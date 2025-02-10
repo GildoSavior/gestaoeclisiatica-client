@@ -19,101 +19,147 @@ import { InputIconModule } from 'primeng/inputicon';
 import { IconFieldModule } from 'primeng/iconfield';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { EventService } from '../../service/event.service';
-import { Event } from '../../models/event.model';
+import { EventModel } from '../../models/event.model';
 import { HttpResponse } from '../../models/http-response.model';
-
+import { EventStatus } from '../../models/enums/enums';
 
 interface Column {
-  field: string;
-  header: string;
-  customExportHeader?: string;
+    field: string;
+    header: string;
+    customExportHeader?: string;
 }
 
 interface ExportColumn {
-  title: string;
-  dataKey: string;
+    title: string;
+    dataKey: string;
 }
-
 
 @Component({
-  selector: 'app-events',
-  imports: [CommonModule,
-    TableModule,
-    FormsModule,
-    ButtonModule,
-    RippleModule,
-    ToastModule,
-    ToolbarModule,
-    RatingModule,
-    InputTextModule,
-    TextareaModule,
-    SelectModule,
-    RadioButtonModule,
-    InputNumberModule,
-    DialogModule,
-    TagModule,
-    InputIconModule,
-    IconFieldModule,
-    ConfirmDialogModule],
-  templateUrl: './events.component.html',
-  styleUrl: './events.component.scss',
-  providers: [MessageService, EventService, ConfirmationService]
+    selector: 'app-events',
+    imports: [
+        CommonModule,
+        TableModule,
+        FormsModule,
+        ButtonModule,
+        RippleModule,
+        ToastModule,
+        ToolbarModule,
+        RatingModule,
+        InputTextModule,
+        TextareaModule,
+        SelectModule,
+        RadioButtonModule,
+        InputNumberModule,
+        DialogModule,
+        TagModule,
+        InputIconModule,
+        IconFieldModule,
+        ConfirmDialogModule
+    ],
+    templateUrl: './events.component.html',
+    styleUrl: './events.component.scss',
+    providers: [MessageService, EventService, ConfirmationService]
 })
 export class EventsComponent {
-  eventDialog: boolean = false;
+    eventDialog: boolean = false;
 
-  events = signal<Event[]>([]);
+    events = signal<EventModel[]>([]);
 
-  product!: Event;
+    event!: EventModel;
 
-  selectedProducts!: Event[] | null;
+    selectedProducts!: EventModel[] | null;
 
-  submitted: boolean = false;
+    submitted: boolean = false;
 
-  statuses!: any[];
+    statuses!: any[];
 
-  @ViewChild('dt') dt!: Table;
+    @ViewChild('dt') dt!: Table;
 
-  exportColumns!: ExportColumn[];
-  
-  cols!: Column[];
+    exportColumns!: ExportColumn[];
 
-  constructor(
-    private eventService: EventService,
-    private messageService: MessageService,
-    private confirmationService: ConfirmationService
-  ) {}
+    cols!: Column[];
 
-  exportCSV() {
-    this.dt.exportCSV();
+    constructor(
+        private eventService: EventService,
+        private messageService: MessageService,
+        private confirmationService: ConfirmationService
+    ) {}
+
+    exportCSV() {
+        this.dt.exportCSV();
+    }
+
+    ngOnInit() {
+        this.loadDemoData();
+    }
+
+    loadDemoData() {
+        this.eventService.getAllEvents().subscribe(
+            (response: HttpResponse<EventModel[]>) => {
+                this.events.set(response.data);
+            },
+            (error) => {
+                console.error('Erro ao buscar eventos:', error);
+            }
+        );
+
+        this.statuses = [
+            { label: 'PENDENTE', value: 'PENDING' },
+            { label: 'REJEITADO', value: 'REJECTED' },
+            { label: 'APROVADO', value: 'APPROVED' }
+        ];
+
+        this.cols = [
+            { field: 'code', header: 'Codigo', customExportHeader: 'Event Code' },
+            { field: 'eventType', header: 'Tipo de Evento' },
+            { field: 'title', header: 'Titulo' },
+            { field: 'user', header: 'Utilizador' },
+            { field: 'description', header: 'Descrição' },
+            { field: 'initialDate', header: 'Data inicial' },
+            { field: 'finalDate', header: 'Data final' },
+            { field: 'eventStatus', header: 'Estado' },
+
+        ];
+
+        this.exportColumns = this.cols.map((col) => ({ title: col.header, dataKey: col.field }));
+    }
+
+    onGlobalFilter(table: Table, event: Event) {
+        table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
+    }
+
+    openNew() {
+        this.event = {
+            code: '',
+            eventType: null,
+            user: null,
+            title: '',
+            description: '',
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            initialDate: new Date(),
+            finalDate: new Date(),
+            eventStatus: EventStatus.PENDING,
+            needContribution: false,
+            images: []
+        };
+        this.submitted = false;
+        this.eventDialog = true;
+    }
+
+    getSeverity(status: string) {
+      switch (status) {
+          case 'APROVADO':
+              return 'success';
+          case 'PENDENTE':
+              return 'warn';
+          case 'ANULADO':
+              return 'danger';
+          default:
+              return 'info';
+      }
   }
 
-  ngOnInit() {
-      this.loadDemoData();
-  }
+    deleteSelectedEvent() {}
 
-  loadDemoData() {
-    this.eventService.getAllEvents().subscribe((response: HttpResponse<Event[]>) => {
-      this.events.set(response.data);
-    }, error => {
-      console.error('Erro ao buscar eventos:', error);
-    });
-  
-
-    this.statuses = [
-        { label: 'INSTOCK', value: 'instock' },
-        { label: 'LOWSTOCK', value: 'lowstock' },
-        { label: 'OUTOFSTOCK', value: 'outofstock' }
-    ];
-
-    this.cols = [
-        { field: 'code', header: 'Code', customExportHeader: 'Product Code' },
-        { field: 'name', header: 'Name' },
-        { field: 'image', header: 'Image' },
-        { field: 'price', header: 'Price' },
-        { field: 'category', header: 'Category' }
-    ];
-
-    this.exportColumns = this.cols.map((col) => ({ title: col.header, dataKey: col.field }));
-}
 }
