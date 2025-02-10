@@ -1,17 +1,18 @@
-import { EventType } from './event-type.model';
+import { EventType } from '@angular/router';
+import { EventStatus } from './enums/enums';
 import { User } from './user.model';
 
-export interface Event {
+export interface EventModel {
   code: string;
-  eventType: EventType;
-  user: User;
+  eventType: EventType | null;
+  user?: User | null;
   title: string;
   description: string;
-  initialDate: string;
-  finalDate: string;
-  createdAt: string;
-  updatedAt: string;
-  eventStatus: string;
+  initialDate: Date;
+  finalDate: Date;
+  createdAt: Date;
+  updatedAt: Date;
+  eventStatus: EventStatus | null;
   needContribution: boolean;
-  images: any[];
+  images: string[];
 }

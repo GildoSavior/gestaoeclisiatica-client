@@ -28,3 +28,17 @@ export enum DisciplinaryStatus {
   DISCIPLINED = "Disciplinado" ,
   UNDISCIPLINED = "Indisciplinado"
 }
+
+
+export enum EventStatus {
+  PENDING = "PENDENTE",
+  APPROVED = "APROVADO", 
+  REJECTED = "ANULADO",
+  PROCESSED = "PROCESSADO"
+}
+
+export enum Enum_EventType {
+  WEDDING = "CASAMENTO",
+  PROPOSAL = "PEDIDO", 
+  FUNERAL = "FUNERAL",
+}

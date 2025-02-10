@@ -1,9 +1,9 @@
-import { Event } from "./event.model";
+import { EventModel } from "./event.model";
 
-export interface EventType {
+export interface EventTypeModel {
   code: string;
   description: string;
   createdAt: Date;
   updatedAt: Date;
-  events: Event[];
+  events: EventModel[];
 }

@@ -235,7 +235,13 @@ export class Crud implements OnInit {
         private confirmationService: ConfirmationService
     ) {}
 
-       
+    exportCSV() {
+        this.dt.exportCSV();
+    }
+
+    ngOnInit() {
+        this.loadDemoData();
+    }
 
     loadDemoData() {
         this.productService.getProducts().then((data) => {

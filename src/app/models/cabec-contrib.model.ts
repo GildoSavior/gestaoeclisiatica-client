@@ -1,5 +1,5 @@
 import { LineContrib } from "./line-contrib.model";
-import { Event } from "./event.model";
+import { EventModel } from "./event.model";
 import { ContribStatus } from "./enums/enums";
 
 export interface CabecContrib {
@@ -10,6 +10,6 @@ export interface CabecContrib {
   createdAt: Date;
   updatedAt: Date;
   lineContrib: LineContrib;
-  event: Event | null;
+  event: EventModel | null;
   cabecStatus: ContribStatus;
 }
