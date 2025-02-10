@@ -21,19 +21,10 @@ export class AppMenu {
     ngOnInit() {
         this.model = [
             {
-                label: 'Oscar Ribas',
+                label: 'Dashboard',
                 items: [{ label: 'Home', icon: 'pi pi-fw pi-home', routerLink: ['/'] }]
             },
-            {
-                label: 'UI Components',
-                items: [
-                    { label: 'Eventos', icon: 'pi pi-fw pi-id-card', routerLink: ['/uikit/formlayout'] },
-                    { label: 'Casamentos', icon: 'pi pi-fw pi-check-square', routerLink: ['/uikit/input'] },
-                    { label: 'Button', icon: 'pi pi-fw pi-mobile', class: 'rotated-icon', routerLink: ['/uikit/button'] },
-                    { label: 'Table', icon: 'pi pi-fw pi-table', routerLink: ['/uikit/table'] },
-                   
-                ]
-            },
+           
             {
                 label: 'Pages',
                 icon: 'pi pi-fw pi-briefcase',
@@ -43,6 +34,11 @@ export class AppMenu {
                         label: 'Landing',
                         icon: 'pi pi-fw pi-globe',
                         routerLink: ['/landing']
+                    },
+                    {
+                        label: 'Eventos',
+                        icon: 'pi pi-fw pi-globe',
+                        routerLink: ['/pages/events']
                     },
                     {
                         label: 'Auth',

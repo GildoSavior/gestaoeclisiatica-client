@@ -56,8 +56,8 @@ import { ButtonModule } from 'primeng/button';
                 </li>
             </ul>
             <div class="flex border-t lg:border-t-0 border-surface py-4 lg:py-0 mt-4 lg:mt-0 gap-2">
-                <button pButton pRipple label="Login" routerLink="/auth/login" [rounded]="true" [text]="true"></button>
-                <button pButton pRipple label="Register" routerLink="/auth/login" [rounded]="true"></button>
+                <button pButton pRipple label="Iniciar Sessão" routerLink="/auth/login" [rounded]="true" [text]="true"></button>
+                <button pButton pRipple label="Registrar" routerLink="/auth/login" [rounded]="true"></button>
             </div>
         </div> `
 })
