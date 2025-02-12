@@ -17,7 +17,7 @@ import { LayoutService } from '../service/layout.service';
         <!-- Sidebar só aparece se não estiver na rota "/" -->
         <app-sidebar *ngIf="showSidebar"></app-sidebar>
         
-        <div class="layout-main-container" [ngStyle]="{'margin': '0'}">
+        <div class="layout-main-container" [ngStyle]="{'margin': showSidebar ? '' : '0'}">
             <div class="layout-main">
                 <router-outlet></router-outlet>
             </div>
