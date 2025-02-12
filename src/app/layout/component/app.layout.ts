@@ -1,4 +1,4 @@
-import { Component, Renderer2, ViewChild } from '@angular/core';
+import { Component, Renderer2, ViewChild, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { filter, Subscription } from 'rxjs';
@@ -13,8 +13,11 @@ import { LayoutService } from '../service/layout.service';
     imports: [CommonModule, AppTopbar, AppSidebar, RouterModule, AppFooter],
     template: `<div class="layout-wrapper" [ngClass]="containerClass">
         <app-topbar></app-topbar>
-        <app-sidebar></app-sidebar>
-        <div class="layout-main-container">
+        
+        <!-- Sidebar só aparece se não estiver na rota "/" -->
+        <app-sidebar *ngIf="showSidebar"></app-sidebar>
+        
+        <div class="layout-main-container" [ngStyle]="{'margin': '0'}">
             <div class="layout-main">
                 <router-outlet></router-outlet>
             </div>
@@ -23,13 +26,12 @@ import { LayoutService } from '../service/layout.service';
         <div class="layout-mask animate-fadein"></div>
     </div> `
 })
-export class AppLayout {
+export class AppLayout implements OnInit, OnDestroy {
     overlayMenuOpenSubscription: Subscription;
-
     menuOutsideClickListener: any;
+    showSidebar: boolean = true; // Sidebar visível por padrão
 
     @ViewChild(AppSidebar) appSidebar!: AppSidebar;
-
     @ViewChild(AppTopbar) appTopBar!: AppTopbar;
 
     constructor(
@@ -51,8 +53,9 @@ export class AppLayout {
             }
         });
 
-        this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe(() => {
+        this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((event: NavigationEnd) => {
             this.hideMenu();
+            this.showSidebar = event.url !== '/'; // Oculta sidebar quando a rota for "/"
         });
     }
 
@@ -97,6 +100,11 @@ export class AppLayout {
             'layout-overlay-active': this.layoutService.layoutState().overlayMenuActive,
             'layout-mobile-active': this.layoutService.layoutState().staticMenuMobileActive
         };
+    }
+
+    ngOnInit() {
+        // Verifica a rota inicial
+        this.showSidebar = this.router.url !== '/';
     }
 
     ngOnDestroy() {

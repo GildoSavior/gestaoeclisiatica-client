@@ -251,6 +251,10 @@ export class EventsComponent {
         });
     }
     
+    editEvent(event: EventModel) {
+
+        this.eventDialog = true;
+    }
     
 }
 
