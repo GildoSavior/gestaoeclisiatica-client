@@ -11,13 +11,14 @@ import { HttpResponse } from '../models/http-response.model';
   providedIn: 'root',
 })
 export class EventService {
-  private apiUrl = 'http://localhost:8080/events'; // Altere para a URL do seu backend
+  private apiUrl = 'http://localhost:8080/api/events'; // Altere para a URL do seu backend
 
   constructor(private http: HttpClient) {}
 
   // Obter todos os eventos
   getAllEvents(): Observable<HttpResponse<EventModel[]>> {
-    return this.http.get<HttpResponse<EventModel[]>>(this.apiUrl);
+    var res =  this.http.get<HttpResponse<EventModel[]>>(this.apiUrl);
+    return res
   }
 
   // Obter eventos de um usuário específico

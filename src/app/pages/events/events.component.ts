@@ -67,7 +67,7 @@ export class EventsComponent {
 
     event!: EventModel;
 
-    selectedProducts!: EventModel[] | null;
+    selectedEvent!: EventModel | null;
 
     submitted: boolean = false;
 
@@ -98,6 +98,7 @@ export class EventsComponent {
             (response: HttpResponse<EventModel[]>) => {
                 this.events.set(response.data);
             },
+
             (error) => {
                 console.error('Erro ao buscar eventos:', error);
             }
@@ -118,7 +119,6 @@ export class EventsComponent {
             { field: 'initialDate', header: 'Data inicial' },
             { field: 'finalDate', header: 'Data final' },
             { field: 'eventStatus', header: 'Estado' },
-
         ];
 
         this.exportColumns = this.cols.map((col) => ({ title: col.header, dataKey: col.field }));
@@ -149,17 +149,110 @@ export class EventsComponent {
 
     getSeverity(status: string) {
       switch (status) {
-          case 'APROVADO':
+          case 'APPROVED':
               return 'success';
-          case 'PENDENTE':
+          case 'PENDING':
               return 'warn';
-          case 'ANULADO':
+          case 'REJECTED':
               return 'danger';
           default:
               return 'info';
       }
   }
 
-    deleteSelectedEvent() {}
+ 
 
+    deleteSelectedEvent() {
+        if (!this.selectedEvent?.code) {
+            this.messageService.add({
+                severity: 'warn',
+                summary: 'Aviso',
+                detail: 'Nenhum evento selecionado para excluir.',
+                life: 3000
+            });
+            return;
+        }
+    
+        this.confirmationService.confirm({
+            message: 'Tem a certeza que pretende eliminar este evento?',
+            header: 'Confirmar',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+                this.eventService.deleteEvent(this.selectedEvent?.code ?? '').subscribe({
+                    next: () => {
+                        this.selectedEvent = null;
+                        this.messageService.add({
+                            severity: 'success',
+                            summary: 'Sucesso',
+                            detail: 'Evento eliminado com sucesso',
+                            life: 3000
+                        });
+                    },
+                    error: (error) => {
+                        console.error('Erro ao excluir evento:', error);
+                        this.messageService.add({
+                            severity: 'error',
+                            summary: 'Erro',
+                            detail: 'Erro ao eliminar evento',
+                            life: 3000
+                        });
+                    }
+                });
+            }
+        });
+    }
+
+    hideDialog() {
+        this.eventDialog = false;
+        this.submitted = false;
+    }
+
+    saveEvent() {}
+
+    deleteEvent(event: EventModel) {
+        this.confirmationService.confirm({
+            message: `Tem a certeza que pretende elimiar o evento ${event.code}?`,
+            header: 'Confirmar',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+                if (!event.code) {
+                    this.messageService.add({
+                        severity: 'warn',
+                        summary: 'Warning',
+                        detail: 'Evento invalido',
+                        life: 3000
+                    });
+                    return;
+                }
+    
+                this.eventService.deleteEvent(event.code).subscribe({
+                    next: () => {
+                        this.loadDemoData();
+                        this.selectedEvent = null;
+                        this.messageService.add({
+                            severity: 'success',
+                            summary: 'Successful',
+                            detail: 'Evento Eliminado',
+                            life: 3000
+                        });
+                    },
+
+                    error: (error) => {
+                        console.error('Error deleting event:', error);
+                        this.messageService.add({
+                            severity: 'error',
+                            summary: 'Error',
+                            detail: 'Failed to delete event.',
+                            life: 3000
+                        });
+                    }
+                });
+            }
+        });
+    }
+    
+    
 }
+
+
+

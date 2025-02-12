@@ -1,10 +1,10 @@
-import { EventType } from '@angular/router';
-import { EventStatus } from './enums/enums';
+
+import { Enum_EventType, EventStatus } from './enums/enums';
 import { User } from './user.model';
 
 export interface EventModel {
   code: string;
-  eventType: EventType | null;
+  eventType: Enum_EventType | null;
   user?: User | null;
   title: string;
   description: string;
