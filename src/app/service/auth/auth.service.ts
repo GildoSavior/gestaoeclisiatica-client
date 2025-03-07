@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { AuthResponse } from '../../app/models/authReponse';
+import { AuthResponse } from '../../models/reponses';
+
 
 
 
@@ -17,8 +18,8 @@ export class AuthService {
     return this.http.post<AuthResponse>(this.apiUrl, { email, password });
   }
 
-  saveUserData(userData: AuthResponse) {
-    localStorage.setItem('user', JSON.stringify(userData));
+  saveUserData(res: AuthResponse) {
+    localStorage.setItem('user', JSON.stringify(res.data));
   }
 
   getUserData(): AuthResponse | null {
