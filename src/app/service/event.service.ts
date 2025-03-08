@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { EventModel } from "../models/event.model";
-import { HttpResponse } from '../models/http-response.model';
+import { HttpResponse } from '../dto/http-response.model';
 
 
 

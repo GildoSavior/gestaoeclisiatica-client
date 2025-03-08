@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { AuthResponse } from '../../models/reponses';
+import { AuthResponse } from '../../dto/reponses';
 
 
 

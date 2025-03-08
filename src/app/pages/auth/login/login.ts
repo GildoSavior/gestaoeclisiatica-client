@@ -11,7 +11,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast'; // ✅ Importação necessária
 
 import { AccessLevel } from '../../../models/enums/enums';
-import { AuthResponse } from '../../../models/reponses';
+import { AuthResponse } from '../../../dto/reponses';
 import { AuthService } from '../../../service/auth/auth.service';
 import { UserService } from '../../../service/user/user.service'; 
 
@@ -55,6 +55,7 @@ export class Login {
                 this.authService.saveUserData(response);
 
                 const accessLevel = this.UserService.getUserData().accessLevel;
+                const isFistLogin = this.UserService.getUserData().firstLogin; 
               
                 // Redireciona com base no nível de acesso
                 this.router.navigate([accessLevel !== AccessLevel.ROLE_USER ? 'admin/dashboard' : '/client']);
