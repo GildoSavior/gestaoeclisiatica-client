@@ -12,27 +12,17 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 
 import { AccessLevel } from '../../../models/enums/enums';
-import { AuthResponse } from '../../../models/reponses';
 import { AuthService } from '../../../service/auth/auth.service';
 import { UserService } from '../../../service/user/user.service';
-import { ChangePasswordRequest } from '../../../application/dtos/ChangePasswordRequest';
+import { AuthResponse, ChangePasswordRequest } from '../../../dto/reponses';
+import { CommonModule } from '@angular/common';
 
 @Component({
     selector: 'app-login',
     standalone: true,
-    imports: [
-        ButtonModule,
-        CheckboxModule,
-        InputTextModule,
-        PasswordModule,
-        FormsModule,
-        RouterModule,
-        RippleModule,
-        AppFloatingConfigurator,
-        ToastModule,
-        DialogModule
-    ],
-    templateUrl: "./login.component.html",
+    imports: [CommonModule, ButtonModule, CheckboxModule, InputTextModule, PasswordModule, FormsModule, RouterModule, RippleModule, AppFloatingConfigurator, ToastModule, DialogModule],
+    templateUrl: './login.component.html',
+    styleUrls: ['./login.component.scss'],
     providers: [MessageService, ConfirmationService]
 })
 export class Login {
@@ -71,18 +61,14 @@ export class Login {
                 // Verifica se é o primeiro login
                 const userData = this.userService.getUserData();
                 const accessLevel = userData.accessLevel;
-                const isFirstLogin = userData.firstLogin;
+                const isFirstLogin = userData.isFirstLogin;
 
                 if (isFirstLogin) {
                     // Abre o modal para alterar a senha
                     this.openChangePasswordDialog();
                 } else {
                     // Redireciona de acordo com o nível de acesso
-                    this.router.navigate([
-                        accessLevel !== AccessLevel.ROLE_USER
-                            ? 'admin/dashboard'
-                            : '/client'
-                    ]);
+                    this.router.navigate([accessLevel !== AccessLevel.ROLE_USER ? 'admin/dashboard' : '/client']);
                 }
             },
             error: () => {
@@ -116,31 +102,25 @@ export class Login {
 
     // Chama o endpoint /change-password passando isFirstTime=true
     confirmChangePassword() {
-        this.authService
-            .changePassword(this.changePasswordRequest, true)
-            .subscribe({
-                next: (response) => {
-                    this.messageService.add({
-                        severity: 'success',
-                        summary: 'Sucesso',
-                        detail: 'Palavra-passe atualizada com sucesso!'
-                    });
+        this.authService.changePassword(this.changePasswordRequest, true).subscribe({
+            next: (response) => {
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Sucesso',
+                    detail: 'Palavra-passe atualizada com sucesso!'
+                });
 
-                    // Fecha o modal
-                    this.closeChangePasswordDialog();
+                // Fecha o modal
+                this.closeChangePasswordDialog();
 
-                    // Redireciona após a alteração
-                    const userData = this.userService.getUserData();
-                    const accessLevel = userData.accessLevel;
-                    this.router.navigate([
-                        accessLevel !== AccessLevel.ROLE_USER
-                            ? 'admin/dashboard'
-                            : '/client'
-                    ]);
-                },
-                error: (err: { error: { message: string; }; }) => {
-                    this.showError('Falha ao atualizar a palavra-passe: ' + err.error.message);
-                }
-            });
+                // Redireciona após a alteração
+                const userData = this.userService.getUserData();
+                const accessLevel = userData.accessLevel;
+                this.router.navigate([accessLevel !== AccessLevel.ROLE_USER ? 'admin/dashboard' : '/client']);
+            },
+            error: (err: { error: { message: string } }) => {
+                this.showError('Falha ao atualizar a palavra-passe: ' + err.error.message);
+            }
+        });
     }
 }

@@ -1,0 +1,10 @@
+::ng-deep .custom-password .p-password-input {
+    padding-right: 1rem !important;
+  }
+  
+  ::ng-deep .custom-password .p-password-toggler {
+    right: 0.5rem !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+  }
+  
