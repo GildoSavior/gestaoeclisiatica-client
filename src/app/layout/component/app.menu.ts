@@ -25,27 +25,24 @@ export class AppMenu {
         this.model = [
             {
                 label: 'Home',
-
                 items: [
-                    { label: 'Home', 
-                      icon: 'pi pi-fw pi-home',
-                      routerLink: this.accessLevel === AccessLevel.ROLE_USER ? ['/client'] : ['/admin/dashboard']
+                    { 
+                        label: 'Home', 
+                        icon: 'pi pi-fw pi-home',
+                        routerLink: this.accessLevel === AccessLevel.ROLE_USER ? ['/client'] : ['/admin/dashboard']
                     }
                 ]
             },
-           
             {
                 label: 'Pages',
                 icon: 'pi pi-fw pi-briefcase',
                 routerLink: ['/pages'],
                 items: [
-                    
                     {
                         label: 'Eventos',
-                        icon: 'pi pi-fw pi-globe',
+                        icon: 'pi pi-fw pi-calendar', // Ícone correto para eventos
                         routerLink: ['/pages/events']
-                    },
-                    
+                    }
                 ]
             },    
         ];

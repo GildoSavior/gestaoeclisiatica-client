@@ -7,7 +7,7 @@ export const authGuard: CanActivateFn = (route, state) => {
 
     const userDataString = localStorage.getItem('user');
     if (!userDataString) {
-        alert('Erro ao recuperar dados do usuário');
+        router.navigate(['/auth/login']); // Redireciona se não estiver autenticado
         return false;
     }
     const userData = JSON.parse(userDataString);

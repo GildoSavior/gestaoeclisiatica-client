@@ -4,7 +4,6 @@
             <i class="pi pi-bars"></i>
         </button>
         <a class="layout-topbar-logo" routerLink="/">
-            
             <span>Igreja</span>
         </a>
     </div>
@@ -14,34 +13,28 @@
             <button type="button" class="layout-topbar-action" (click)="toggleDarkMode()">
                 <i [ngClass]="{ 'pi ': true, 'pi-moon': layoutService.isDarkTheme(), 'pi-sun': !layoutService.isDarkTheme() }"></i>
             </button>
-            <div class="relative">
-                <button
-                    class="layout-topbar-action layout-topbar-action-highlight"
-                    pStyleClass="@next"
-                    enterFromClass="hidden"
-                    enterActiveClass="animate-scalein"
-                    leaveToClass="hidden"
-                    leaveActiveClass="animate-fadeout"
-                    [hideOnOutsideClick]="true"
-                >
-                    <i class="pi pi-palette"></i>
-                </button>
-                <app-configurator />
-            </div>
         </div>
 
-        <button class="layout-topbar-menu-button layout-topbar-action" pStyleClass="@next" enterFromClass="hidden" enterActiveClass="animate-scalein" leaveToClass="hidden" leaveActiveClass="animate-fadeout" [hideOnOutsideClick]="true">
-            <i class="pi pi-ellipsis-v"></i>
+        <!-- Botão de Perfil -->
+        <button type="button" class="layout-topbar-action" (click)="openProfileMenu($event)">
+            <i class="pi pi-user"></i>
+            <span>Profile</span>
         </button>
 
-        <div class="layout-topbar-menu hidden lg:block" *ngIf="currentUrl !== '/'">
-            <div class="layout-topbar-menu-content">
-               
-                <button type="button" class="layout-topbar-action">
-                    <i class="pi pi-user"></i>
-                    <span>Profile</span>
-                </button>
+        <!-- Overlay Panel para opções do usuário -->
+        <p-overlayPanel #profileMenu>
+            <div class="p-2">
+                <button class="p-button p-button-text w-full text-left" (click)="openProfile()"><i class="pi pi-user mr-2"></i> Ver Perfil</button>
+                <button class="p-button p-button-text w-full text-left text-red-500" (click)="logout()"><i class="pi pi-sign-out mr-2"></i> Logout</button>
             </div>
-        </div>
+        </p-overlayPanel>
     </div>
 </div>
+
+<!-- Dialog para exibir o componente de perfil -->
+<p-dialog [(visible)]="isProfileDialogVisible" [modal]="true" [closable]="true" header="Perfil do Usuário" [style]="{ width: '50vw' }">
+    <ng-container *ngIf="isProfileDialogVisible">
+        <app-profile></app-profile>
+        <!-- Componente de perfil -->
+    </ng-container>
+</p-dialog>
