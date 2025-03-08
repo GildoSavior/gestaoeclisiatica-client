@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { AuthResponse } from '../../dto/reponses';
+import { AuthResponse, ChangePasswordRequest } from '../../dto/reponses';
 
 
 
@@ -29,5 +29,20 @@ export class AuthService {
 
   logout() {
     localStorage.removeItem('user');
+  }
+
+  // Novo método
+  changePassword(request: ChangePasswordRequest, isFirstTime: boolean): Observable<any> {
+    const userDataString = localStorage.getItem('user');
+    const userData = userDataString ? JSON.parse(userDataString) : null;
+    const token = userData?.jwtToken || '';
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+
+    const url = `http://localhost:8080/api/users/change-password?isFirstTime=${isFirstTime}`;
+    return this.http.post(url, request, { headers });
   }
 }
