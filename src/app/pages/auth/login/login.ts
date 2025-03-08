@@ -12,6 +12,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { AccessLevel } from '../../../models/enums/enums';
 import { AuthResponse } from '../../../models/reponses';
 import { AuthService } from '../../../service/auth/auth.service';
+import { UserService } from '../../../service/user/user.service'; 
 
 @Component({
     selector: 'app-login',
@@ -26,9 +27,10 @@ export class Login {
     checked = false;
 
     constructor(
-        private authService: AuthService, 
-        private router: Router, 
-        private messageService: MessageService
+        private readonly authService: AuthService, 
+        private readonly UserService: UserService,
+        private readonly router: Router, 
+        private readonly messageService: MessageService
     ) {}
 
     onLogin() {
@@ -41,15 +43,8 @@ export class Login {
             next: (response: AuthResponse) => {
                 this.authService.saveUserData(response);
 
-                const userDataString = localStorage.getItem('user');
-                if (!userDataString) {
-                    this.showError('Erro ao recuperar dados do usuário');
-                    return;
-                }
-
-                const userData = JSON.parse(userDataString);
-                const accessLevel = userData.accessLevel;
-
+                const  accessLevel = this.UserService.getUserData().accessLevel;
+              
                 // Redireciona com base no nível de acesso
                 this.router.navigate([accessLevel !== AccessLevel.ROLE_USER ? 'admin/dashboard' : '/client']);
             },

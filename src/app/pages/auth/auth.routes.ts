@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { Access } from './access';
+import { Access } from './acess/access';
 
 import { Error } from './error';
 import { Login } from './login/login';
