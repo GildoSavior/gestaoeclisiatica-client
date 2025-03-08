@@ -8,6 +8,7 @@ import { PasswordModule } from 'primeng/password';
 import { RippleModule } from 'primeng/ripple';
 import { AppFloatingConfigurator } from '../../../layout/component/app.floatingconfigurator';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast'; // ✅ Importação necessária
 
 import { AccessLevel } from '../../../models/enums/enums';
 import { AuthResponse } from '../../../models/reponses';
@@ -17,7 +18,17 @@ import { UserService } from '../../../service/user/user.service';
 @Component({
     selector: 'app-login',
     standalone: true,
-    imports: [ButtonModule, CheckboxModule, InputTextModule, PasswordModule, FormsModule, RouterModule, RippleModule, AppFloatingConfigurator],
+    imports: [
+        ButtonModule, 
+        CheckboxModule, 
+        InputTextModule, 
+        PasswordModule, 
+        FormsModule, 
+        RouterModule, 
+        RippleModule, 
+        AppFloatingConfigurator, 
+        ToastModule // ✅ Adicionado ToastModule
+    ],
     templateUrl: "./login.component.html",
     providers: [MessageService, ConfirmationService]
 })
@@ -43,7 +54,7 @@ export class Login {
             next: (response: AuthResponse) => {
                 this.authService.saveUserData(response);
 
-                const  accessLevel = this.UserService.getUserData().accessLevel;
+                const accessLevel = this.UserService.getUserData().accessLevel;
               
                 // Redireciona com base no nível de acesso
                 this.router.navigate([accessLevel !== AccessLevel.ROLE_USER ? 'admin/dashboard' : '/client']);
