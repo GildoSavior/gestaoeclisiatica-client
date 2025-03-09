@@ -13,9 +13,9 @@ import { ToastModule } from 'primeng/toast';
 
 import { AccessLevel } from '../../../models/enums/enums';
 import { AuthService } from '../../../service/auth/auth.service';
-import { UserService } from '../../../service/user/user.service';
 import { AuthResponse, ChangePasswordRequest } from '../../../dto/reponses';
 import { CommonModule } from '@angular/common';
+import { UserUtil } from '../../../service/user/user.service';
 
 @Component({
     selector: 'app-login',
@@ -42,7 +42,6 @@ export class Login {
 
     constructor(
         private readonly authService: AuthService,
-        private readonly userService: UserService,
         private readonly router: Router,
         private readonly messageService: MessageService
     ) {}
@@ -59,16 +58,16 @@ export class Login {
                 this.authService.saveUserData(response);
 
                 // Verifica se é o primeiro login
-                const userData = this.userService.getUserData();
-                const accessLevel = userData.accessLevel;
-                const isFirstLogin = userData.isFirstLogin;
+                const userData = UserUtil.getUserData();
+                const accessLevel = userData?.accessLevel
+                const isFirstLogin = userData?.isFirstLogin;
 
                 if (isFirstLogin) {
                     // Abre o modal para alterar a senha
                     this.openChangePasswordDialog();
                 } else {
                     // Redireciona de acordo com o nível de acesso
-                    this.router.navigate([accessLevel !== AccessLevel.ROLE_USER ? 'admin/dashboard' : '/client']);
+                    this.router.navigate(accessLevel !== AccessLevel.ROLE_USER ? ['/admin/dashboard'] : ['/client']);
                 }
             },
             error: () => {
@@ -114,8 +113,8 @@ export class Login {
                 this.closeChangePasswordDialog();
 
                 // Redireciona após a alteração
-                const userData = this.userService.getUserData();
-                const accessLevel = userData.accessLevel;
+                const userData = UserUtil.getUserData();
+                const accessLevel = userData?.accessLevel;
                 this.router.navigate([accessLevel !== AccessLevel.ROLE_USER ? 'admin/dashboard' : '/client']);
             },
             error: (err: { error: { message: string } }) => {

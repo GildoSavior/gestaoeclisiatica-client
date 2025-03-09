@@ -42,6 +42,8 @@ export class AuthService {
       'Authorization': `Bearer ${token}`
     });
 
+    console.log(headers)
+
     const url = `http://localhost:8080/api/users/change-password?isFirstTime=${isFirstTime}`;
     return this.http.post(url, request, { headers });
   }

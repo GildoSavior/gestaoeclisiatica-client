@@ -207,7 +207,7 @@ export class EventsComponent {
         this.submitted = false;
     }
 
-    saveEvent(event: EventModel) {}
+    saveEvent() {}
 
     deleteEvent(event: EventModel) {
         this.confirmationService.confirm({

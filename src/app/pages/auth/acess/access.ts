@@ -4,7 +4,8 @@ import { ButtonModule } from 'primeng/button';
 import { RippleModule } from 'primeng/ripple';
 import { AppFloatingConfigurator } from '../../../layout/component/app.floatingconfigurator';
 import { AccessLevel } from '../../../models/enums/enums';
-import { UserService } from '../../../service/user/user.service';
+import { UserUtil } from '../../../service/user/user.service';
+
 
 @Component({
     selector: 'app-access',
@@ -17,8 +18,8 @@ export class Access {
     buttonLink: string = '/admin/dashboard';
     userData: any;
 
-    constructor(private userService: UserService) {
-        this.userData = this.userService.getUserData();
+    constructor() {
+        this.userData = UserUtil.getUserData();
 
         if (this.userData && this.userData.accessLevel === AccessLevel.ROLE_USER) {
             this.buttonLabel = 'Go to Home';

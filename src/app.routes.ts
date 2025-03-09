@@ -12,8 +12,8 @@ export const appRoutes: Routes = [
         path: '',
         component: AppLayout,
         children: [
-            { path: 'client', component: Landing, canActivate: [authGuard]},
-            { path: 'admin/dashboard', component: Dashboard, canActivate: [authGuard] },
+            { path: 'client', component: Landing},
+            { path: 'admin/dashboard', component: Dashboard},
             { path: 'pages', loadChildren: () => import('./app/pages/pages.routes') },
             { path: 'uikit', loadChildren: () => import('./app/pages/uikit/uikit.routes') },
             { path: 'documentation', component: Documentation },

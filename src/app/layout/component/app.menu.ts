@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { AppMenuitem } from './app.menuitem';
 import { AccessLevel } from '../../models/enums/enums';
+import { UserUtil } from '../../service/user/user.service';
 
 @Component({
     selector: 'app-menu',
@@ -19,17 +20,19 @@ import { AccessLevel } from '../../models/enums/enums';
 export class AppMenu {
     model: MenuItem[] = [];
 
-    accessLevel = localStorage.getItem('accessLevel');
-
+    role = UserUtil.getUserData()?.accessLevel;
+   
     ngOnInit() {
+        console.log(this.role?.toString());
+
         this.model = [
             {
                 label: 'Home',
                 items: [
-                    { 
-                        label: 'Home', 
+                    {
+                        label: 'Home',
                         icon: 'pi pi-fw pi-home',
-                        routerLink: this.accessLevel === AccessLevel.ROLE_USER ? ['/client'] : ['/admin/dashboard']
+                        routerLink: this.role === AccessLevel.ROLE_USER ? ['/client'] : ['/admin/dashboard']
                     }
                 ]
             },
@@ -44,7 +47,7 @@ export class AppMenu {
                         routerLink: ['/pages/events']
                     }
                 ]
-            },    
+            }
         ];
     }
 }
