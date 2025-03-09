@@ -15,7 +15,7 @@ import { CommonModule } from '@angular/common';
 import { AccessLevel } from '../../../models/enums/enums';
 import { AuthService } from '../../../service/auth/auth.service';
 import { AuthResponse } from '../../../dto/reponses';
-import { UserUtil } from '../../../service/user/user.service';
+import { UserUtil } from '../../../service/user/userUtils';
 
 @Component({
     selector: 'app-login',

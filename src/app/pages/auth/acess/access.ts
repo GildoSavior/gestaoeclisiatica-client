@@ -4,7 +4,7 @@ import { ButtonModule } from 'primeng/button';
 import { RippleModule } from 'primeng/ripple';
 import { AppFloatingConfigurator } from '../../../layout/component/app.floatingconfigurator';
 import { AccessLevel } from '../../../models/enums/enums';
-import { UserUtil } from '../../../service/user/user.service';
+import { UserUtil } from '../../../service/user/userUtils';
 
 
 @Component({

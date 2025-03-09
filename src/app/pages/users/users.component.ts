@@ -1,11 +1,150 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, ViewChild, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
+import { Table } from 'primeng/table';
+import { TableModule } from 'primeng/table';
+import { ButtonModule } from 'primeng/button';
+import { RippleModule } from 'primeng/ripple';
+import { ToastModule } from 'primeng/toast';
+import { ToolbarModule } from 'primeng/toolbar';
+import { RatingModule } from 'primeng/rating';
+import { InputTextModule } from 'primeng/inputtext';
+import { TextareaModule } from 'primeng/textarea';
+import { SelectModule } from 'primeng/select';
+import { RadioButtonModule } from 'primeng/radiobutton';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { DialogModule } from 'primeng/dialog';
+import { TagModule } from 'primeng/tag';
+import { InputIconModule } from 'primeng/inputicon';
+import { IconFieldModule } from 'primeng/iconfield';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { HttpResponse } from '@angular/common/http';
+
+import { User } from '../../models/user.model';
+import { UserService } from '../../service/user/user.service';
+
+interface Column {
+    field: string;
+    header: string;
+    customExportHeader?: string;
+}
+
+interface ExportColumn {
+    title: string;
+    dataKey: string;
+}
 
 @Component({
-  selector: 'app-users',
-  imports: [],
-  templateUrl: './users.component.html',
-  styleUrl: './users.component.scss'
+    selector: 'app-users',
+    standalone: true,
+    imports: [
+        CommonModule,
+        FormsModule,
+        RouterModule,
+        TableModule,
+        ButtonModule,
+        RippleModule,
+        ToastModule,
+        ToolbarModule,
+        RatingModule,
+        InputTextModule,
+        TextareaModule,
+        SelectModule,
+        RadioButtonModule,
+        InputNumberModule,
+        DialogModule,
+        TagModule,
+        InputIconModule,
+        IconFieldModule,
+        ConfirmDialogModule
+    ],
+    templateUrl: './users.component.html',
+    styleUrls: ['./users.component.scss'],
+    providers: [MessageService, ConfirmationService]
 })
-export class UsersComponent {
+export class UsersComponent implements OnInit {
+    userDialog: boolean = false;
+    users = signal<User[]>([]);
+    user!: User;
+    selectedUser!: User | null;
+    submitted: boolean = false;
+    statuses!: any[];
+    @ViewChild('dt') dt!: Table;
+    exportColumns!: ExportColumn[];
+    cols!: Column[];
 
+    constructor(
+        private readonly eventService: UserService,
+        private readonly messageService: MessageService,
+        private readonly confirmationService: ConfirmationService
+    ) {}
+
+    exportCSV() {
+        this.dt.exportCSV();
+    }
+
+    ngOnInit(): void {
+        this.loadDemoData();
+    }
+
+    loadDemoData() {
+      this.eventService.getAllUsers().subscribe(
+        (users: User[]) => {
+          this.users.set(users);
+        },
+        (error: any) => {
+          console.error('Erro ao buscar usuários:', error);
+        }
+      );
+      
+
+        this.cols = [
+            { field: 'name', header: 'Nome', customExportHeader: 'Nome' },
+            { field: 'lastName', header: 'Sobrenome' },
+            { field: 'age', header: 'Idade' },
+            { field: 'phoneNumber', header: 'Telefone' },
+            { field: 'address', header: 'Morada' },
+            { field: 'departament', header: 'Departamento' },
+            { field: 'disciplinaryStatus', header: 'Estado Disciplinar' },
+            { field: 'accessLevel', header: 'Nível de Acesso' }
+        ];
+
+        this.exportColumns = this.cols.map((col) => ({ title: col.header, dataKey: col.field }));
+    }
+
+    onGlobalFilter(table: Table, event: Event) {
+        table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
+    }
+
+    openNew() {
+        this.user = {
+            id: '',
+            name: '',
+            lastName: '',
+            age: 0
+        };
+
+        this.submitted = false;
+        this.userDialog = true;
+    }
+
+    deleteSelectedUser() {
+        if (!this.selectedUser?.email) {
+            this.messageService.add({
+                severity: 'warn',
+                summary: 'Aviso',
+                detail: 'Nenhum evento selecionado para excluir.',
+                life: 3000
+            });
+            return;
+        }
+    }
+
+    saveUser(usr: User) {}
+
+    editUser(user: User) {
+        this.userDialog = true;
+    }
 }
