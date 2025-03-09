@@ -44,7 +44,31 @@ export class AuthService {
 
     console.log(headers)
 
-    const url = `http://localhost:8080/api/users/change-password?isFirstTime=${isFirstTime}`;
+    const url = `http://localhost:8080/api/auth/change-password?isFirstTime=${isFirstTime}`;
     return this.http.post(url, request, { headers });
+  }
+
+
+  // =========== ESQUECI A SENHA ===========
+
+  // 1. Enviar código de confirmação
+  sendConfirmationCode(email: string): Observable<any> {
+    // Exemplo: POST /api/auth/email/sendConfirmationCode?email=xxx
+    return this.http.post(`http://localhost:8080/api/auth/email/sendConfirmationCode?email=${email}`, {});
+  }
+
+  // 2. Validar o código
+  validateConfirmationCode(email: string, code: string): Observable<any> {
+    // Exemplo: POST /api/auth/email/validateConfirmationCode?email=xxx&code=yyy
+    return this.http.post(`http://localhost:8080/api/auth/email/validateConfirmationCode?email=${email}&code=${code}`, {});
+  }
+
+  // 3. Definir nova senha
+  setNewPassword(email: string, code: string, body: { newPassword: string; confirmPassword: string }): Observable<any> {
+    // Exemplo: POST /api/auth/forgot-password/set-password?email=xxx&code=yyy
+    return this.http.post(
+      `http://localhost:8080/api/auth/forgot-password/set-password?email=${email}&code=${code}`,
+      body
+    );
   }
 }
