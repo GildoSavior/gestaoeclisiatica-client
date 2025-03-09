@@ -11,13 +11,13 @@ import { HttpResponse } from '../dto/http-response.model';
   providedIn: 'root',
 })
 export class EventService {
-  private apiUrl = 'http://localhost:8080/api/events'; // Altere para a URL do seu backend
+  private readonly apiUrl = 'http://localhost:8080/api/events'; // Altere para a URL do seu backend
 
-  constructor(private http: HttpClient) {}
+  constructor(private readonly http: HttpClient) {}
 
   // Obter todos os eventos
   getAllEvents(): Observable<HttpResponse<EventModel[]>> {
-    var res =  this.http.get<HttpResponse<EventModel[]>>(this.apiUrl);
+    const res =  this.http.get<HttpResponse<EventModel[]>>(this.apiUrl);
     return res
   }
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, signal, ViewChild } from '@angular/core';
+import { Component, signal, ViewChild } from '@angular/core';
 import { Table, TableModule } from 'primeng/table';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { CommonModule } from '@angular/common';
@@ -80,9 +80,9 @@ export class EventsComponent {
     cols!: Column[];
 
     constructor(
-        private eventService: EventService,
-        private messageService: MessageService,
-        private confirmationService: ConfirmationService
+        private readonly eventService: EventService,
+        private readonly messageService: MessageService,
+        private readonly confirmationService: ConfirmationService
     ) {}
 
     exportCSV() {
@@ -207,7 +207,7 @@ export class EventsComponent {
         this.submitted = false;
     }
 
-    saveEvent() {}
+    saveEvent(event: EventModel) {}
 
     deleteEvent(event: EventModel) {
         this.confirmationService.confirm({

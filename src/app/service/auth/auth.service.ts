@@ -10,9 +10,9 @@ import { AuthResponse, ChangePasswordRequest } from '../../dto/reponses';
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:8080/api/auth/login'; // Ajuste conforme necessário
+  private readonly apiUrl = 'http://localhost:8080/api/auth/login'; // Ajuste conforme necessário
 
-  constructor(private http: HttpClient) {}
+  constructor(private readonly http: HttpClient) {}
 
   login(email: string, password: string): Observable<AuthResponse> {
     return this.http.post<AuthResponse>(this.apiUrl, { email, password });
