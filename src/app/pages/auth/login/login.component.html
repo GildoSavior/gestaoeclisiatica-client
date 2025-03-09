@@ -1,8 +1,7 @@
 <app-floating-configurator />
-<!-- Removido overflow-hidden e mantido outras classes -->
+<!-- Tela de Login -->
 <div class="bg-surface-50 dark:bg-surface-950 flex items-center justify-center min-h-screen min-w-[100vw]">
     <p-toast></p-toast>
-    <!-- ✅ Componente Toast -->
 
     <div class="flex flex-col items-center justify-center">
         <div style="border-radius: 56px; padding: 0.3rem; background: linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%)">
@@ -24,7 +23,7 @@
                             <p-checkbox [(ngModel)]="checked" id="rememberme1" binary class="mr-2"></p-checkbox>
                             <label for="rememberme1">Remember me</label>
                         </div>
-                        <span class="font-medium no-underline ml-2 text-right cursor-pointer text-primary">Forgot password?</span>
+                        <span class="font-medium no-underline ml-2 text-right cursor-pointer text-primary" (click)="openForgotPasswordDialog()">Forgot password?</span>
                     </div>
                     <p-button label="Sign In" styleClass="w-full" (click)="onLogin()"></p-button>
                 </div>
@@ -34,20 +33,111 @@
 </div>
 
 <p-dialog
-    header="Alterar Palavra-passe"
-    [(visible)]="showChangePasswordDialog"
+    header="Esqueci a senha"
+    [(visible)]="showForgotPasswordDialog"
     [modal]="true"
     [closable]="false"
-    [style]="{ width: '400px' }"
+    [style]="{ width: '450px', height: '400px' }"  
     appendTo="body"
 >
+    <!-- Contêiner principal ocupa 100% da altura do modal -->
+    <div class="h-full flex flex-col p-4">
+        <!-- Área principal que cresce para preencher espaço -->
+        <div class="flex-1">
+            <!-- Passo 1: Solicitar email -->
+            <div *ngIf="forgotPasswordStep === 'email'" class="h-full flex flex-col justify-center">
+                <div class="field mb-3">
+                    <label for="forgotEmail" class="block font-semibold mb-2">Informe seu Email</label>
+                    <input
+                        id="forgotEmail"
+                        pInputText
+                        [(ngModel)]="forgotPasswordData.email"
+                        placeholder="seu.email@example.com"
+                        class="w-full"
+                    />
+                </div>
+            </div>
+
+            <!-- Passo 2: Validar código -->
+            <div *ngIf="forgotPasswordStep === 'code'" class="h-full flex flex-col justify-center">
+                <div class="field mb-3">
+                    <label for="confirmationCode" class="block font-semibold mb-2">Código de Confirmação</label>
+                    <input
+                        id="confirmationCode"
+                        pInputText
+                        [(ngModel)]="forgotPasswordData.code"
+                        placeholder="Ex: 123456"
+                        class="w-full"
+                    />
+                </div>
+            </div>
+
+            <!-- Passo 3: Definir nova senha -->
+            <div *ngIf="forgotPasswordStep === 'newPassword'" class="h-full flex flex-col justify-center">
+                <div class="field mb-10">
+                    <label for="newPassword" class="block font-semibold mb-2">Nova Senha</label>
+                    <p-password
+                        id="newPassword"
+                        [(ngModel)]="forgotPasswordData.newPassword"
+                        [toggleMask]="true"
+                        [feedback]="true"
+                        placeholder="Digite a nova senha"
+                        class="w-full mb-3"
+                    ></p-password>
+                </div>
+                <div class="field mb-10">
+                    <label for="confirmPassword" class="block font-semibold mb-2">Confirmar Nova Senha</label>
+                    <p-password
+                        id="confirmPassword"
+                        [(ngModel)]="forgotPasswordData.confirmPassword"
+                        [toggleMask]="true"
+                        [feedback]="false"
+                        placeholder="Confirme a nova senha"
+                        class="w-full"
+                    ></p-password>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rodapé (botões) -->
+        <div class="flex justify-end gap-2">
+            <button
+                *ngIf="forgotPasswordStep === 'email'"
+                pButton
+                label="Enviar código"
+                (click)="sendConfirmationCode()"
+            ></button>
+            <button
+                *ngIf="forgotPasswordStep === 'code'"
+                pButton
+                label="Validar código"
+                (click)="validateConfirmationCode()"
+            ></button>
+            <button
+                *ngIf="forgotPasswordStep === 'newPassword'"
+                pButton
+                label="Definir senha"
+                (click)="setNewPassword()"
+            ></button>
+            <button
+                pButton
+                label="Fechar"
+                class="p-button-secondary"
+                (click)="closeForgotPasswordDialog()"
+            ></button>
+        </div>
+    </div>
+</p-dialog>
+
+
+<!-- Modal de Alterar Senha (Primeiro Login) -->
+<p-dialog header="Alterar Palavra-passe" [(visible)]="showChangePasswordDialog" [modal]="true" [closable]="false" [style]="{ width: '400px' }" appendTo="body">
     <div class="p-fluid">
-        <!-- Campo para NOVA SENHA -->
         <div class="field mb-3">
             <label for="newPassword" class="block font-semibold mb-2">Nova Senha</label>
             <p-password
                 id="newPassword"
-                [(ngModel)]="changePasswordRequest.newPassword"      
+                [(ngModel)]="changePasswordRequest.newPassword"
                 styleClass="w-full"
                 placeholder="Digite a nova senha"
                 [feedback]="true"
@@ -59,25 +149,16 @@
             ></p-password>
         </div>
 
-        <!-- Campo para CONFIRMAR SENHA -->
         <div class="field mb-3">
             <label for="confirmPassword" class="block font-semibold mb-2">Confirmar Senha</label>
-            <p-password
-                id="confirmPassword"
-                [(ngModel)]="changePasswordRequest.confirmPassword"
-                [feedback]="false"        
-                [toggleMask]="true"
-                styleClass="w-full"
-                placeholder="Confirme a senha"
-            ></p-password>
+            <p-password id="confirmPassword" [(ngModel)]="changePasswordRequest.confirmPassword" [feedback]="false" [toggleMask]="true" styleClass="w-full" placeholder="Confirme a senha"></p-password>
         </div>
 
         <p-footer>
-          <div class="flex justify-content-end gap-2">
-              <button pButton label="Confirmar" (click)="confirmChangePassword()"></button>
-              <button pButton label="Fechar" class="p-button-secondary" (click)="closeChangePasswordDialog()"></button>
-          </div>
-      </p-footer>
+            <div class="flex justify-content-end gap-2">
+                <button pButton label="Confirmar" (click)="confirmChangePassword()"></button>
+                <button pButton label="Fechar" class="p-button-secondary" (click)="closeChangePasswordDialog()"></button>
+            </div>
+        </p-footer>
     </div>
 </p-dialog>
-
