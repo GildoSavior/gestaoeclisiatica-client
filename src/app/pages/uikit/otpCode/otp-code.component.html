@@ -1,0 +1,6 @@
+<div class="otp-container">
+    <div class="otp-inputs">
+        <input *ngFor="let digit of codeDigits; let i = index" id="digit-{{ i }}" type="text" maxlength="1" class="otp-box" [(ngModel)]="codeDigits[i]" (input)="onDigitInput($event, i)" />
+    </div>
+    <button (click)="validateCode()">Validar</button>
+</div>
