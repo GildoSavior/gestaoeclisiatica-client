@@ -8,18 +8,18 @@ import { UserUtil } from './userUtils';
   providedIn: 'root'
 })
 export class UserService {
-  private baseUrl = 'http://localhost:8080/api/users';
+  private readonly baseUrl = 'http://localhost:8080/api';
 
-  constructor(private http: HttpClient) {}
+  constructor(private readonly http: HttpClient) {}
 
-  getAllUsers(): Observable<User[]> {
+  getAllUsers(): Observable<{ message: string; data: User[] }> {
     
     const token = UserUtil.getUserData()?.jwtToken;
     const headers = new HttpHeaders({
       'Authorization': `Bearer ${token}`
     });
 
-    var users = this.http.get<HttpResponse<User[]>>(`${this.baseUrl}/users`, { headers });
-    return this.http.get<User[]>(`${this.baseUrl}/users`, { headers });
+
+    return this.http.get<{ message: string; data: User[] }>(`${this.baseUrl}/users`, { headers });
   }
 }

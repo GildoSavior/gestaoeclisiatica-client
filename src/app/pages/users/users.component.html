@@ -1,4 +1,3 @@
-<p>users works!</p>
 
 <p-toolbar styleClass="mb-6">
     <ng-template #start>
@@ -17,12 +16,12 @@
     [rows]="10"
     [columns]="cols"
     [paginator]="true"
-    [globalFilterFields]="['name', 'country.name', 'representative.name', 'status']"
+    [globalFilterFields]="['name', 'user.emaul', 'user.accessLevel', 'phoneNumber']"
     [tableStyle]="{ 'min-width': '70rem' }"
     [(selection)]="selectedUser"
     [rowHover]="true"
     dataKey="id"
-    currentPageReportTemplate="Utilizador {first} até {last} de {totalRecords} Utilizadores"
+    currentPageReportTemplate="Utilizador {first} de {totalRecords} Utilizadores"
     [showCurrentPageReport]="true"
     [rowsPerPageOptions]="[10, 20, 30]"
 >
@@ -53,13 +52,22 @@
             <td style="width: 3rem">
                 <p-tableCheckbox [value]="user" />
             </td>
-            <td style="min-width: 9.5rem">{{ user.name }}</td>
-            <td style="min-width: 9.5rem">{{ user.lastName }}</td>
+
+          
+            <td style="min-width: 9.5rem">
+                <div class="flex items-center gap-2 w-44">
+                    <img [alt]="" src="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png'" width="32" />
+                    <span>{{ user.name }} {{ user.lastName }} </span>
+                </div>      
+            </td>
+            <td style="min-width: 9.5rem">{{ user.email }}</td>
             <td style="min-width: 9.5rem">{{ user.age }}</td>
             <td style="min-width: 9.5rem">{{ user.phoneNumber }}</td>
             <td style="min-width: 9.5rem">{{ user.address }}</td>
+            <td style="min-width: 9.5rem">{{ user.departament }}</td>
             <td style="min-width: 9.5rem">{{ user.disciplinaryStatus }}</td>
             <td style="min-width: 9.5rem">{{ user.accessLevel }}</td>
+            <td style="min-width: 9.5rem">{{ user.maritalStatus }}</td>
            
             <td>
                 <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true" (click)="editUser(user)" />
@@ -70,10 +78,32 @@
 </p-table>
 
 <p-dialog [(visible)]="userDialog" [style]="{ width: '450px' }" header="User Details" [modal]="true">
+    <!-- <div class="p-fluid"> -->
+        <div class="p-field">
+            <label for="name">Nome</label>
+            <input id="name" type="text" pInputText [(ngModel)]="user.name" />
+        </div>
+        <div class="p-field">
+            <label for="lastName">Sobrenome</label>
+            <input id="lastName" type="text" pInputText [(ngModel)]="user.lastName" />
+        </div>
+        <div class="p-field">
+            <label for="email">Email</label>
+            <input id="email" type="email" pInputText [(ngModel)]="user.email" disabled />
+        </div>
+        <div class="p-field">
+            <label for="phoneNumber">Telefone</label>
+            <input id="phoneNumber" type="text" pInputText [(ngModel)]="user.phoneNumber" />
+        </div>
+    <!-- </div> -->
+
     <ng-template #footer>
-        <p-button label="Cancel" icon="pi pi-times" text (click)="hideDialog()" />
-        <p-button label="Save" icon="pi pi-check" (click)="saveUser(user)" />
+        <p-button label="Cancelar" icon="pi pi-times" text (click)="hideDialog()" />
+        <p-button label="Salvar" icon="pi pi-check" (click)="saveUser(user)" />
     </ng-template>
 </p-dialog>
+
+
+
 
 <p-confirmdialog [style]="{ width: '450px' }"></p-confirmdialog>

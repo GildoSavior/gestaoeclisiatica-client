@@ -16,13 +16,14 @@ export interface User {
     yearOfConversion?: number;
     createdAt?: Date;
     updatedAt?: Date;
+    phoneNumber?:number;
     accessLevel?: AccessLevel;
     maritalStatus?: MaritalStatus;
     disciplinaryStatus?: DisciplinaryStatus;
     department?: Department;
     position?: Position;
     contactsList?: Contact[];
-    imagesUrl?: string[];
+    imageUrl?: string;
     events?: Event[];
     consultations?: Consultation[];
     lineContribs?: LineContrib[];

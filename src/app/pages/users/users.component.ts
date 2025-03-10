@@ -20,7 +20,7 @@ import { InputIconModule } from 'primeng/inputicon';
 import { IconFieldModule } from 'primeng/iconfield';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { HttpResponse } from '@angular/common/http';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 import { User } from '../../models/user.model';
 import { UserService } from '../../service/user/user.service';
@@ -58,7 +58,8 @@ interface ExportColumn {
         TagModule,
         InputIconModule,
         IconFieldModule,
-        ConfirmDialogModule
+        ConfirmDialogModule, 
+        MultiSelectModule
     ],
     templateUrl: './users.component.html',
     styleUrls: ['./users.component.scss'],
@@ -90,29 +91,35 @@ export class UsersComponent implements OnInit {
     }
 
     loadDemoData() {
-      this.eventService.getAllUsers().subscribe(
-        (users: User[]) => {
-          this.users.set(users);
-        },
-        (error: any) => {
-          console.error('Erro ao buscar usuários:', error);
-        }
-      );
-      
-
+        this.eventService.getAllUsers().subscribe(
+            (response: { message: string; data: User[] }) => {
+                if (response && response.data) {
+                    this.users.set(response.data);
+                } else {
+                    console.warn("A resposta da API não contém usuários.");
+                }
+            },
+            (error: any) => {
+                console.error("Erro ao buscar usuários:", error);
+            }
+        );
+    
         this.cols = [
-            { field: 'name', header: 'Nome', customExportHeader: 'Nome' },
-            { field: 'lastName', header: 'Sobrenome' },
-            { field: 'age', header: 'Idade' },
-            { field: 'phoneNumber', header: 'Telefone' },
-            { field: 'address', header: 'Morada' },
-            { field: 'departament', header: 'Departamento' },
-            { field: 'disciplinaryStatus', header: 'Estado Disciplinar' },
-            { field: 'accessLevel', header: 'Nível de Acesso' }
+            { field: "", header: "Utilizador" },
+            { field: "email", header: "Email"},
+            { field: "age", header: "Idade" },
+            { field: "phoneNumber", header: "Telefone" },
+            { field: "address", header: "Morada" },
+            { field: "departament", header: "Departamento" },
+            { field: "disciplinaryStatus", header: "Estado Disciplinar" },
+            { field: "accessLevel", header: "Nível de Acesso" },
+            { field: "maritalStatus", header: "Marital" },
+            
         ];
-
+    
         this.exportColumns = this.cols.map((col) => ({ title: col.header, dataKey: col.field }));
     }
+    
 
     onGlobalFilter(table: Table, event: Event) {
         table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
@@ -149,7 +156,10 @@ export class UsersComponent implements OnInit {
 
     saveUser(usr: User) {}
 
+    deleteUser(user: User) {}
+
     editUser(user: User) {
         this.userDialog = true;
+        this.user = {...user}
     }
 }
