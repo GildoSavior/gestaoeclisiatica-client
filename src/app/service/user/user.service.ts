@@ -1,29 +1,25 @@
-export interface AuthUserData {
-  email: string;
-  accessLevel: string;
-  jwtToken: string;
-  isFirstLogin: boolean;
-}
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { User } from '../../models/user.model';
+import { UserUtil } from './userUtils';
 
-export class UserUtil {
-  static getUserData(): AuthUserData | null {
-    const userDataString = localStorage.getItem('user');
-    if (!userDataString) {
-      return null;
-    }
-    try {
-      const data = JSON.parse(userDataString);
-      // Se o nome da propriedade armazenada for "firstLogin", converta para "isFirstLogin"
-      const authUser: AuthUserData = {
-        email: data.email || '',
-        accessLevel: data.accessLevel || '',
-        jwtToken: data.jwtToken || '',
-        isFirstLogin: data.firstLogin !== undefined ? data.firstLogin : false
-      };
-      return authUser;
-    } catch (error) {
-      console.error('Erro ao fazer parse dos dados do usuário:', error);
-      return null;
-    }
+@Injectable({
+  providedIn: 'root'
+})
+export class UserService {
+  private baseUrl = 'http://localhost:8080/api/users';
+
+  constructor(private http: HttpClient) {}
+
+  getAllUsers(): Observable<User[]> {
+    
+    const token = UserUtil.getUserData()?.jwtToken;
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    });
+
+    var users = this.http.get<HttpResponse<User[]>>(`${this.baseUrl}/users`, { headers });
+    return this.http.get<User[]>(`${this.baseUrl}/users`, { headers });
   }
 }

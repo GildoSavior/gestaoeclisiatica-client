@@ -7,24 +7,24 @@ import { Position } from "./position.model";
 
 export interface User {
     id: string;
-    name: string;
-    lastName: string;
-    age: number;
-    email: string;
-    password: string;
-    address: string;
-    yearOfConversion: number;
-    createdAt: Date;
-    updatedAt: Date;
-    accessLevel: AccessLevel;
-    maritalStatus: MaritalStatus;
-    disciplinaryStatus: DisciplinaryStatus;
+    name?: string;
+    lastName?: string;
+    age?: number;
+    email?: string;
+    password?: string;
+    address?: string;
+    yearOfConversion?: number;
+    createdAt?: Date;
+    updatedAt?: Date;
+    accessLevel?: AccessLevel;
+    maritalStatus?: MaritalStatus;
+    disciplinaryStatus?: DisciplinaryStatus;
     department?: Department;
     position?: Position;
-    contactsList: Contact[];
-    imagesUrl: string[];
-    events: Event[];
-    consultations: Consultation[];
-    lineContribs: LineContrib[];
+    contactsList?: Contact[];
+    imagesUrl?: string[];
+    events?: Event[];
+    consultations?: Consultation[];
+    lineContribs?: LineContrib[];
   }
   

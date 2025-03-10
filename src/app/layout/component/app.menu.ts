@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { AppMenuitem } from './app.menuitem';
 import { AccessLevel } from '../../models/enums/enums';
-import { UserUtil } from '../../service/user/user.service';
+import { UserUtil } from '../../service/user/userUtils';
 
 @Component({
     selector: 'app-menu',
@@ -45,8 +45,16 @@ export class AppMenu {
                         label: 'Eventos',
                         icon: 'pi pi-fw pi-calendar', // Ícone correto para eventos
                         routerLink: ['/pages/events']
+                    },
+
+                    {
+                        label: 'Utilizadores',
+                        icon: 'pi pi-fw pi-users', // Ícone correto para eventos
+                        routerLink: ['/pages/users']
                     }
-                ]
+                ],
+               
+              
             }
         ];
     }
