@@ -130,6 +130,11 @@ export class UsersComponent implements OnInit {
         this.userDialog = true;
     }
 
+    hideDialog() {
+        this.userDialog = false;
+        this.submitted = false;
+    }
+
     deleteSelectedUser() {
         if (!this.selectedUser?.email) {
             this.messageService.add({
