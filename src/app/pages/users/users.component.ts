@@ -58,7 +58,7 @@ interface ExportColumn {
         TagModule,
         InputIconModule,
         IconFieldModule,
-        ConfirmDialogModule, 
+        ConfirmDialogModule,
         MultiSelectModule
     ],
     templateUrl: './users.component.html',
@@ -95,6 +95,7 @@ export class UsersComponent implements OnInit {
             (response: { message: string; data: User[] }) => {
                 if (response && response.data) {
                     this.users.set(response.data);
+                    console.log("utilizadore:  ", JSON.stringify(response.data, null, 2))
                 } else {
                     console.warn("A resposta da API não contém usuários.");
                 }
@@ -103,7 +104,7 @@ export class UsersComponent implements OnInit {
                 console.error("Erro ao buscar usuários:", error);
             }
         );
-    
+
         this.cols = [
             { field: "", header: "Utilizador" },
             { field: "email", header: "Email"},
@@ -114,25 +115,18 @@ export class UsersComponent implements OnInit {
             { field: "disciplinaryStatus", header: "Estado Disciplinar" },
             { field: "accessLevel", header: "Nível de Acesso" },
             { field: "maritalStatus", header: "Marital" },
-            
         ];
-    
+
         this.exportColumns = this.cols.map((col) => ({ title: col.header, dataKey: col.field }));
     }
-    
+
 
     onGlobalFilter(table: Table, event: Event) {
         table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
     }
 
     openNew() {
-        this.user = {
-            id: '',
-            name: '',
-            lastName: '',
-            age: 0
-        };
-
+        this.user = {} as User
         this.submitted = false;
         this.userDialog = true;
     }
@@ -147,7 +141,7 @@ export class UsersComponent implements OnInit {
             this.messageService.add({
                 severity: 'warn',
                 summary: 'Aviso',
-                detail: 'Nenhum evento selecionado para excluir.',
+                detail: 'Nenhum utilizador selecionado para excluir.',
                 life: 3000
             });
             return;
