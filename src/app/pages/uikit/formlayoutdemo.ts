@@ -14,7 +14,7 @@ import { TextareaModule } from 'primeng/textarea';
         <div class="flex flex-col md:flex-row gap-8">
             <div class="md:w-1/2">
                 <div class="card flex flex-col gap-4">
-                    <div class="font-semibold text-xl">Vertical</div>
+
                     <div class="flex flex-col gap-2">
                         <label for="name1">Name</label>
                         <input pInputText id="name1" type="text" />

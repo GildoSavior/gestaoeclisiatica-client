@@ -1,3 +1,4 @@
+import { MaritalStatus } from './../../models/enums/enums';
 import { Component, OnInit, ViewChild, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -24,6 +25,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
 
 import { User } from '../../models/user.model';
 import { UserService } from '../../service/user/user.service';
+import { DropdownModule } from 'primeng/dropdown';
 
 interface Column {
     field: string;
@@ -59,7 +61,13 @@ interface ExportColumn {
         InputIconModule,
         IconFieldModule,
         ConfirmDialogModule,
-        MultiSelectModule
+        MultiSelectModule,
+        InputTextModule,
+        ButtonModule,
+        SelectModule,
+        FormsModule,
+        TextareaModule,
+        DropdownModule
     ],
     templateUrl: './users.component.html',
     styleUrls: ['./users.component.scss'],
@@ -75,6 +83,8 @@ export class UsersComponent implements OnInit {
     @ViewChild('dt') dt!: Table;
     exportColumns!: ExportColumn[];
     cols!: Column[];
+    maritalStatusOptions = Object.values(MaritalStatus).map(status => ({ name: status, code: status }));
+    maritalStatus: MaritalStatus | null = null;
 
     constructor(
         private readonly eventService: UserService,
@@ -95,38 +105,37 @@ export class UsersComponent implements OnInit {
             (response: { message: string; data: User[] }) => {
                 if (response && response.data) {
                     this.users.set(response.data);
-                    console.log("utilizadore:  ", JSON.stringify(response.data, null, 2))
+                    console.log('utilizadore:  ', JSON.stringify(response.data, null, 2));
                 } else {
-                    console.warn("A resposta da API não contém usuários.");
+                    console.warn('A resposta da API não contém usuários.');
                 }
             },
             (error: any) => {
-                console.error("Erro ao buscar usuários:", error);
+                console.error('Erro ao buscar usuários:', error);
             }
         );
 
         this.cols = [
-            { field: "", header: "Utilizador" },
-            { field: "email", header: "Email"},
-            { field: "age", header: "Idade" },
-            { field: "phoneNumber", header: "Telefone" },
-            { field: "address", header: "Morada" },
-            { field: "departament", header: "Departamento" },
-            { field: "disciplinaryStatus", header: "Estado Disciplinar" },
-            { field: "accessLevel", header: "Nível de Acesso" },
-            { field: "maritalStatus", header: "Marital" },
+            { field: '', header: 'Utilizador' },
+            { field: 'email', header: 'Email' },
+            { field: 'age', header: 'Idade' },
+            { field: 'phoneNumber', header: 'Telefone' },
+            { field: 'address', header: 'Morada' },
+            { field: 'departament', header: 'Departamento' },
+            { field: 'disciplinaryStatus', header: 'Estado Disciplinar' },
+            { field: 'accessLevel', header: 'Nível de Acesso' },
+            { field: 'maritalStatus', header: 'Marital' }
         ];
 
         this.exportColumns = this.cols.map((col) => ({ title: col.header, dataKey: col.field }));
     }
-
 
     onGlobalFilter(table: Table, event: Event) {
         table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
     }
 
     openNew() {
-        this.user = {} as User
+        this.user = {} as User;
         this.submitted = false;
         this.userDialog = true;
     }
@@ -154,6 +163,14 @@ export class UsersComponent implements OnInit {
 
     editUser(user: User) {
         this.userDialog = true;
-        this.user = {...user}
+        this.user = { ...user };
     }
+
+    MaritalStatus = [
+        { name: 'Option 1', code: 'Option 1' },
+        { name: 'Option 2', code: 'Option 2' },
+        { name: 'Option 3', code: 'Option 3' }
+    ];
+
+
 }
