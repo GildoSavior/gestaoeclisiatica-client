@@ -159,10 +159,55 @@ export class UsersComponent implements OnInit {
 
     saveUser(usr: User) {}
 
-    deleteUser(user: User) {}
+    deleteUser(user: User) {
+        if (!user?.email) {
+            this.messageService.add({
+                severity: 'warn',
+                summary: 'Aviso',
+                detail: 'Email inválido',
+                life: 3000
+            });
+            return;
+        }
+    
+        this.confirmationService.confirm({
+            message: `Tem certeza de que deseja eliminar o utilizador ${user.name}?`,
+            header: 'Confirmar',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+                this.userService.deleteUserByEmail(user?.email as string).subscribe({
+                    next: () => {
+                        this.messageService.add({
+                            severity: 'success',
+                            summary: 'Sucesso',
+                            detail: 'Utilizador eliminado com sucesso',
+                            life: 3000
+                        });
+    
+                        // Resetando usuário selecionado
+                        this.selectedUser = null;
+                        this.user = emptyUser;
+    
+                        // Recarrega os dados após a exclusão
+                        this.loadDemoData();
+                    },
+                    error: (error) => {
+                        this.messageService.add({
+                            severity: 'error',
+                            summary: 'Erro',
+                            detail: `Erro ao eliminar utilizador: ${error.message}`,
+                            life: 3000
+                        });
+                    }
+                });
+            }
+        });
+    }
+    
+    
 
     editUser(user: User) {
-        this.user = { ...user }
+        this.user = { ...user };
         this.userDialog = true;
     }
 }

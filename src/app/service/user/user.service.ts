@@ -20,15 +20,24 @@ export class UserService {
 
         return this.http.get<{ message: string; data: User[] }>(`${this.baseUrl}/users`, { headers });
     }
-    
+
     getUserByEmail(): Observable<{ message: string; data: User }> {
-      const userData = UserUtil.getUserData()
+        const userData = UserUtil.getUserData();
 
-      const headers = new HttpHeaders({
-        Authorization: `Bearer ${userData?.jwtToken}`
-      })
+        const headers = new HttpHeaders({
+            Authorization: `Bearer ${userData?.jwtToken}`
+        });
 
-      return this.http.get<{message: string, data: User}>(`${this.baseUrl}/users/email/${userData?.email}`, { headers })
+        return this.http.get<{ message: string; data: User }>(`${this.baseUrl}/users/email/${userData?.email}`, { headers });
+    }
+
+    deleteUserByEmail(email: string): Observable<{ message: string; data: any }> {
+        const userData = UserUtil.getUserData();
+
+        const headers = new HttpHeaders({
+            Authorization: `Bearer ${userData?.jwtToken}`
+        });
+
+        return this.http.delete<{ message: string; data: User }>(`${this.baseUrl}/users/email/${email}`, { headers });
     }
 }
-

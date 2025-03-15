@@ -7,6 +7,9 @@ import { DialogModule } from 'primeng/dialog';
 import { AppConfigurator } from '../app.configurator';
 import { LayoutService } from '../../service/layout.service';
 import { ProfileComponent } from '../../../pages/user/profile.component';
+import { UserDetailsModalComponent } from '../../../pages/users/components/components/user-details-modal-component/user-details-modal-component.component';
+import { emptyUser } from '../../../service/user/userUtils';
+import { User } from '../../../models/user.model';
 
 @Component({
     selector: 'app-topbar',
@@ -18,7 +21,8 @@ import { ProfileComponent } from '../../../pages/user/profile.component';
         AppConfigurator,
         DialogModule,
         OverlayPanelModule, // ✅ Adicionado
-        ProfileComponent
+        ProfileComponent,
+        UserDetailsModalComponent
     ],
     templateUrl: './app-topbar.component.html'
 })
@@ -27,6 +31,7 @@ export class AppTopbar {
 
     isProfileDialogVisible: boolean = false;
     currentUrl: string = '';
+    user: User = {...emptyUser}
 
     constructor(public layoutService: LayoutService, private readonly router: Router) {
         this.router.events.subscribe(() => {

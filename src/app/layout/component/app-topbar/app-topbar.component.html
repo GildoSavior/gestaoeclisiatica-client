@@ -31,10 +31,12 @@
     </div>
 </div>
 
-<!-- Dialog para exibir o componente de perfil -->
-<p-dialog [(visible)]="isProfileDialogVisible" [modal]="true" [closable]="true" header="Perfil do Usuário" [style]="{ width: '50vw' }">
-    <ng-container *ngIf="isProfileDialogVisible">
-        <app-profile></app-profile>
-        <!-- Componente de perfil -->
-    </ng-container>
-</p-dialog>
+
+<app-user-details-modal-component 
+    [visible]="isProfileDialogVisible" 
+    [user]="user" 
+    [isAdmin]="false">
+</app-user-details-modal-component>
+
+
+    

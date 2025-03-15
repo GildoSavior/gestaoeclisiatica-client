@@ -48,8 +48,6 @@ export class UserDetailsModalComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        //console.log('Utilizador dialog: ', JSON.stringify(this.user));
-        console.log('IsAdmin:', this.isAdmin);
         this.populateYears();
     }
 
