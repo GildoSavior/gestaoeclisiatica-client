@@ -1,5 +1,5 @@
 import { MaritalStatus } from './../../models/enums/enums';
-import { Component, OnInit, ViewChild, signal } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -83,8 +83,13 @@ export class UsersComponent implements OnInit {
     @ViewChild('dt') dt!: Table;
     exportColumns!: ExportColumn[];
     cols!: Column[];
-    maritalStatusOptions = Object.values(MaritalStatus).map(status => ({ name: status, code: status }));
+    maritalStatusOptions = Object.values(MaritalStatus).map((status) => ({ name: status, code: status }));
     maritalStatus: MaritalStatus | null = null;
+    dropdownYears: { name: string; value: number }[] = [];
+    dropdownYear: { name: string; value: number } | null = null;
+    selectedImage: string | ArrayBuffer | null = null;
+
+    @ViewChild('fileInput') fileInput!: ElementRef;
 
     constructor(
         private readonly eventService: UserService,
@@ -98,6 +103,7 @@ export class UsersComponent implements OnInit {
 
     ngOnInit(): void {
         this.loadDemoData();
+        this.populateYears();
     }
 
     loadDemoData() {
@@ -128,6 +134,34 @@ export class UsersComponent implements OnInit {
         ];
 
         this.exportColumns = this.cols.map((col) => ({ title: col.header, dataKey: col.field }));
+    }
+
+    populateYears() {
+        const currentYear = new Date().getFullYear();
+        const startYear = 1900; // Defina o ano inicial conforme necessário
+        this.dropdownYears = [];
+
+        for (let year = currentYear; year >= startYear; year--) {
+            this.dropdownYears.push({ name: year.toString(), value: year });
+        }
+    }
+
+    triggerFileInput() {
+        this.fileInput.nativeElement.click();
+    }
+
+    onFileSelected(event: Event) {
+        const input = event.target as HTMLInputElement;
+        if (input.files?.[0]) {
+            const file = input.files[0];
+            const reader = new FileReader();
+
+            reader.onload = (e) => {
+                this.selectedImage = e.target?.result ?? null;
+            };
+
+            reader.readAsDataURL(file);
+        }
     }
 
     onGlobalFilter(table: Table, event: Event) {
@@ -171,6 +205,4 @@ export class UsersComponent implements OnInit {
         { name: 'Option 2', code: 'Option 2' },
         { name: 'Option 3', code: 'Option 3' }
     ];
-
-
 }

@@ -1,9 +1,7 @@
 <p-toolbar styleClass="mb-6">
     <ng-template #start>
-        <p-button label="Adicionar utilizador" icon="pi pi-plus" severity="secondary" class="mr-2"
-            (onClick)="openNew()" />
-        <p-button severity="secondary" label="Delete" icon="pi pi-trash" outlined (onClick)="deleteSelectedUser()"
-            [disabled]="!selectedUser" />
+        <p-button label="Adicionar utilizador" icon="pi pi-plus" severity="secondary" class="mr-2" (onClick)="openNew()" />
+        <p-button severity="secondary" label="Delete" icon="pi pi-trash" outlined (onClick)="deleteSelectedUser()" [disabled]="!selectedUser" />
     </ng-template>
 
     <ng-template #end>
@@ -11,11 +9,21 @@
     </ng-template>
 </p-toolbar>
 
-<p-table #dt [value]="users()" [rows]="10" [columns]="cols" [paginator]="true"
+<p-table
+    #dt
+    [value]="users()"
+    [rows]="10"
+    [columns]="cols"
+    [paginator]="true"
     [globalFilterFields]="['user.name', 'user.email', 'user.accessLevel', 'phoneNumber']"
-    [tableStyle]="{ 'min-width': '70rem' }" [(selection)]="selectedUser" [rowHover]="true" dataKey="id"
-    currentPageReportTemplate="Utilizador {first} de {totalRecords} Utilizadores" [showCurrentPageReport]="true"
-    [rowsPerPageOptions]="[10, 20, 30]">
+    [tableStyle]="{ 'min-width': '70rem' }"
+    [(selection)]="selectedUser"
+    [rowHover]="true"
+    dataKey="id"
+    currentPageReportTemplate="Utilizador {first} de {totalRecords} Utilizadores"
+    [showCurrentPageReport]="true"
+    [rowsPerPageOptions]="[10, 20, 30]"
+>
     <ng-template #caption>
         <div class="flex items-center justify-between">
             <h5 class="m-0">Utilizadores</h5>
@@ -44,11 +52,9 @@
                 <p-tableCheckbox [value]="user" />
             </td>
 
-
             <td style="min-width: 9.5rem">
                 <div class="flex items-center gap-2 w-44">
-                    <img [alt]="" src="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png'"
-                        width="32" />
+                    <img [alt]="" src="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png'" width="32" />
                     <span>{{ user.name }} {{ user.lastName }} </span>
                 </div>
             </td>
@@ -62,10 +68,8 @@
             <td style="min-width: 9.5rem">{{ user.maritalStatus }}</td>
 
             <td>
-                <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true"
-                    (click)="editUser(user)" />
-                <p-button icon="pi pi-trash" severity="danger" [rounded]="true" [outlined]="true"
-                    (click)="deleteUser(user)" />
+                <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true" (click)="editUser(user)" />
+                <p-button icon="pi pi-trash" severity="danger" [rounded]="true" [outlined]="true" (click)="deleteUser(user)" />
             </td>
         </tr>
     </ng-template>
@@ -73,34 +77,69 @@
 
 <p-dialog [(visible)]="userDialog" [style]="{ width: '450px' }" header="Detalhes do utilizador" [modal]="true">
     <div class="card flex flex-col gap-4">
+
+        <div class="relative flex justify-center items-center w-full mt-4">
+            <img [src]="selectedImage || 'https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png'" 
+                alt="User Avatar" 
+                width="100" 
+                class="rounded-full border border-gray-300 object-cover" />
+            
+            <!-- Ícone de edição -->
+            <div class="absolute bottom-2 right-40 bg-white p-1 rounded-full shadow-md flex items-center justify-center w-8 h-8 border border-gray-300 cursor-pointer"
+                (click)="triggerFileInput()">
+                <i class="pi pi-pencil text-gray-600 text-sm"></i>
+            </div>
+            <input type="file" accept="image/*" #fileInput hidden (change)="onFileSelected($event)">
+        </div>
+                
         <div class="flex flex-col gap-2">
-            <label for="name1">Name</label>
-            <input pInputText id="name1" type="text" />
+            <label for="name">Name</label>
+            <input pInputText id="name" type="text" />
         </div>
         <div class="flex flex-col gap-2">
-            <label for="name1">Sobrenome</label>
-            <input pInputText id="name1" type="text" />
+            <label for="lastName">Sobrenome</label>
+            <input pInputText id="lastName" type="text" />
         </div>
         <div class="flex flex-col gap-2">
-            <label for="email1">Email</label>
-            <input pInputText id="email1" type="text" />
+            <label for="email">Email</label>
+            <input pInputText id="email" type="text" />
+        </div>
+
+        <div class="flex flex-col gap-2">
+            <label for="phoneNumber">Telefone</label>
+            <input pInputText id="phoneNumber" type="text" />
         </div>
         <div class="flex flex-col gap-2">
-            <label for="age1">Age</label>
-            <input pInputText id="age1" type="text" disabled />
+            <label for="age">Age</label>
+            <input pInputText id="age" type="text" disabled />
         </div>
 
         <div class="flex flex-wrap gap-2 w-full">
-            <label for="state">Estado Cívil</label>
-            <p-dropdown id="state" [(ngModel)]="maritalStatus" [options]="maritalStatusOptions" optionLabel="name" placeholder="Selecione um estado civil" class="w-full"></p-dropdown>
+            <label for="maritalStatus">Estado Cívil</label>
+            <p-select id="maritalStatus" [(ngModel)]="maritalStatus" [options]="maritalStatusOptions" optionLabel="name" placeholder="Selecione um estado civil" class="w-full" [panelStyle]="{ top: '-200px', position: 'absolute' }"></p-select>
         </div>
+
+        <div class="flex flex-wrap gap-2 w-full">
+            <label for="yearOfConversion">Ano de conversão</label>
+            <p-select id="yearOfConversion" [(ngModel)]="dropdownYear" [options]="dropdownYears" optionLabel="name" placeholder="Selecione um ano" class="w-full" [panelStyle]="{ top: '-200px', position: 'absolute' }"></p-select>
+
+        </div>
+
+        <div class="flex flex-col gap-2">
+            <label for="departament">Departamento</label>
+            <input pInputText id="departament" type="text"  />
+        </div>
+        <div class="flex flex-col gap-2">
+            <label for="position">Posição</label>
+            <input pInputText id="position" type="text"  />
+        </div>
+        
     </div>
 
     <ng-template #footer>
         <p-button label="Cancelar" icon="pi pi-times" text (click)="hideDialog()" />
         <p-button label="Salvar" icon="pi pi-check" (click)="saveUser(user)" />
     </ng-template>
-
 </p-dialog>
 
 <p-confirmdialog [style]="{ width: '450px' }"></p-confirmdialog>
