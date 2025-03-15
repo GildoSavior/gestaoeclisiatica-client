@@ -88,7 +88,7 @@ export class UsersComponent implements OnInit {
     cols!: Column[];
 
     constructor(
-        private readonly eventService: UserService,
+        private readonly userService: UserService,
         private readonly messageService: MessageService,
         private readonly confirmationService: ConfirmationService
     ) {}
@@ -102,7 +102,7 @@ export class UsersComponent implements OnInit {
     }
 
     loadDemoData() {
-        this.eventService.getAllUsers().subscribe(
+        this.userService.getAllUsers().subscribe(
             (response: { message: string; data: User[] }) => {
                 if (response && response.data) {
                     this.users.set(response.data);

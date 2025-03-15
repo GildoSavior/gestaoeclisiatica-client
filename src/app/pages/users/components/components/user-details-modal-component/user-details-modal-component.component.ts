@@ -4,6 +4,9 @@ import { DialogModule } from 'primeng/dialog';
 import { AccessLevel, MaritalStatus } from '../../../../../models/enums/enums';
 import { DropdownModule } from 'primeng/dropdown';
 import { ButtonModule } from 'primeng/button';
+import { UserService } from '../../../../../service/user/user.service';
+import { User } from '../../../../../models/user.model';
+import { emptyUser } from '../../../../../service/user/userUtils';
 
 @Component({
     selector: 'app-user-details-modal-component',
@@ -12,6 +15,8 @@ import { ButtonModule } from 'primeng/button';
     styleUrl: './user-details-modal-component.scss'
 })
 export class UserDetailsModalComponent {
+    constructor(private readonly userService: UserService) {}
+
     dropdownYears: { name: string; value: number }[] = [];
     dropdownYear: { name: string; value: number } | null = null;
     selectedImage: string | ArrayBuffer | null = null;
@@ -32,6 +37,24 @@ export class UserDetailsModalComponent {
         this.populateYears();
     }
 
+    getAuthenticadeUser(): User {
+        let user: User = emptyUser;
+        this.userService.getUserByEmail().subscribe(
+            (response: { message: string; data: User }) => {
+                if (response?.data) {
+                    console.log('Utilizador', JSON.stringify(response.data, null, 2));
+                    user = response.data;
+                } else {
+                    console.warn('A resposta da API não contém usuários.');
+                }
+            },
+            (error: any) => {
+                console.error('Erro ao buscar usuários:', error);
+            }
+        );
+
+        return user;
+    }
     populateYears() {
         const currentYear = new Date().getFullYear();
         const startYear = 1900; // Defina o ano inicial conforme necessário
