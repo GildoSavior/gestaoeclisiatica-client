@@ -1,3 +1,5 @@
+import { User } from "../../models/user.model";
+
 export interface AuthUserData {
   email: string;
   accessLevel: string;
@@ -26,4 +28,28 @@ export class UserUtil {
       return null;
     }
   }
-}
+}export const emptyUser: User = {
+  id: '',
+  name: '',
+  lastName: '',
+  age: undefined,
+  email: '',
+  password: '',
+  address: '',
+  yearOfConversion: undefined,
+  createdAt: undefined,
+  updatedAt: undefined,
+  phoneNumber: undefined,
+  accessLevel: undefined,
+  maritalStatus: undefined,
+  disciplinaryStatus: undefined,
+  department: undefined,
+  position: undefined,
+  contactsList: [],
+  imageUrl: '',
+  events: [],
+  consultations: [],
+  lineContribs: []
+};
+
+

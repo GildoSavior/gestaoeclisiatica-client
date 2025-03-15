@@ -26,6 +26,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { User } from '../../models/user.model';
 import { UserService } from '../../service/user/user.service';
 import { DropdownModule } from 'primeng/dropdown';
+import { emptyUser } from '../../service/user/userUtils';
 
 interface Column {
     field: string;
@@ -76,7 +77,7 @@ interface ExportColumn {
 export class UsersComponent implements OnInit {
     userDialog: boolean = false;
     users = signal<User[]>([]);
-    user!: User;
+    user: User = {...emptyUser};
     selectedUser!: User | null;
     submitted: boolean = false;
     statuses!: any[];
@@ -200,9 +201,5 @@ export class UsersComponent implements OnInit {
         this.user = { ...user };
     }
 
-    MaritalStatus = [
-        { name: 'Option 1', code: 'Option 1' },
-        { name: 'Option 2', code: 'Option 2' },
-        { name: 'Option 3', code: 'Option 3' }
-    ];
+   
 }

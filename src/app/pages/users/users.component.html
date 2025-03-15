@@ -75,71 +75,83 @@
     </ng-template>
 </p-table>
 
-<p-dialog [(visible)]="userDialog" [style]="{ width: '450px' }" header="Detalhes do utilizador" [modal]="true">
+<p-dialog [(visible)]="userDialog" [style]="{ width: '500px' }" header="Detalhes do utilizador" [modal]="true">
     <div class="card flex flex-col gap-4">
-
+{{user.name}}
+        <!-- Imagem do usuário com botão de edição -->
         <div class="relative flex justify-center items-center w-full mt-4">
             <img [src]="selectedImage || 'https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png'" 
                 alt="User Avatar" 
                 width="100" 
                 class="rounded-full border border-gray-300 object-cover" />
             
-            <!-- Ícone de edição -->
             <div class="absolute bottom-2 right-40 bg-white p-1 rounded-full shadow-md flex items-center justify-center w-8 h-8 border border-gray-300 cursor-pointer"
                 (click)="triggerFileInput()">
                 <i class="pi pi-pencil text-gray-600 text-sm"></i>
             </div>
             <input type="file" accept="image/*" #fileInput hidden (change)="onFileSelected($event)">
         </div>
-                
-        <div class="flex flex-col gap-2">
-            <label for="name">Name</label>
-            <input pInputText id="name" type="text" />
+
+        <!-- Campos organizados em duas colunas -->
+        <div class="grid grid-cols-2 gap-4">
+            <div class="flex flex-col gap-2">
+                <label for="name">Nome</label>
+                <input pInputText id="name" type="text"  [(ngModel)]="user.name" />
+            </div>
+            <div class="flex flex-col gap-2">
+                <label for="lastName">Sobrenome</label>
+                <input pInputText id="lastName" type="text" />
+            </div>
         </div>
-        <div class="flex flex-col gap-2">
-            <label for="lastName">Sobrenome</label>
-            <input pInputText id="lastName" type="text" />
-        </div>
-        <div class="flex flex-col gap-2">
-            <label for="email">Email</label>
-            <input pInputText id="email" type="text" />
+
+        <div class="grid grid-cols-2 gap-4">
+            <div class="flex flex-col gap-2">
+                <label for="email">Email</label>
+                <input pInputText id="email" type="text" />
+            </div>
+            <div class="flex flex-col gap-2">
+                <label for="phoneNumber">Telefone</label>
+                <input pInputText id="phoneNumber" type="text" />
+            </div>
         </div>
 
         <div class="flex flex-col gap-2">
-            <label for="phoneNumber">Telefone</label>
-            <input pInputText id="phoneNumber" type="text" />
-        </div>
-        <div class="flex flex-col gap-2">
-            <label for="age">Age</label>
+            <label for="age">Idade</label>
             <input pInputText id="age" type="text" disabled />
         </div>
 
-        <div class="flex flex-wrap gap-2 w-full">
-            <label for="maritalStatus">Estado Cívil</label>
-            <p-select id="maritalStatus" [(ngModel)]="maritalStatus" [options]="maritalStatusOptions" optionLabel="name" placeholder="Selecione um estado civil" class="w-full" [panelStyle]="{ top: '-200px', position: 'absolute' }"></p-select>
+        <div class="grid grid-cols-2 gap-4">
+            <div class="flex flex-col gap-2">
+                <label for="maritalStatus">Estado Cívil</label>
+                <p-select id="maritalStatus" [(ngModel)]="maritalStatus" [options]="maritalStatusOptions" 
+                    optionLabel="name" placeholder="Selecione um estado civil" class="w-full" [panelStyle]="{ top: '-200px', position: 'absolute' }"></p-select>
+            </div>
+            <div class="flex flex-col gap-2">
+                <label for="yearOfConversion">Ano de conversão</label>
+                <p-select id="yearOfConversion" [(ngModel)]="dropdownYear" [options]="dropdownYears" 
+                    optionLabel="name" placeholder="Selecione um ano" class="w-full" [panelStyle]="{ top: '-200px', position: 'absolute' }"></p-select>
+            </div>
         </div>
 
-        <div class="flex flex-wrap gap-2 w-full">
-            <label for="yearOfConversion">Ano de conversão</label>
-            <p-select id="yearOfConversion" [(ngModel)]="dropdownYear" [options]="dropdownYears" optionLabel="name" placeholder="Selecione um ano" class="w-full" [panelStyle]="{ top: '-200px', position: 'absolute' }"></p-select>
-
+        <div class="grid grid-cols-2 gap-4">
+            <div class="flex flex-col gap-2">
+                <label for="departament">Departamento</label>
+                <input pInputText id="departament" type="text" />
+            </div>
+            <div class="flex flex-col gap-2">
+                <label for="position">Posição</label>
+                <input pInputText id="position" type="text" />
+            </div>
         </div>
 
-        <div class="flex flex-col gap-2">
-            <label for="departament">Departamento</label>
-            <input pInputText id="departament" type="text"  />
-        </div>
-        <div class="flex flex-col gap-2">
-            <label for="position">Posição</label>
-            <input pInputText id="position" type="text"  />
-        </div>
-        
     </div>
 
+    <!-- Rodapé com botões -->
     <ng-template #footer>
         <p-button label="Cancelar" icon="pi pi-times" text (click)="hideDialog()" />
         <p-button label="Salvar" icon="pi pi-check" (click)="saveUser(user)" />
     </ng-template>
 </p-dialog>
+
 
 <p-confirmdialog [style]="{ width: '450px' }"></p-confirmdialog>
