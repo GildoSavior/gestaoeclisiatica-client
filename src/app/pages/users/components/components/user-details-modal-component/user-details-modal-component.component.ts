@@ -1,7 +1,7 @@
 import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
-import { MaritalStatus } from '../../../../../models/enums/enums';
+import { AccessLevel, MaritalStatus } from '../../../../../models/enums/enums';
 import { DropdownModule } from 'primeng/dropdown';
 import { ButtonModule } from 'primeng/button';
 
@@ -17,14 +17,19 @@ export class UserDetailsModalComponent {
     selectedImage: string | ArrayBuffer | null = null;
     maritalStatusOptions = Object.values(MaritalStatus).map((status) => ({ name: status, code: status }));
     maritalStatus: MaritalStatus | null = null;
+    accessOptions = Object.values(AccessLevel).map((status) => ({
+        name: status,
+        value: status // Alterado de "code" para "value"
+    }));
+
+    access: AccessLevel | null = null;
     @ViewChild('fileInput') fileInput!: ElementRef;
     @Input() visible: boolean = false; // Controla a visibilidade do modal
     @Input() user: any; // Recebe os dados do usuário
 
     ngOnInit(): void {
-      console.log("Utilizador dialog: ", JSON.stringify( this.user));
+        console.log('Utilizador dialog: ', JSON.stringify(this.user));
         this.populateYears();
-        
     }
 
     populateYears() {
