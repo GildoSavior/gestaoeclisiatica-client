@@ -1,11 +1,64 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { DialogModule } from 'primeng/dialog';
+import { MaritalStatus } from '../../../../../models/enums/enums';
+import { DropdownModule } from 'primeng/dropdown';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
-  selector: 'app-user-details-modal-component',
-  imports: [],
-  templateUrl: './user-details-modal-component.component.html',
-  styleUrl: './user-details-modal-component.component.scss'
+    selector: 'app-user-details-modal-component',
+    imports: [DialogModule, FormsModule, DropdownModule, ButtonModule],
+    templateUrl: './user-details-modal-component.html',
+    styleUrl: './user-details-modal-component.scss'
 })
-export class UserDetailsModalComponentComponent {
+export class UserDetailsModalComponent {
+    dropdownYears: { name: string; value: number }[] = [];
+    dropdownYear: { name: string; value: number } | null = null;
+    selectedImage: string | ArrayBuffer | null = null;
+    maritalStatusOptions = Object.values(MaritalStatus).map((status) => ({ name: status, code: status }));
+    maritalStatus: MaritalStatus | null = null;
+    @ViewChild('fileInput') fileInput!: ElementRef;
+    @Input() visible: boolean = false; // Controla a visibilidade do modal
+    @Input() user: any; // Recebe os dados do usuário
 
+    ngOnInit(): void {
+      console.log("Utilizador dialog: ", JSON.stringify( this.user));
+        this.populateYears();
+        
+    }
+
+    populateYears() {
+        const currentYear = new Date().getFullYear();
+        const startYear = 1900; // Defina o ano inicial conforme necessário
+        this.dropdownYears = [];
+
+        for (let year = currentYear; year >= startYear; year--) {
+            this.dropdownYears.push({ name: year.toString(), value: year });
+        }
+    }
+
+    triggerFileInput() {
+        this.fileInput.nativeElement.click();
+    }
+
+    onFileSelected(event: Event) {
+        const input = event.target as HTMLInputElement;
+        if (input.files?.[0]) {
+            const file = input.files[0];
+            const reader = new FileReader();
+
+            reader.onload = (e) => {
+                this.selectedImage = e.target?.result ?? null;
+            };
+
+            reader.readAsDataURL(file);
+        }
+    }
+    hideDialog() {
+        this.visible = false;
+    }
+
+    saveUser() {}
+
+    close() {}
 }

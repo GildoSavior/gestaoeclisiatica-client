@@ -22,6 +22,7 @@ import { IconFieldModule } from 'primeng/iconfield';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { UserDetailsModalComponent } from './components/components/user-details-modal-component/user-details-modal-component.component';
 
 import { User } from '../../models/user.model';
 import { UserService } from '../../service/user/user.service';
@@ -68,7 +69,8 @@ interface ExportColumn {
         SelectModule,
         FormsModule,
         TextareaModule,
-        DropdownModule
+        DropdownModule,
+        UserDetailsModalComponent
     ],
     templateUrl: './users.component.html',
     styleUrls: ['./users.component.scss'],
@@ -77,20 +79,13 @@ interface ExportColumn {
 export class UsersComponent implements OnInit {
     userDialog: boolean = false;
     users = signal<User[]>([]);
-    user: User = {...emptyUser};
+    user: User = { ...emptyUser };
     selectedUser!: User | null;
     submitted: boolean = false;
     statuses!: any[];
     @ViewChild('dt') dt!: Table;
     exportColumns!: ExportColumn[];
     cols!: Column[];
-    maritalStatusOptions = Object.values(MaritalStatus).map((status) => ({ name: status, code: status }));
-    maritalStatus: MaritalStatus | null = null;
-    dropdownYears: { name: string; value: number }[] = [];
-    dropdownYear: { name: string; value: number } | null = null;
-    selectedImage: string | ArrayBuffer | null = null;
-
-    @ViewChild('fileInput') fileInput!: ElementRef;
 
     constructor(
         private readonly eventService: UserService,
@@ -104,7 +99,6 @@ export class UsersComponent implements OnInit {
 
     ngOnInit(): void {
         this.loadDemoData();
-        this.populateYears();
     }
 
     loadDemoData() {
@@ -135,34 +129,6 @@ export class UsersComponent implements OnInit {
         ];
 
         this.exportColumns = this.cols.map((col) => ({ title: col.header, dataKey: col.field }));
-    }
-
-    populateYears() {
-        const currentYear = new Date().getFullYear();
-        const startYear = 1900; // Defina o ano inicial conforme necessário
-        this.dropdownYears = [];
-
-        for (let year = currentYear; year >= startYear; year--) {
-            this.dropdownYears.push({ name: year.toString(), value: year });
-        }
-    }
-
-    triggerFileInput() {
-        this.fileInput.nativeElement.click();
-    }
-
-    onFileSelected(event: Event) {
-        const input = event.target as HTMLInputElement;
-        if (input.files?.[0]) {
-            const file = input.files[0];
-            const reader = new FileReader();
-
-            reader.onload = (e) => {
-                this.selectedImage = e.target?.result ?? null;
-            };
-
-            reader.readAsDataURL(file);
-        }
     }
 
     onGlobalFilter(table: Table, event: Event) {
@@ -197,9 +163,9 @@ export class UsersComponent implements OnInit {
     deleteUser(user: User) {}
 
     editUser(user: User) {
+        this.user = { ...user }
         this.userDialog = true;
-        this.user = { ...user };
-    }
+        console.log('Utilizador component: ', JSON.stringify(this.user));
 
-   
+    }
 }
