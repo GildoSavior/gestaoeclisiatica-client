@@ -31,6 +31,17 @@ export class UserService {
         return this.http.get<{ message: string; data: User }>(`${this.baseUrl}/users/email/${userData?.email}`, { headers });
     }
 
+    createUser(user: User): Observable<{ message: string; data: User }> {
+        const userData = UserUtil.getUserData();
+
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${userData?.jwtToken}`
+        });
+
+        return this.http.post<{ message: string; data: User }>(`${this.baseUrl}/users`, user, { headers });
+    }
+
     deleteUserByEmail(email: string): Observable<{ message: string; data: any }> {
         const userData = UserUtil.getUserData();
 

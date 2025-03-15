@@ -17,19 +17,20 @@ import { emptyUser } from '../../../../../service/user/userUtils';
 export class UserDetailsModalComponent implements OnInit {
     constructor(private readonly userService: UserService) {}
 
-    dropdownYears: { name: string; value: number }[] = [];
-    dropdownYear: { name: string; value: number } | null = null;
+    dropdownYears: { name: string; value: string }[] = [];
+    dropdownYear: { name: string; value: string } | null = null;
     selectedImage: string | ArrayBuffer | null = null;
-    maritalStatusOptions = Object.values(MaritalStatus).map((status) => ({ name: status, code: status }));
+   
+    maritalStatusOptions = Object.values(MaritalStatus).map((status) => ({ name: status, value: status }));
     maritalStatus: MaritalStatus | null = null;
-    accessOptions = Object.values(AccessLevel).map((status) => ({
-        name: status,
-        value: status // Alterado de "code" para "value"
+    
+    accessOptions = Object.values(AccessLevel).map((access) => ({
+        name: access,
+        value: access 
     }));
-
-    private _visible: boolean = false;
-
     access: AccessLevel | null = null;
+    
+    private _visible: boolean = false;
     @ViewChild('fileInput') fileInput!: ElementRef;
     //@Input() visible: boolean = false;
     @Input() isAdmin: boolean = false; // Controla a visibilidade do modal
@@ -67,19 +68,19 @@ export class UserDetailsModalComponent implements OnInit {
             }
         );
     }
+
     populateYears() {
         const currentYear = new Date().getFullYear();
         const startYear = 1900; // Defina o ano inicial conforme necessário
         this.dropdownYears = [];
 
         for (let year = currentYear; year >= startYear; year--) {
-            this.dropdownYears.push({ name: year.toString(), value: year });
+            this.dropdownYears.push({ name: year.toString(), value: year.toString() });
         }
     }
 
     triggerFileInput() {
         this.fileInput.nativeElement.click();
-        console.log('IsAdmin:', this.isAdmin);
     }
 
     onFileSelected(event: Event) {
@@ -100,7 +101,31 @@ export class UserDetailsModalComponent implements OnInit {
         this.visible = false;
     }
 
-    saveUser() {}
+    saveUser(user: User) {  
+        console.log(JSON.stringify(user, null, 2))
 
-    close() {}
+        if (!user.id) {
+            this.userService.createUser(user).subscribe(
+                (response: { message: string; data: User }) => {
+                    if (response?.data) {
+                        alert(response.message);
+                    } else {
+                        console.warn('A resposta da API não contém usuários.');
+                    }
+                },
+                (error: any) => {
+                    console.error('Erro ao criar utilizador:', error);
+                }
+            );
+
+            return;
+        }
+
+
+        console.log(user.id);
+    }
+
+    close() {
+        this.visible = false;
+    }
 }

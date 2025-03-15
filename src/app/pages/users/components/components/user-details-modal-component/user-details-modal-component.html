@@ -54,6 +54,7 @@
                     [(ngModel)]="user.maritalStatus"
                     [options]="maritalStatusOptions"
                     optionLabel="name"
+                    optionValue="value"
                     placeholder="Selecione"
                     class="w-full p-dropdown-sm border border-gray-300 rounded-md p-2"
                     [panelStyle]="{ top: '-200px', position: 'absolute' }"
@@ -66,6 +67,7 @@
                     [(ngModel)]="user.yearOfConversion"
                     [options]="dropdownYears"
                     optionLabel="name"
+                    optionValue="value"
                     placeholder="Selecione"
                     class="w-full p-dropdown-sm border border-gray-300 rounded-md p-2"
                     [panelStyle]="{ top: '-200px', position: 'absolute' }"
@@ -89,7 +91,7 @@
     <ng-template #footer>
         <div class="flex justify-end gap-2">
             <p-button label="Cancelar" icon="pi pi-times" class="p-button-text" (click)="hideDialog()" />
-            <p-button label="Salvar" icon="pi pi-check" class="p-button-primary" />
+            <p-button label="Salvar" icon="pi pi-check" class="p-button-primary" (click)="saveUser(user)" />
         </div>
     </ng-template>
 </p-dialog>
