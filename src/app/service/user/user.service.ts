@@ -20,6 +20,7 @@ export class UserService {
 
         return this.http.get<{ message: string; data: User[] }>(`${this.baseUrl}/users`, { headers });
     }
+    
     getUserByEmail(): Observable<{ message: string; data: User }> {
       const userData = UserUtil.getUserData()
 
@@ -27,6 +28,7 @@ export class UserService {
         Authorization: `Bearer ${userData?.jwtToken}`
       })
 
-      return this.http.get<{message: string, data: User}>(`${this.baseUrl}/users/email/${userData?.email}`)
+      return this.http.get<{message: string, data: User}>(`${this.baseUrl}/users/email/${userData?.email}`, { headers })
     }
 }
+

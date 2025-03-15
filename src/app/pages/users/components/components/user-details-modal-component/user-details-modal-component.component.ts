@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
 import { AccessLevel, MaritalStatus } from '../../../../../models/enums/enums';
@@ -14,7 +14,7 @@ import { emptyUser } from '../../../../../service/user/userUtils';
     templateUrl: './user-details-modal-component.html',
     styleUrl: './user-details-modal-component.scss'
 })
-export class UserDetailsModalComponent {
+export class UserDetailsModalComponent implements OnInit {
     constructor(private readonly userService: UserService) {}
 
     dropdownYears: { name: string; value: number }[] = [];
@@ -27,33 +27,47 @@ export class UserDetailsModalComponent {
         value: status // Alterado de "code" para "value"
     }));
 
+    private _visible: boolean = false;
+
     access: AccessLevel | null = null;
     @ViewChild('fileInput') fileInput!: ElementRef;
-    @Input() visible: boolean = false; // Controla a visibilidade do modal
+    //@Input() visible: boolean = false;
+    @Input() isAdmin: boolean = false; // Controla a visibilidade do modal
     @Input() user: any; // Recebe os dados do usuário
 
+    @Input()
+    set visible(value: boolean) {
+        this._visible = value;
+        if (this._visible && !this.isAdmin) {
+            this.getAuthenticatedUser();
+        }
+    }
+
+    get visible(): boolean {
+        return this._visible;
+    }
+
     ngOnInit(): void {
-        console.log('Utilizador dialog: ', JSON.stringify(this.user));
+        //console.log('Utilizador dialog: ', JSON.stringify(this.user));
+        console.log('IsAdmin:', this.isAdmin);
         this.populateYears();
     }
 
-    getAuthenticadeUser(): User {
-        let user: User = emptyUser;
+    getAuthenticatedUser() {
         this.userService.getUserByEmail().subscribe(
             (response: { message: string; data: User }) => {
                 if (response?.data) {
-                    console.log('Utilizador', JSON.stringify(response.data, null, 2));
-                    user = response.data;
+                    console.log('Utilizador autenticado:', JSON.stringify(response.data, null, 2));
+                    this.user = response.data; // Atribui o usuário autenticado a this.user
                 } else {
-                    console.warn('A resposta da API não contém usuários.');
+                    console.warn('A resposta da API não contém usuário.');
                 }
             },
+
             (error: any) => {
-                console.error('Erro ao buscar usuários:', error);
+                console.error('Erro ao buscar usuário:', error);
             }
         );
-
-        return user;
     }
     populateYears() {
         const currentYear = new Date().getFullYear();
@@ -67,6 +81,7 @@ export class UserDetailsModalComponent {
 
     triggerFileInput() {
         this.fileInput.nativeElement.click();
+        console.log('IsAdmin:', this.isAdmin);
     }
 
     onFileSelected(event: Event) {
@@ -82,6 +97,7 @@ export class UserDetailsModalComponent {
             reader.readAsDataURL(file);
         }
     }
+
     hideDialog() {
         this.visible = false;
     }

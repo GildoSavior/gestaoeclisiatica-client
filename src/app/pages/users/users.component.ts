@@ -106,7 +106,6 @@ export class UsersComponent implements OnInit {
             (response: { message: string; data: User[] }) => {
                 if (response && response.data) {
                     this.users.set(response.data);
-                    console.log('utilizadore:  ', JSON.stringify(response.data, null, 2));
                 } else {
                     console.warn('A resposta da API não contém usuários.');
                 }
@@ -165,7 +164,5 @@ export class UsersComponent implements OnInit {
     editUser(user: User) {
         this.user = { ...user }
         this.userDialog = true;
-        console.log('Utilizador component: ', JSON.stringify(this.user));
-
     }
 }
