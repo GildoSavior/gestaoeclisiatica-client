@@ -1,5 +1,4 @@
-import { MaritalStatus } from './../../models/enums/enums';
-import { Component, ElementRef, OnInit, ViewChild, signal } from '@angular/core';
+import { Component, OnInit, ViewChild, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
