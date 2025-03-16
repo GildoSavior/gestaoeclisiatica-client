@@ -51,6 +51,18 @@ export class AppMenu {
                         label: 'Utilizadores',
                         icon: 'pi pi-fw pi-users', // Ícone correto para eventos
                         routerLink: ['/pages/users']
+                    },
+
+                    {
+                        label: 'Departamentos',
+                        icon: 'pi pi-fw pi-sitemap', // Ícone correto para eventos
+                        routerLink: ['/pages/departments']
+                    },
+
+                    {
+                        label: 'Cargos',
+                        icon: 'pi pi-fw pi-briefcase', // Ícone correto para eventos
+                        routerLink: ['/pages/positions']
                     }
                 ],
                
