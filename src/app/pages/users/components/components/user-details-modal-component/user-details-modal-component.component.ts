@@ -6,13 +6,14 @@ import { DropdownModule } from 'primeng/dropdown';
 import { ButtonModule } from 'primeng/button';
 import { UserService } from '../../../../../service/user/user.service';
 import { User } from '../../../../../models/user.model';
-import { emptyUser } from '../../../../../service/user/userUtils';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { CommonModule } from '@angular/common';
 
 @Component({
     selector: 'app-user-details-modal-component',
-    imports: [DialogModule, FormsModule, DropdownModule, ButtonModule, ToastModule],
+    imports: [DialogModule, FormsModule, DropdownModule, ButtonModule, ToastModule, ProgressSpinnerModule, CommonModule],
     templateUrl: './user-details-modal-component.html',
     styleUrl: './user-details-modal-component.scss'
 })
@@ -24,11 +25,9 @@ export class UserDetailsModalComponent implements OnInit {
 
     dropdownYears: { name: string; value: string }[] = [];
     dropdownYear: { name: string; value: string } | null = null;
-    selectedImage: string | ArrayBuffer | null = null;
-
+    selectedImage: string | ArrayBuffer | File | null = null;
     maritalStatusOptions = Object.values(MaritalStatus).map((status) => ({ name: status, value: status }));
     maritalStatus: MaritalStatus | null = null;
-
     accessOptions = Object.values(AccessLevel).map((access) => ({
         name: access,
         value: access
@@ -53,6 +52,8 @@ export class UserDetailsModalComponent implements OnInit {
         return this._visible;
     }
 
+    isLoading = false;
+
     ngOnInit(): void {
         this.populateYears();
     }
@@ -62,7 +63,7 @@ export class UserDetailsModalComponent implements OnInit {
             (response: { message: string; data: User }) => {
                 if (response?.data) {
                     console.log('Utilizador autenticado:', JSON.stringify(response.data, null, 2));
-                    this.user = response.data; // Atribui o usuário autenticado a this.user
+                    this.user = response.data;
                 } else {
                     console.warn('A resposta da API não contém usuário.');
                 }
@@ -91,14 +92,7 @@ export class UserDetailsModalComponent implements OnInit {
     onFileSelected(event: Event) {
         const input = event.target as HTMLInputElement;
         if (input.files?.[0]) {
-            const file = input.files[0];
-            const reader = new FileReader();
-
-            reader.onload = (e) => {
-                this.selectedImage = e.target?.result ?? null;
-            };
-
-            reader.readAsDataURL(file);
+            this.selectedImage = input.files[0]; // Armazena diretamente como File
         }
     }
 
@@ -115,40 +109,55 @@ export class UserDetailsModalComponent implements OnInit {
     }
 
     saveUser(user: User) {
-        if (!user.id) {
-            this.userService.createUser(user).subscribe({
-                next: (response: { message: string; data: User }) => {
-                    this.messageService.add({
-                        severity: 'success',
-                        summary: 'Sucesso',
-                        detail: response.message
-                    });
-                    this.close();
-                },
-                error: (err: { error: { message: string } }) => {
-                    this.showError('Falha ao atualizar utilizador: ' + err.error.message);
-                }
-            });
 
-            return;
-        }
+        this.isLoading = true;
 
-        this.userService.updateUser(user.email as string, user).subscribe({
+        const saveObservable = user.id ? this.userService.updateUser(user.email as string, user) : this.userService.createUser(user);
+
+        saveObservable.subscribe({
             next: (response: { message: string; data: User }) => {
                 this.messageService.add({
                     severity: 'success',
                     summary: 'Sucesso',
                     detail: response.message
                 });
-                this.close();
+
+                // Se houver uma imagem, faz o upload
+                if (this.selectedImage) {
+                    this.uploadImage(user.email as string);
+                } else {
+                    this.hideDialog();
+                    this.isLoading = false;
+                }
             },
             error: (err: { error: { message: string } }) => {
-                this.showError('Falha ao atualizar utilizador: ' + err.error.message);
+                this.isLoading = false; 
+                this.showError('Falha ao salvar utilizador: ' + err.error.message);
             }
         });
     }
 
-    close() {
-        this.visible = false;
+    uploadImage(email: string) {
+        if (this.selectedImage instanceof File) {
+            // Garante que é um File
+            this.userService.uploadUserImage(email, this.selectedImage).subscribe({
+                next: (response: { message: string; data: User }) => {
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: 'Sucesso',
+                        detail: response.message
+                    });
+                    this.isLoading = false; 
+                    this.hideDialog();
+                },
+                error: (err: { error: { message: string } }) => {
+                    this.isLoading = false; 
+                    this.showError('Falha ao fazer upload da imagem: ' + err.error.message);
+                }
+            });
+        } else {
+            this.isLoading = false; 
+            this.showError('Erro: Nenhum arquivo válido selecionado.');
+        }
     }
 }

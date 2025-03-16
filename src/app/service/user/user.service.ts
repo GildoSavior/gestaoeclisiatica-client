@@ -67,20 +67,15 @@ export class UserService {
     }
 
     uploadUserImage(email: string, file: File): Observable<{ message: string; data: any }> {
-      const userData = UserUtil.getUserData();
-  
-      const headers = new HttpHeaders({
-          Authorization: `Bearer ${userData?.jwtToken}`
-      });
-  
-      const formData = new FormData();
-      formData.append('file', file);
-  
-      return this.http.post<{ message: string; data: any }>(
-          `${this.baseUrl}/upload/${email}`,
-          formData,
-          { headers }
-      );
-  }
-  
+        const userData = UserUtil.getUserData();
+
+        const headers = new HttpHeaders({
+            Authorization: `Bearer ${userData?.jwtToken}`
+        });
+
+        const formData = new FormData();
+        formData.append('file', file);
+        console.log(`${this.baseUrl}/users/upload/${email}`);
+        return this.http.post<{ message: string; data: any }>(`${this.baseUrl}/users/upload/${email}`, formData,   { headers } );
+    }
 }
