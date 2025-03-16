@@ -20,16 +20,16 @@ export class UserDetailsModalComponent implements OnInit {
     dropdownYears: { name: string; value: string }[] = [];
     dropdownYear: { name: string; value: string } | null = null;
     selectedImage: string | ArrayBuffer | null = null;
-   
+
     maritalStatusOptions = Object.values(MaritalStatus).map((status) => ({ name: status, value: status }));
     maritalStatus: MaritalStatus | null = null;
-    
+
     accessOptions = Object.values(AccessLevel).map((access) => ({
         name: access,
-        value: access 
+        value: access
     }));
     access: AccessLevel | null = null;
-    
+
     private _visible: boolean = false;
     @ViewChild('fileInput') fileInput!: ElementRef;
     //@Input() visible: boolean = false;
@@ -101,14 +101,15 @@ export class UserDetailsModalComponent implements OnInit {
         this.visible = false;
     }
 
-    saveUser(user: User) {  
-        console.log(JSON.stringify(user, null, 2))
+    saveUser(user: User) {
+        console.log(JSON.stringify(user, null, 2));
 
         if (!user.id) {
             this.userService.createUser(user).subscribe(
                 (response: { message: string; data: User }) => {
                     if (response?.data) {
                         alert(response.message);
+                        this.close();
                     } else {
                         console.warn('A resposta da API não contém usuários.');
                     }
@@ -121,8 +122,19 @@ export class UserDetailsModalComponent implements OnInit {
             return;
         }
 
-
-        console.log(user.id);
+        this.userService.update(user.email, user).subscribe(
+            (response: { message: string; data: User }) => {
+                if (response?.data) {
+                    alert(response.message);
+                    this.close();
+                } else {
+                    console.warn('A resposta da API não contém usuários.');
+                }
+            },
+            (error: any) => {
+                console.error('Erro ao criar utilizador:', error);
+            }
+        );
     }
 
     close() {
