@@ -7,15 +7,20 @@ import { ButtonModule } from 'primeng/button';
 import { UserService } from '../../../../../service/user/user.service';
 import { User } from '../../../../../models/user.model';
 import { emptyUser } from '../../../../../service/user/userUtils';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
     selector: 'app-user-details-modal-component',
-    imports: [DialogModule, FormsModule, DropdownModule, ButtonModule],
+    imports: [DialogModule, FormsModule, DropdownModule, ButtonModule, ToastModule],
     templateUrl: './user-details-modal-component.html',
     styleUrl: './user-details-modal-component.scss'
 })
 export class UserDetailsModalComponent implements OnInit {
-    constructor(private readonly userService: UserService) {}
+    constructor(
+        private readonly userService: UserService,
+        private readonly messageService: MessageService
+    ) {}
 
     dropdownYears: { name: string; value: string }[] = [];
     dropdownYear: { name: string; value: string } | null = null;
@@ -101,40 +106,46 @@ export class UserDetailsModalComponent implements OnInit {
         this.visible = false;
     }
 
-    saveUser(user: User) {
-        console.log(JSON.stringify(user, null, 2));
+    private showError(message: string) {
+        this.messageService.add({
+            severity: 'error',
+            summary: 'Erro',
+            detail: message
+        });
+    }
 
+    saveUser(user: User) {
         if (!user.id) {
-            this.userService.createUser(user).subscribe(
-                (response: { message: string; data: User }) => {
-                    if (response?.data) {
-                        alert(response.message);
-                        this.close();
-                    } else {
-                        console.warn('A resposta da API não contém usuários.');
-                    }
+            this.userService.createUser(user).subscribe({
+                next: (response: { message: string; data: User }) => {
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: 'Sucesso',
+                        detail: response.message
+                    });
+                    this.close();
                 },
-                (error: any) => {
-                    console.error('Erro ao criar utilizador:', error);
+                error: (err: { error: { message: string } }) => {
+                    this.showError('Falha ao atualizar utilizador: ' + err.error.message);
                 }
-            );
+            });
 
             return;
         }
 
-        this.userService.update(user.email, user).subscribe(
-            (response: { message: string; data: User }) => {
-                if (response?.data) {
-                    alert(response.message);
-                    this.close();
-                } else {
-                    console.warn('A resposta da API não contém usuários.');
-                }
+        this.userService.updateUser(user.email as string, user).subscribe({
+            next: (response: { message: string; data: User }) => {
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Sucesso',
+                    detail: response.message
+                });
+                this.close();
             },
-            (error: any) => {
-                console.error('Erro ao criar utilizador:', error);
+            error: (err: { error: { message: string } }) => {
+                this.showError('Falha ao atualizar utilizador: ' + err.error.message);
             }
-        );
+        });
     }
 
     close() {

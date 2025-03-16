@@ -1,7 +1,6 @@
+<p-toast></p-toast>
 <p-dialog [(visible)]="visible" [style]="{ width: '500px', 'border-radius': '12px' }" header="Detalhes do Utilizador" [modal]="true" class="p-fluid">
     <div class="card flex flex-col gap-6 p-4">
-  
-
         <!-- Imagem do usuário com botão de edição -->
         <div class="relative flex justify-center items-center">
             <img [src]="selectedImage || 'https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png'" alt="User Avatar" width="100" class="rounded-full border border-gray-300 shadow-md object-cover" />
@@ -61,10 +60,10 @@
                 ></p-dropdown>
             </div>
             <div class="flex flex-col gap-2">
-                <label for="yearOfConversion" class="font-medium">Ano de conversão</label>
+                <label for="yearOfConversation" class="font-medium">Ano de conversão</label>
                 <p-dropdown
-                    id="yearOfConversion"
-                    [(ngModel)]="user.yearOfConversion"
+                    id="yearOfConversation"
+                    [(ngModel)]="user.yearOfConversation"
                     [options]="dropdownYears"
                     optionLabel="name"
                     optionValue="value"
