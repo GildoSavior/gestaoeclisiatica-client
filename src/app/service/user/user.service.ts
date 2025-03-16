@@ -39,10 +39,21 @@ export class UserService {
             Authorization: `Bearer ${userData?.jwtToken}`
         });
 
-        console.log("Token JWT:", userData?.jwtToken);
+        console.log('Token JWT:', userData?.jwtToken);
 
-        console.log(JSON.stringify(user, null, 2))
+        console.log(JSON.stringify(user, null, 2));
         return this.http.post<{ message: string; data: User }>(`${this.baseUrl}/users`, user, { headers });
+    }
+
+    updateUser(email: string, user: User): Observable<{ message: string; data: User }> {
+        const userData = UserUtil.getUserData();
+
+        const headers = new HttpHeaders({
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${userData?.jwtToken}`
+        });
+
+        return this.http.put<{ message: string; data: User }>(`${this.baseUrl}/users/${email}`, user, { headers });
     }
 
     deleteUserByEmail(email: string): Observable<{ message: string; data: any }> {
