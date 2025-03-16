@@ -2,7 +2,6 @@ import { Component, signal, ViewChild } from '@angular/core';
 import { Department } from '../../models/departament.model';
 import { Table, TableModule } from 'primeng/table';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { DepartmentService } from '../../service/department/department.service';
 import { ToolbarModule } from 'primeng/toolbar';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -23,6 +22,8 @@ import { IconFieldModule } from 'primeng/iconfield';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { DropdownModule } from 'primeng/dropdown';
+import { Position } from '../../models/position.model';
+import { PositionService } from '../../service/position/position.service';
 
 
 
@@ -39,7 +40,7 @@ interface ExportColumn {
 
 
 @Component({
-  selector: 'app-departamentos',
+  selector: 'app-positions',
   providers: [ConfirmationService],
   imports: [
     CommonModule,
@@ -69,16 +70,16 @@ interface ExportColumn {
         TextareaModule,
         DropdownModule,
   ],
-  templateUrl: './departamentos.component.html',
-  styleUrl: './departamentos.component.scss'
+  templateUrl: './positions.component.html',
+  styleUrl: './positions.component.scss'
 })
 
-export class DepartamentosComponent {
+export class PositionsComponent {
 
- departmentDialog: boolean = false;
-    departments = signal<Department[]>([]);
-    department: Department = { id: '', code: '', description: '' };
-    selectedDepartment!: Department | null;
+ positionDialog: boolean = false;
+    positions = signal<Position[]>([]);
+    position: Position = { id: '', code: '', description: '' };
+    selectedPosition!: Department | null;
     submitted: boolean = false;
     statuses!: any[];
     @ViewChild('dt') dt!: Table;
@@ -86,7 +87,7 @@ export class DepartamentosComponent {
     cols!: Column[];
 
     constructor(
-        private readonly departmentService: DepartmentService,
+        private readonly departmentService: PositionService,
         private readonly messageService: MessageService,
         private readonly confirmationService: ConfirmationService
     ) {}
@@ -102,18 +103,7 @@ export class DepartamentosComponent {
     }
 
     loadDemoData() {
-        // this.departmentService.getAll().subscribe(
-        //     (response: { message: string; data: Department[] }) => {
-        //         if (response && response.data) {
-        //             this.departments.set(response.data);
-        //         } else {
-        //             console.warn('A resposta da API não contém departamentos.');
-        //         }
-        //     },
-        //     (error: any) => {
-        //         console.error('Erro ao buscar departamentos:', error);
-        //     }
-        // );
+
 
         this.cols = [
             { field: 'code', header: 'Codigo' },
@@ -128,24 +118,24 @@ export class DepartamentosComponent {
     }
 
     openNew() {
-        this.department = {} as Department;
+        this.position = {} as Department;
         this.submitted = false;
-        this.departmentDialog = true;
+        this.positionDialog = true;
     }
 
     hideDialog() {
-        this.departmentDialog = false;
+        this.positionDialog = false;
         this.submitted = false;
     }
 
-    deleteSelectedDepartment() {}
+    deleteSelectedPosition() {}
 
-    saveDepartment(departament: Department) {}
+    savePosition(position: Position) {}
 
-    deleteDepartment(departament: Department) {}
+    deletePosition(position: Position) {}
     
-    editDepartment(departament: Department) {
-        this.department = { ...departament };
-        this.departmentDialog = true;
+    editPosition(position: Position) {
+        this.position = { ...position };
+        this.positionDialog = true;
     }
 }

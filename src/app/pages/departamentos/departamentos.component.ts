@@ -39,7 +39,7 @@ interface ExportColumn {
 
 
 @Component({
-  selector: 'app-departamentos',
+  selector: 'app-positions',
   providers: [ConfirmationService],
   imports: [
     CommonModule,
