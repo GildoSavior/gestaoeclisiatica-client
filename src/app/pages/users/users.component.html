@@ -54,7 +54,7 @@
 
             <td style="min-width: 9.5rem">
                 <div class="flex items-center gap-2 w-44">
-                    <img [alt]="" src="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png'" width="32" />
+                    <img [alt]="" [src]="user.imageUrl || 'https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png'" width="32"  class="w-10 h-10 rounded-full object-cover border border-gray-300"/>
                     <span>{{ user.name }} {{ user.lastName }} </span>
                 </div>
             </td>

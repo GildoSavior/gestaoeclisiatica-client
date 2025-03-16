@@ -6,7 +6,6 @@ import { OverlayPanelModule, OverlayPanel } from 'primeng/overlaypanel';
 import { DialogModule } from 'primeng/dialog';
 import { AppConfigurator } from '../app.configurator';
 import { LayoutService } from '../../service/layout.service';
-import { ProfileComponent } from '../../../pages/user/profile.component';
 import { UserDetailsModalComponent } from '../../../pages/users/components/components/user-details-modal-component/user-details-modal-component.component';
 import { emptyUser } from '../../../service/user/userUtils';
 import { User } from '../../../models/user.model';
@@ -21,7 +20,6 @@ import { User } from '../../../models/user.model';
         AppConfigurator,
         DialogModule,
         OverlayPanelModule, // ✅ Adicionado
-        ProfileComponent,
         UserDetailsModalComponent
     ],
     templateUrl: './app-topbar.component.html'
