@@ -1,35 +1,28 @@
 <p-toast></p-toast>
 
-<p-dialog [(visible)]="visible" [style]="{ width: '500px', 'border-radius': '12px' }" header="Detalhes do Departamento"
-    [modal]="true" class="p-fluid" [closable]="!isLoading">
-
+<p-dialog [(visible)]="visible" [style]="{ width: '500px', 'border-radius': '12px' }" header="Detalhes do departamento" [modal]="true" class="p-fluid" [closable]="!isLoading">
     <div *ngIf="isLoading" class="flex justify-center items-center p-6">
         <p-progressSpinner></p-progressSpinner>
     </div>
 
-    <div class="card flex flex-col gap-6 p-4" [class.opacity-50]="isLoading">
-        <div class="grid grid-cols-2 gap-4">
+    <div class="card flex flex-col gap-6 p-4" [class.opacity-50]="isLoading">        
             <div class="flex flex-col gap-2">
-                <label for="name" class="font-medium">Código</label>
-                <input pInputText class="p-inputtext border border-gray-300 rounded-md p-2" id="name" type="text"
-                    [(ngModel)]="department.code" />
+                <label for="name" class="font-medium">Codigo</label>
+                <input pInputText class="p-inputtext border border-gray-300 rounded-md p-2" id="name" type="text" [(ngModel)]="department.codigo" />
             </div>
             <div class="flex flex-col gap-2">
-                <label for="description" class="font-medium">Descrição</label>
-                <input pInputText id="description" type="text" class="p-inputtext border border-gray-300 rounded-md p-2"
-                    [(ngModel)]="department.description" />
+                <label for="lastName" class="font-medium">Descrição</label>
+                <input pInputText id="lastName" type="text" class="p-inputtext border border-gray-300 rounded-md p-2" [(ngModel)]="department.description" />
             </div>
-        </div>
     </div>
 
-    <!-- ✅ Correção: Usando p-footer corretamente -->
-    <p-footer>
-        <div class="flex justify-end gap-2">
-            <p-button label="Cancelar" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"
-                [disabled]="isLoading" />
-            <p-button label="Salvar" icon="pi pi-check" class="p-button-primary" (click)="saveDepartment(department)"
-                [disabled]="isLoading" />
+    <ng-template #footer>
+        <div class="flex justify-end w-full p-4">
+            <p-button label="Cancelar" icon="pi pi-times" class="p-button-text" (click)="hideDialog()" [disabled]="isLoading" />
+            <p-button label="Salvar" icon="pi pi-check" class="p-button-primary ml-2" (click)="saveDepartment(department)" [disabled]="isLoading" />
         </div>
-    </p-footer>
+    </ng-template>
+    
+
 
 </p-dialog>
