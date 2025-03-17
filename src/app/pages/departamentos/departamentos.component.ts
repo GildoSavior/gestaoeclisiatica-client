@@ -23,6 +23,7 @@ import { IconFieldModule } from 'primeng/iconfield';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { DropdownModule } from 'primeng/dropdown';
+import { DepartmentDetailsModalComponent } from './components/department-details-modal-component.component';
 
 
 
@@ -68,6 +69,7 @@ interface ExportColumn {
         FormsModule,
         TextareaModule,
         DropdownModule,
+        DepartmentDetailsModalComponent
   ],
   templateUrl: './departamentos.component.html',
   styleUrl: './departamentos.component.scss'
@@ -102,19 +104,6 @@ export class DepartamentosComponent {
     }
 
     loadDemoData() {
-        // this.departmentService.getAll().subscribe(
-        //     (response: { message: string; data: Department[] }) => {
-        //         if (response && response.data) {
-        //             this.departments.set(response.data);
-        //         } else {
-        //             console.warn('A resposta da API não contém departamentos.');
-        //         }
-        //     },
-        //     (error: any) => {
-        //         console.error('Erro ao buscar departamentos:', error);
-        //     }
-        // );
-
         this.cols = [
             { field: 'code', header: 'Codigo' },
             { field: 'description', header: 'Descrição' },
@@ -138,12 +127,17 @@ export class DepartamentosComponent {
         this.submitted = false;
     }
 
+    closeModal() {
+        this.departmentDialog = false;
+        this.selectedDepartment = null;
+    }
+
     deleteSelectedDepartment() {}
 
     saveDepartment(departament: Department) {}
 
     deleteDepartment(departament: Department) {}
-    
+
     editDepartment(departament: Department) {
         this.department = { ...departament };
         this.departmentDialog = true;
