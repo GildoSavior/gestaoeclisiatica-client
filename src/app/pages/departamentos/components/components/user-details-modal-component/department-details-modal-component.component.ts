@@ -11,12 +11,12 @@ import { CommonModule } from '@angular/common';
 import { DepartmentService } from '../../../../../service/department/department.service';
 
 @Component({
-    selector: 'app-user-details-modal-component',
+    selector: 'app-department-details-modal-component',
     imports: [DialogModule, FormsModule, DropdownModule, ButtonModule, ToastModule, ProgressSpinnerModule, CommonModule],
-    templateUrl: './user-details-modal-component.html',
-    styleUrl: './user-details-modal-component.scss'
+    templateUrl: './department-details-modal-component.html',
+    styleUrl: './department-details-modal-component.scss'
 })
-export class UserDetailsModalComponent implements OnInit {
+export class DepartmentDetailsModalComponent implements OnInit {
     constructor(
         private readonly departmentService: DepartmentService,
         private readonly messageService: MessageService
@@ -42,7 +42,7 @@ export class UserDetailsModalComponent implements OnInit {
         });
     }
 
-    saveUser(department: Department) {
+    saveDepartment(department: Department) {
         this.isLoading = true;
 
         const saveObservable = department.id ? this.departmentService.updateDepartment(department.code) : this.departmentService.createDepartment(department);
