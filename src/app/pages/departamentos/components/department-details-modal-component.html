@@ -7,12 +7,12 @@
 
     <div class="card flex flex-col gap-6 p-4" [class.opacity-50]="isLoading">        
             <div class="flex flex-col gap-2">
-                <label for="name" class="font-medium">Codigo</label>
-                <input pInputText class="p-inputtext border border-gray-300 rounded-md p-2" id="name" type="text" [(ngModel)]="department.codigo" />
+                <label for="code" class="font-medium">Codigo</label>
+                <input pInputText class="p-inputtext border border-gray-300 rounded-md p-2" id="code" type="text" [(ngModel)]="department.code" />
             </div>
             <div class="flex flex-col gap-2">
-                <label for="lastName" class="font-medium">Descrição</label>
-                <input pInputText id="lastName" type="text" class="p-inputtext border border-gray-300 rounded-md p-2" [(ngModel)]="department.description" />
+                <label for="description" class="font-medium">Descrição</label>
+                <input pInputText id="description" type="text" class="p-inputtext border border-gray-300 rounded-md p-2" [(ngModel)]="department.description" />
             </div>
     </div>
 

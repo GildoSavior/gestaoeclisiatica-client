@@ -24,8 +24,8 @@ export class DepartmentDetailsModalComponent implements OnInit {
     ) {}
 
     @Input() visible: boolean = false;
-    @Input() department!: any
-    @Output() onClose = new EventEmitter<void>(); // Evento para notificar o fechamento do modal
+    @Input() department!: any;
+    @Output() onClose = new EventEmitter<void>(); 
 
     isLoading = false;
 
@@ -33,7 +33,7 @@ export class DepartmentDetailsModalComponent implements OnInit {
 
     hideDialog() {
         this.visible = false;
-        this.onClose.emit(); // Emite o evento ao fechar o modal
+        this.onClose.emit(); 
     }
 
     private showError(message: string) {
@@ -47,8 +47,22 @@ export class DepartmentDetailsModalComponent implements OnInit {
     saveDepartment(department: Department) {
         this.isLoading = true;
 
-        const saveObservable = department.id
-            ? this.departmentService.updateDepartment(department.code)
-            : this.departmentService.createDepartment(department);
+        const saveObservable = department.id ? this.departmentService.updateDepartment(department.code, department) : this.departmentService.createDepartment(department);
+        saveObservable.subscribe({
+            next: (response: { message: string; data: Department }) => {
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Sucesso',
+                    detail: response.message
+                });
+
+                this.hideDialog();
+                this.isLoading = false;
+            },
+            error: (err: { error: { message: string } }) => {
+                this.isLoading = false;
+                this.showError('Falha ao salvar departamento: ' + err.error.message);
+            }
+        });
     }
 }
