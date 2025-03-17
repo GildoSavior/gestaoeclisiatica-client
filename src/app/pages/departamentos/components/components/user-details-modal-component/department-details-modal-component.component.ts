@@ -1,15 +1,14 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Department } from './../../../../../models/departament.model';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
-import { AccessLevel, MaritalStatus } from '../../../../../models/enums/enums';
 import { DropdownModule } from 'primeng/dropdown';
 import { ButtonModule } from 'primeng/button';
-import { UserService } from '../../../../../service/user/user.service';
-import { User } from '../../../../../models/user.model';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { CommonModule } from '@angular/common';
+import { DepartmentService } from '../../../../../service/department/department.service';
 
 @Component({
     selector: 'app-user-details-modal-component',
@@ -19,82 +18,17 @@ import { CommonModule } from '@angular/common';
 })
 export class UserDetailsModalComponent implements OnInit {
     constructor(
-        private readonly userService: UserService,
+        private readonly departmentService: DepartmentService,
         private readonly messageService: MessageService
     ) {}
 
-    dropdownYears: { name: string; value: string }[] = [];
-    dropdownYear: { name: string; value: string } | null = null;
-    selectedImage: string | ArrayBuffer | File | null = null;
-    maritalStatusOptions = Object.values(MaritalStatus).map((status) => ({ name: status, value: status }));
-    maritalStatus: MaritalStatus | null = null;
-    accessOptions = Object.values(AccessLevel).map((access) => ({
-        name: access,
-        value: access
-    }));
-    access: AccessLevel | null = null;
-
-    private _visible: boolean = false;
-    @ViewChild('fileInput') fileInput!: ElementRef;
-    //@Input() visible: boolean = false;
+    @Input() visible: boolean = false;
     @Input() isAdmin: boolean = false; // Controla a visibilidade do modal
-    @Input() user: any; // Recebe os dados do usuário
-
-    @Input()
-    set visible(value: boolean) {
-        this._visible = value;
-        if (this._visible && !this.isAdmin) {
-            this.getAuthenticatedUser();
-        }
-    }
-
-    get visible(): boolean {
-        return this._visible;
-    }
+    @Input() department: any; // Recebe os dados do usuário
 
     isLoading = false;
 
-    ngOnInit(): void {
-        this.populateYears();
-    }
-
-    getAuthenticatedUser() {
-        this.userService.getUserByEmail().subscribe(
-            (response: { message: string; data: User }) => {
-                if (response?.data) {
-                    console.log('Utilizador autenticado:', JSON.stringify(response.data, null, 2));
-                    this.user = response.data;
-                } else {
-                    console.warn('A resposta da API não contém usuário.');
-                }
-            },
-
-            (error: any) => {
-                console.error('Erro ao buscar usuário:', error);
-            }
-        );
-    }
-
-    populateYears() {
-        const currentYear = new Date().getFullYear();
-        const startYear = 1900; // Defina o ano inicial conforme necessário
-        this.dropdownYears = [];
-
-        for (let year = currentYear; year >= startYear; year--) {
-            this.dropdownYears.push({ name: year.toString(), value: year.toString() });
-        }
-    }
-
-    triggerFileInput() {
-        this.fileInput.nativeElement.click();
-    }
-
-    onFileSelected(event: Event) {
-        const input = event.target as HTMLInputElement;
-        if (input.files?.[0]) {
-            this.selectedImage = input.files[0]; // Armazena diretamente como File
-        }
-    }
+    ngOnInit(): void {}
 
     hideDialog() {
         this.visible = false;
@@ -108,56 +42,9 @@ export class UserDetailsModalComponent implements OnInit {
         });
     }
 
-    saveUser(user: User) {
-
+    saveUser(department: Department) {
         this.isLoading = true;
 
-        const saveObservable = user.id ? this.userService.updateUser(user.email as string, user) : this.userService.createUser(user);
-
-        saveObservable.subscribe({
-            next: (response: { message: string; data: User }) => {
-                this.messageService.add({
-                    severity: 'success',
-                    summary: 'Sucesso',
-                    detail: response.message
-                });
-
-                // Se houver uma imagem, faz o upload
-                if (this.selectedImage) {
-                    this.uploadImage(user.email as string);
-                } else {
-                    this.hideDialog();
-                    this.isLoading = false;
-                }
-            },
-            error: (err: { error: { message: string } }) => {
-                this.isLoading = false; 
-                this.showError('Falha ao salvar utilizador: ' + err.error.message);
-            }
-        });
-    }
-
-    uploadImage(email: string) {
-        if (this.selectedImage instanceof File) {
-            // Garante que é um File
-            this.userService.uploadUserImage(email, this.selectedImage).subscribe({
-                next: (response: { message: string; data: User }) => {
-                    this.messageService.add({
-                        severity: 'success',
-                        summary: 'Sucesso',
-                        detail: response.message
-                    });
-                    this.isLoading = false; 
-                    this.hideDialog();
-                },
-                error: (err: { error: { message: string } }) => {
-                    this.isLoading = false; 
-                    this.showError('Falha ao fazer upload da imagem: ' + err.error.message);
-                }
-            });
-        } else {
-            this.isLoading = false; 
-            this.showError('Erro: Nenhum arquivo válido selecionado.');
-        }
+        const saveObservable = department.id ? this.departmentService.updateDepartment(department.code) : this.departmentService.createDepartment(department);
     }
 }
