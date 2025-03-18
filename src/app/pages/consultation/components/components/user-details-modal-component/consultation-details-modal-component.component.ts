@@ -9,6 +9,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { CommonModule } from '@angular/common';
 import { Consultation } from '../../../../../models/consultation.model';
 import { ConsultationStatus } from '../../../../../models/enums/enums';
+import { ConsultationService } from '../../../../../service/consultation/consultation.service';
 
 @Component({
     selector: 'app-consultation-details-modal-component',
