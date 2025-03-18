@@ -1,0 +1,41 @@
+<p-toast></p-toast>
+
+<p-dialog [(visible)]="visible" [style]="{ width: '500px', 'border-radius': '12px' }" header="Detalhes do Utilizador" [modal]="true" class="p-fluid" [closable]="!isLoading">
+    <div *ngIf="isLoading" class="flex justify-center items-center p-6">
+        <p-progressSpinner></p-progressSpinner>
+    </div>
+
+    <div class="card flex flex-col gap-6 p-4" [class.opacity-50]="isLoading">
+        <!-- Campos organizados em duas colunas -->
+
+        <div class="flex flex-col gap-2">
+            <label for="code" class="font-medium">Codigo</label>
+            <input pInputText class="p-inputtext border border-gray-300 rounded-md p-2" id="code" type="text" [(ngModel)]="consultation.code" />
+        </div>
+        <div class="flex flex-col gap-2">
+            <label for="description" class="font-medium">Descrição</label>
+            <input pInputText id="description" type="text" class="p-inputtext border border-gray-300 rounded-md p-2" [(ngModel)]="consultation.description" />
+        </div>
+        <div class="flex flex-col gap-2">
+            <label for="userEmail" class="font-medium">Utilizador</label>
+            <input pInputText id="userEmail" type="text" class="p-inputtext border border-gray-300 rounded-md p-2" [(ngModel)]="consultation.userEmail" />
+        </div>
+        <div class="flex flex-col gap-2">
+            <label for="data" class="font-medium">Data</label>
+            <input pInputText id="data" type="datetime" class="p-inputtext border border-gray-300 rounded-md p-2" [(ngModel)]="consultation.data" />
+        </div>
+
+        <div class="flex flex-col gap-2">
+            <label for="status" class="font-medium">Estado</label>
+            <p-dropdown id="status" [(ngModel)]="consultation.status" [options]="statusOptions" optionLabel="name" optionValue="value" placeholder="Selecione" class="w-full p-dropdown-sm border border-gray-300 rounded-md p-2"></p-dropdown>
+        </div>
+    </div>
+
+    <!-- Rodapé com botões -->
+    <ng-template #footer>
+        <div class="flex justify-end gap-2">
+            <p-button label="Cancelar" icon="pi pi-times" class="p-button-text" (click)="hideDialog()" [disabled]="isLoading" />
+            <p-button label="Salvar" icon="pi pi-check" class="p-button-primary" (click)="saveConsultation(consultation)" [disabled]="isLoading" />
+        </div>
+    </ng-template>
+</p-dialog>

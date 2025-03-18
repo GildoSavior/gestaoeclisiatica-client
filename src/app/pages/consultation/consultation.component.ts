@@ -21,12 +21,9 @@ import { IconFieldModule } from 'primeng/iconfield';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { MultiSelectModule } from 'primeng/multiselect';
-import { UserDetailsModalComponent } from './components/components/user-details-modal-component/user-details-modal-component.component';
-
-import { User } from '../../models/user.model';
-import { UserService } from '../../service/user/user.service';
 import { DropdownModule } from 'primeng/dropdown';
-import { emptyUser } from '../../service/user/userUtils';
+import { Consultation } from '../../models/consultation.model';
+import { ConsultationService } from '../../service/consultation/consultation.service';
 
 interface Column {
     field: string;
@@ -40,7 +37,7 @@ interface ExportColumn {
 }
 
 @Component({
-    selector: 'app-users',
+    selector: 'app-consultations',
     standalone: true,
     imports: [
         CommonModule,
@@ -69,17 +66,16 @@ interface ExportColumn {
         FormsModule,
         TextareaModule,
         DropdownModule,
-        UserDetailsModalComponent
     ],
-    templateUrl: './users.component.html',
-    styleUrls: ['./users.component.scss'],
+    templateUrl: './consultations.component.html',
+    styleUrls: ['./consultations.component.scss'],
     providers: [MessageService, ConfirmationService]
 })
-export class UsersComponent implements OnInit {
-    userDialog: boolean = false;
-    users = signal<User[]>([]);
-    user: User = { ...emptyUser };
-    selectedUser!: User | null;
+export class ConsultationsComponent implements OnInit {
+    consultationDialog: boolean = false;
+    consultations = signal<Consultation[]>([]);
+    consultation: Consultation = {} as Consultation
+    selectedConsultation!: Consultation | null;
     submitted: boolean = false;
     statuses!: any[];
     @ViewChild('dt') dt!: Table;
@@ -87,7 +83,7 @@ export class UsersComponent implements OnInit {
     cols!: Column[];
 
     constructor(
-        private readonly userService: UserService,
+        private readonly consultationService: ConsultationService,
         private readonly messageService: MessageService,
         private readonly confirmationService: ConfirmationService
     ) {}
@@ -101,12 +97,12 @@ export class UsersComponent implements OnInit {
     }
 
     loadDemoData() {
-        this.userService.getAllUsers().subscribe(
-            (response: { message: string; data: User[] }) => {
+        this.consultationService.getAll().subscribe(
+            (response: { message: string; data: Consultation[] }) => {
                 if (response && response.data) {
-                    this.users.set(response.data);
+                    this.consultations.set(response.data);
                 } else {
-                    console.warn('A resposta da API não contém usuários.');
+                    console.warn('A resposta da API não contém consultas.');
                 }
             },
             (error: any) => {
@@ -115,15 +111,12 @@ export class UsersComponent implements OnInit {
         );
 
         this.cols = [
-            { field: '', header: 'Utilizador' },
-            { field: 'email', header: 'Email' },
-            { field: 'age', header: 'Idade' },
-            { field: 'phoneNumber', header: 'Telefone' },
-            { field: 'address', header: 'Morada' },
-            { field: 'departament', header: 'Departamento' },
-            { field: 'disciplinaryStatus', header: 'Estado Disciplinar' },
-            { field: 'accessLevel', header: 'Nível de Acesso' },
-            { field: 'maritalStatus', header: 'Marital' }
+            { field: 'Code', header: 'Codigo' },
+            { field: 'description', header: 'Descrição' },
+            { field: 'userEmail', header: 'Utilizador' },
+            { field: 'data', header: 'Data' },
+            { field: 'status', header: 'Estado' },
+
         ];
 
         this.exportColumns = this.cols.map((col) => ({ title: col.header, dataKey: col.field }));
@@ -134,67 +127,67 @@ export class UsersComponent implements OnInit {
     }
 
     openNew() {
-        this.user = {} as User;
+        this.consultation = {} as Consultation;
         this.submitted = false;
-        this.userDialog = true;
+        this.consultationDialog = true;
     }
 
     hideDialog() {
-        this.userDialog = false;
+        this.consultationDialog = false;
         this.submitted = false;
     }
 
-    deleteSelectedUser() {
-        if (!this.selectedUser?.email) {
+    deleteSelectedConsultation() {
+        if (!this.selectedConsultation?.code) {
             this.messageService.add({
                 severity: 'warn',
                 summary: 'Aviso',
-                detail: 'Nenhum utilizador selecionado para excluir.',
+                detail: 'Nenhum consulta selecionada para excluir.',
                 life: 3000
             });
             return;
         }
     }
 
-    saveUser(usr: User) {}
+    saveConsultation(consultation: Consultation) {}
 
-    deleteUser(user: User) {
-        if (!user?.email) {
+    deleteConsultation(consultation: Consultation) {
+        if (!consultation?.code) {
             this.messageService.add({
                 severity: 'warn',
                 summary: 'Aviso',
-                detail: 'Email inválido',
+                detail: 'Codigo inválido',
                 life: 3000
             });
             return;
         }
     
         this.confirmationService.confirm({
-            message: `Tem certeza de que deseja eliminar o utilizador ${user.name}?`,
+            message: `Tem certeza de que deseja eliminar a consulta ${consultation.code}?`,
             header: 'Confirmar',
             icon: 'pi pi-exclamation-triangle',
             accept: () => {
-                this.userService.deleteUserByEmail(user?.email as string).subscribe({
+                this.consultationService.deleteConsultation(consultation?.code as string).subscribe({
                     next: () => {
                         this.messageService.add({
                             severity: 'success',
                             summary: 'Sucesso',
-                            detail: 'Utilizador eliminado com sucesso',
+                            detail: 'Consulta eleminada com sucesso eliminado com sucesso',
                             life: 3000
                         });
     
                         // Resetando usuário selecionado
-                        this.selectedUser = null;
-                        this.user = emptyUser;
+                        this.selectedConsultation = null;
+                        this.consultation = {} as Consultation;
     
                         // Recarrega os dados após a exclusão
                         this.loadDemoData();
                     },
-                    error: (error) => {
+                    error: (error: { message: any; }) => {
                         this.messageService.add({
                             severity: 'error',
                             summary: 'Erro',
-                            detail: `Erro ao eliminar utilizador: ${error.message}`,
+                            detail: `Erro ao eliminar consulta: ${error.message}`,
                             life: 3000
                         });
                     }
@@ -205,8 +198,8 @@ export class UsersComponent implements OnInit {
     
     
 
-    editUser(user: User) {
-        this.user = { ...user };
-        this.userDialog = true;
+    editConsutation(consultation: Consultation) {
+        this.consultation = { ...consultation };
+        this.consultationDialog = true;
     }
 }
