@@ -1,4 +1,4 @@
-import { User } from "./user.model";
+
 import { ConsultationStatus } from "./enums/enums";
 
 export interface Consultation {
@@ -7,6 +7,6 @@ export interface Consultation {
   data: Date;
   createdAt: Date;
   updatedAt: Date;
-  user: User;
+  userEmail: string;
   status: ConsultationStatus;
 }

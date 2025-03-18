@@ -1,15 +1,13 @@
-import { Component, signal, ViewChild } from '@angular/core';
-import { Department } from '../../models/departament.model';
-import { Table, TableModule } from 'primeng/table';
-import { ConfirmationService, MessageService } from 'primeng/api';
-import { DepartmentService } from '../../service/department/department.service';
-import { ToolbarModule } from 'primeng/toolbar';
+import { Component, OnInit, ViewChild, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { Table } from 'primeng/table';
+import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { RippleModule } from 'primeng/ripple';
 import { ToastModule } from 'primeng/toast';
+import { ToolbarModule } from 'primeng/toolbar';
 import { RatingModule } from 'primeng/rating';
 import { InputTextModule } from 'primeng/inputtext';
 import { TextareaModule } from 'primeng/textarea';
@@ -21,9 +19,14 @@ import { TagModule } from 'primeng/tag';
 import { InputIconModule } from 'primeng/inputicon';
 import { IconFieldModule } from 'primeng/iconfield';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { UserDetailsModalComponent } from './components/components/user-details-modal-component/user-details-modal-component.component';
+
+import { User } from '../../models/user.model';
+import { UserService } from '../../service/user/user.service';
 import { DropdownModule } from 'primeng/dropdown';
-import { DepartmentDetailsModalComponent } from './components/department-details-modal-component.component';
+import { emptyUser } from '../../service/user/userUtils';
 
 interface Column {
     field: string;
@@ -37,8 +40,8 @@ interface ExportColumn {
 }
 
 @Component({
-    selector: 'app-positions',
-    providers: [ConfirmationService],
+    selector: 'app-users',
+    standalone: true,
     imports: [
         CommonModule,
         FormsModule,
@@ -66,16 +69,17 @@ interface ExportColumn {
         FormsModule,
         TextareaModule,
         DropdownModule,
-        DepartmentDetailsModalComponent
+        UserDetailsModalComponent
     ],
-    templateUrl: './departamentos.component.html',
-    styleUrl: './departamentos.component.scss'
+    templateUrl: './users.component.html',
+    styleUrls: ['./users.component.scss'],
+    providers: [MessageService, ConfirmationService]
 })
-export class DepartamentosComponent {
-    departmentDialog: boolean = false;
-    departments = signal<Department[]>([]);
-    department: Department = { id: '', code: '', description: '' };
-    selectedDepartment!: Department | null;
+export class UsersComponent implements OnInit {
+    userDialog: boolean = false;
+    users = signal<User[]>([]);
+    user: User = { ...emptyUser };
+    selectedUser!: User | null;
     submitted: boolean = false;
     statuses!: any[];
     @ViewChild('dt') dt!: Table;
@@ -83,7 +87,7 @@ export class DepartamentosComponent {
     cols!: Column[];
 
     constructor(
-        private readonly departmentService: DepartmentService,
+        private readonly userService: UserService,
         private readonly messageService: MessageService,
         private readonly confirmationService: ConfirmationService
     ) {}
@@ -97,10 +101,10 @@ export class DepartamentosComponent {
     }
 
     loadDemoData() {
-        this.departmentService.getAll().subscribe(
-            (response: { message: string; data: Department[] }) => {
+        this.userService.getAllUsers().subscribe(
+            (response: { message: string; data: User[] }) => {
                 if (response && response.data) {
-                    this.departments.set(response.data);
+                    this.users.set(response.data);
                 } else {
                     console.warn('A resposta da API não contém usuários.');
                 }
@@ -111,8 +115,15 @@ export class DepartamentosComponent {
         );
 
         this.cols = [
-            { field: 'code', header: 'Codigo' },
-            { field: 'description', header: 'Descrição' }
+            { field: '', header: 'Utilizador' },
+            { field: 'email', header: 'Email' },
+            { field: 'age', header: 'Idade' },
+            { field: 'phoneNumber', header: 'Telefone' },
+            { field: 'address', header: 'Morada' },
+            { field: 'departament', header: 'Departamento' },
+            { field: 'disciplinaryStatus', header: 'Estado Disciplinar' },
+            { field: 'accessLevel', header: 'Nível de Acesso' },
+            { field: 'maritalStatus', header: 'Marital' }
         ];
 
         this.exportColumns = this.cols.map((col) => ({ title: col.header, dataKey: col.field }));
@@ -123,57 +134,59 @@ export class DepartamentosComponent {
     }
 
     openNew() {
-        this.department = {} as Department;
+        this.user = {} as User;
         this.submitted = false;
-        this.departmentDialog = true;
+        this.userDialog = true;
     }
 
     hideDialog() {
-        this.departmentDialog = false;
+        this.userDialog = false;
         this.submitted = false;
     }
 
-    closeModal() {
-        this.departmentDialog = false;
-        this.selectedDepartment = null;
-    }
-
-    deleteSelectedDepartment() {}
-
-    saveDepartment(departament: Department) {}
-
-    deleteDepartment(departament: Department) {
-        console.log('departament:', departament);
-        console.log('departament.code:', departament?.code);
-        
-        if (!departament?.code) {
+    deleteSelectedUser() {
+        if (!this.selectedUser?.email) {
             this.messageService.add({
                 severity: 'warn',
                 summary: 'Aviso',
-                detail: 'Codigo do departamento inválido',
+                detail: 'Nenhum utilizador selecionado para excluir.',
                 life: 3000
             });
             return;
         }
+    }
 
+    saveUser(usr: User) {}
+
+    deleteUser(user: User) {
+        if (!user?.email) {
+            this.messageService.add({
+                severity: 'warn',
+                summary: 'Aviso',
+                detail: 'Email inválido',
+                life: 3000
+            });
+            return;
+        }
+    
         this.confirmationService.confirm({
-            message: `Tem certeza de que deseja eliminar o departamento ${departament.code} - ${departament.description}?`,
+            message: `Tem certeza de que deseja eliminar o utilizador ${user.name}?`,
             header: 'Confirmar',
             icon: 'pi pi-exclamation-triangle',
             accept: () => {
-                this.departmentService.deleteDepartment(departament?.code as string).subscribe({
+                this.userService.deleteUserByEmail(user?.email as string).subscribe({
                     next: () => {
                         this.messageService.add({
                             severity: 'success',
                             summary: 'Sucesso',
-                            detail: 'Departamento eliminado com sucesso',
+                            detail: 'Utilizador eliminado com sucesso',
                             life: 3000
                         });
-
+    
                         // Resetando usuário selecionado
-                        this.selectedDepartment = null;
-                        this.department = {} as Department;
-
+                        this.selectedUser = null;
+                        this.user = emptyUser;
+    
                         // Recarrega os dados após a exclusão
                         this.loadDemoData();
                     },
@@ -181,7 +194,7 @@ export class DepartamentosComponent {
                         this.messageService.add({
                             severity: 'error',
                             summary: 'Erro',
-                            detail: `Erro ao eliminar departamento: ${error.message}`,
+                            detail: `Erro ao eliminar utilizador: ${error.message}`,
                             life: 3000
                         });
                     }
@@ -189,11 +202,11 @@ export class DepartamentosComponent {
             }
         });
     }
+    
+    
 
-    editDepartment(departament: Department) {
-        this.department = { ...departament };
-        this.submitted = false;
-        this.departmentDialog = true;
+    editUser(user: User) {
+        this.user = { ...user };
+        this.userDialog = true;
     }
 }
-

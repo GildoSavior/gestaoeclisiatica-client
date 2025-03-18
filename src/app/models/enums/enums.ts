@@ -6,10 +6,10 @@ export enum AccessLevel {
 }
   
 export enum MaritalStatus {
-    SINGLE = "SINGLE",
-    MARRIED = "MARRIED",
-    DIVORCED = "DIVORCED",
-    WIDOWED = "WIDOWED"
+    SINGLE = "Solteiro",
+    MARRIED = "Casado",
+    DIVORCED = "Divorciado",
+    WIDOWED = "Viuvo"
 }
 
 export enum ConsultationStatus {
