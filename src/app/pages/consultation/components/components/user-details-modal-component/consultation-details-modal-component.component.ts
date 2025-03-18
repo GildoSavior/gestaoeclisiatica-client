@@ -22,11 +22,10 @@ export class ConsultationDetailsModalComponent implements OnInit {
         private readonly consultationService: ConsultationService,
         private readonly messageService: MessageService
     ) {}
-    statusOptions = Object.values(ConsultationStatus).map((status) => ({
-        name: status,
-        value: status
+    statusOptions = Object.entries(ConsultationStatus).map(([key, value]) => ({
+        name: value, // Exibe a descrição no dropdown
+        value: key // Mantém o valor real para envio
     }));
-    static: ConsultationStatus | null = null;
 
     @Input() visible: boolean = false;
     @Input() consultation!: any;
@@ -50,9 +49,16 @@ export class ConsultationDetailsModalComponent implements OnInit {
 
     saveConsultation(consultation: Consultation) {
         this.isLoading = true;
-
-        const saveObservable = consultation.code ? this.consultationService.updateConsultation(consultation.code, consultation) : this.consultationService.createConsultation(consultation);
-
+    
+        // Converte a string '2025-03-18T08:47' para um objeto Date e depois para ISO string
+        consultation.data = new Date(consultation.data).toISOString();
+    
+        console.log(JSON.stringify(consultation));
+    
+        const saveObservable = consultation.code 
+            ? this.consultationService.updateConsultation(consultation.code, consultation) 
+            : this.consultationService.createConsultation(consultation);
+    
         saveObservable.subscribe({
             next: (response: { message: string; data: Consultation }) => {
                 this.messageService.add({
@@ -69,4 +75,5 @@ export class ConsultationDetailsModalComponent implements OnInit {
             }
         });
     }
+    
 }

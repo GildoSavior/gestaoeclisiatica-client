@@ -42,7 +42,7 @@ export class ConsultationService {
         return this.http.put<ApiResponse<Consultation>>(`${this.baseUrl}/${code}`, consultation, { headers: this.getHeaders() });
     }
 
-    deleteConsultation(code: string): Observable<ApiResponse<Consultation>> {
-        return this.http.delete<ApiResponse<Consultation>>(`${this.baseUrl}/${code}`, { headers: this.getHeaders() });
+    deleteConsultation(code: string): Observable<ApiResponse<string>> {
+        return this.http.delete<ApiResponse<string>>(`${this.baseUrl}/${code}`, { headers: this.getHeaders() });
     }
 }

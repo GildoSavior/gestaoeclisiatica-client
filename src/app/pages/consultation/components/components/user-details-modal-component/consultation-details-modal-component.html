@@ -22,13 +22,25 @@
         </div>
         <div class="flex flex-col gap-2">
             <label for="data" class="font-medium">Data</label>
-            <input pInputText id="data" type="datetime" class="p-inputtext border border-gray-300 rounded-md p-2" [(ngModel)]="consultation.data" />
+            <input pInputText id="data" type="datetime-local" class="p-inputtext border border-gray-300 rounded-md p-2" [(ngModel)]="consultation.data" />
         </div>
 
         <div class="flex flex-col gap-2">
             <label for="status" class="font-medium">Estado</label>
-            <p-dropdown id="status" [(ngModel)]="consultation.status" [options]="statusOptions" optionLabel="name" optionValue="value" placeholder="Selecione" class="w-full p-dropdown-sm border border-gray-300 rounded-md p-2"></p-dropdown>
+            <p-dropdown
+                id="status"
+                [(ngModel)]="consultation.status"
+                [options]="statusOptions"
+                optionLabel="name"
+                optionValue="value"
+                placeholder="Selecione"
+                class="w-full p-dropdown-sm border border-gray-300 rounded-md p-2"
+                [appendTo]="'body'"
+                [panelStyle]="{ 'bottom': '100%', 'top': 'auto' }"
+            >
+            </p-dropdown>
         </div>
+        
     </div>
 
     <!-- Rodapé com botões -->

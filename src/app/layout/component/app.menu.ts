@@ -63,6 +63,12 @@ export class AppMenu {
                         label: 'Cargos',
                         icon: 'pi pi-fw pi-briefcase', // Ícone correto para eventos
                         routerLink: ['/pages/positions']
+                    },
+
+                    {
+                        label: 'Consultas',
+                        icon: 'pi pi-calendar', // Ícone correto para eventos
+                        routerLink: ['/pages/consultations']
                     }
                 ],
                

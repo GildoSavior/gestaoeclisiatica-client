@@ -24,6 +24,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { DropdownModule } from 'primeng/dropdown';
 import { Consultation } from '../../models/consultation.model';
 import { ConsultationService } from '../../service/consultation/consultation.service';
+import { ConsultationDetailsModalComponent } from './components/components/user-details-modal-component/consultation-details-modal-component.component';
 
 interface Column {
     field: string;
@@ -66,6 +67,7 @@ interface ExportColumn {
         FormsModule,
         TextareaModule,
         DropdownModule,
+        ConsultationDetailsModalComponent
     ],
     templateUrl: './consultations.component.html',
     styleUrls: ['./consultations.component.scss'],
@@ -198,7 +200,7 @@ export class ConsultationsComponent implements OnInit {
     
     
 
-    editConsutation(consultation: Consultation) {
+    editConsultation(consultation: Consultation) {
         this.consultation = { ...consultation };
         this.consultationDialog = true;
     }
