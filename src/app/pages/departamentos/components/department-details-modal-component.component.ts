@@ -24,9 +24,8 @@ export class DepartmentDetailsModalComponent implements OnInit {
     ) {}
 
     @Input() visible: boolean = false;
-    @Input() department!: any;
+    @Input() department: Department = {id: "", code: "", description:""}
     @Output() onClose = new EventEmitter<void>(); 
-
     isLoading = false;
 
     ngOnInit(): void {}

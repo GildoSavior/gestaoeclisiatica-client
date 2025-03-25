@@ -17,6 +17,7 @@ import { ConsultationService } from '../../../../../service/consultation/consult
     templateUrl: './consultation-details-modal-component.html',
     styleUrl: './consultation-details-modal-component.scss'
 })
+
 export class ConsultationDetailsModalComponent implements OnInit {
     constructor(
         private readonly consultationService: ConsultationService,
