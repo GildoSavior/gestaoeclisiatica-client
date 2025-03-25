@@ -102,11 +102,11 @@ export class DepartamentosComponent {
                 if (response && response.data) {
                     this.departments.set(response.data);
                 } else {
-                    console.warn('A resposta da API não contém usuários.');
+                    console.warn('A resposta da API não contém Departamentos.');
                 }
             },
             (error: any) => {
-                console.error('Erro ao buscar usuários:', error);
+                console.error('Erro ao buscar Departamentos:', error);
             }
         );
 

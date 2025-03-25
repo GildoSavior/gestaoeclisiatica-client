@@ -25,7 +25,7 @@ export class PositionDetailsModalComponent implements OnInit {
     ) {}
 
     @Input() visible: boolean = false;
-    @Input() position: Position = {id: "", code: "", description:""}
+    @Input() position: Position = {id: '', code: '', description:''}
     @Output() onClose = new EventEmitter<void>(); 
     isLoading = false;
 
@@ -44,7 +44,7 @@ export class PositionDetailsModalComponent implements OnInit {
         });
     }
 
-    saveDepartment(position: Position) {
+    savePosition(position: Position) {
         this.isLoading = true;
 
         const saveObservable = position.id ? this.positionService.updatePosition(position.code, position) : this.positionService.createPosition(position);

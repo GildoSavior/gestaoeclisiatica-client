@@ -1,5 +1,4 @@
 import { Component, signal, ViewChild } from '@angular/core';
-import { Department } from '../../models/departament.model';
 import { Table, TableModule } from 'primeng/table';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ToolbarModule } from 'primeng/toolbar';
@@ -24,6 +23,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { DropdownModule } from 'primeng/dropdown';
 import { Position } from '../../models/position.model';
 import { PositionService } from '../../service/position/position.service';
+import { PositionDetailsModalComponent } from './components/position-details-modal-component.component';
 
 
 
@@ -69,6 +69,7 @@ interface ExportColumn {
         FormsModule,
         TextareaModule,
         DropdownModule,
+        PositionDetailsModalComponent
   ],
   templateUrl: './positions.component.html',
   styleUrl: './positions.component.scss'
@@ -79,7 +80,7 @@ export class PositionsComponent {
  positionDialog: boolean = false;
     positions = signal<Position[]>([]);
     position: Position = { id: '', code: '', description: '' };
-    selectedPosition!: Department | null;
+    selectedPosition!: Position | null;
     submitted: boolean = false;
     statuses!: any[];
     @ViewChild('dt') dt!: Table;
@@ -87,7 +88,7 @@ export class PositionsComponent {
     cols!: Column[];
 
     constructor(
-        private readonly departmentService: PositionService,
+        private readonly positionService: PositionService,
         private readonly messageService: MessageService,
         private readonly confirmationService: ConfirmationService
     ) {}
@@ -118,12 +119,12 @@ export class PositionsComponent {
     }
 
     openNew() {
-        this.position = {} as Department;
+        this.position = {} as Position;
         this.submitted = false;
         this.positionDialog = true;
     }
 
-    hideDialog() {
+    closeModal() {
         this.positionDialog = false;
         this.submitted = false;
     }
