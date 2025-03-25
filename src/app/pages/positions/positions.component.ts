@@ -104,11 +104,22 @@ export class PositionsComponent {
     }
 
     loadDemoData() {
-
+        this.positionService.getAll().subscribe(
+            (response: { message: string; data: Position[] }) => {
+                if (response && response.data) {
+                    this.positions.set(response.data);
+                } else {
+                    console.warn('A resposta da API não contém Cargos.');
+                }
+            },
+            (error: any) => {
+                console.error('Erro ao buscar Cargos:', error);
+            }
+        );
 
         this.cols = [
             { field: 'code', header: 'Codigo' },
-            { field: 'description', header: 'Descrição' },
+            { field: 'description', header: 'Descrição' }
         ];
 
         this.exportColumns = this.cols.map((col) => ({ title: col.header, dataKey: col.field }));
@@ -133,7 +144,50 @@ export class PositionsComponent {
 
     savePosition(position: Position) {}
 
-    deletePosition(position: Position) {}
+    deletePosition(position: Position) {
+    
+        
+        if (!position?.code) {
+            this.messageService.add({
+                severity: 'warn',
+                summary: 'Aviso',
+                detail: 'Codigo do cargo inválido',
+                life: 3000
+            });
+            return;
+        }
+
+        this.confirmationService.confirm({
+            message: `Tem certeza de que deseja eliminar o cargo ${position.code} - ${position.description}?`,
+            header: 'Confirmar',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+                this.positionService.deletePosition(position?.code).subscribe({
+                    next: () => {
+                        this.messageService.add({
+                            severity: 'success',
+                            summary: 'Sucesso',
+                            detail: 'CArgo eliminado com sucesso',
+                            life: 3000
+                        });
+                        
+                        this.selectedPosition = null;
+                        this.position = {} as Position;
+
+                        this.loadDemoData();
+                    },
+                    error: (error) => {
+                        this.messageService.add({
+                            severity: 'error',
+                            summary: 'Erro',
+                            detail: `Erro ao eliminar cargo: ${error.message}`,
+                            life: 3000
+                        });
+                    }
+                });
+            }
+        });
+    }
     
     editPosition(position: Position) {
         this.position = { ...position };
