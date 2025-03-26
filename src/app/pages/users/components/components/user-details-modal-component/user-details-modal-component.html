@@ -51,8 +51,8 @@
                 <p-dropdown id="accessLevel" [(ngModel)]="user.accessLevel" [options]="accessOptions" optionLabel="name" optionValue="value" placeholder="Selecione" class="w-full p-dropdown-sm border border-gray-300 rounded-md p-2"></p-dropdown>
             </div>
             <div class="flex flex-col gap-2">
-                <label for="age" class="font-medium">Idade</label>
-                <input pInputText id="age" type="text" disabled class="p-inputtext border border-gray-300 rounded-md p-2 bg-gray-100" [(ngModel)]="user.age" />
+                <label for="birthDay" class="font-medium">Data de Nascimento</label>
+                <input pInputText id="birthDay" type="date"  class="p-inputtext border border-gray-300 rounded-md p-2 bg-gray-100" [(ngModel)]="user.birthDay" />
             </div>
         </div>
 

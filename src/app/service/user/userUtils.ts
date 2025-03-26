@@ -32,7 +32,7 @@ export class UserUtil {
   id: '',
   name: '',
   lastName: '',
-  age: undefined,
+  birthDay: undefined,
   email: '',
   password: '',
   address: '',
