@@ -10,6 +10,8 @@ import { CommonModule } from '@angular/common';
 import { Consultation } from '../../../../../models/consultation.model';
 import { ConsultationStatus } from '../../../../../models/enums/enums';
 import { ConsultationService } from '../../../../../service/consultation/consultation.service';
+import { ApiResponse } from '../../../../../dto/reponses';
+
 
 @Component({
     selector: 'app-consultation-details-modal-component',
@@ -48,33 +50,62 @@ export class ConsultationDetailsModalComponent implements OnInit {
         });
     }
 
+    toLocalISOStringWithoutMs(date: Date): string {
+        const pad = (n: number) => n.toString().padStart(2, '0');
+        return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T` +
+               `${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+    }
+
     saveConsultation(consultation: Consultation) {
         this.isLoading = true;
     
-        // Converte a string '2025-03-18T08:47' para um objeto Date e depois para ISO string
-        consultation.data = new Date(consultation.data).toISOString();
+        // Verifica se a data foi informada e é válida
+        if (typeof consultation.data !== 'string' || !consultation.data.trim()) {
+            this.showError('Data da consulta não informada.');
+            this.isLoading = false;
+            return;
+        }
     
-        console.log(JSON.stringify(consultation));
+        const parsedDate = new Date(consultation.data);
+        if (isNaN(parsedDate.getTime())) {
+            this.showError('Data da consulta inválida.');
+            this.isLoading = false;
+            return;
+        }
     
-        const saveObservable = consultation.code 
-            ? this.consultationService.updateConsultation(consultation.code, consultation) 
-            : this.consultationService.createConsultation(consultation);
+        // Converte a data para o formato aceito pelo Spring Boot (LocalDateTime sem milissegundos)
+        consultation.data = this.toLocalISOStringWithoutMs(parsedDate);
     
-        saveObservable.subscribe({
-            next: (response: { message: string; data: Consultation }) => {
-                this.messageService.add({
-                    severity: 'success',
-                    summary: 'Sucesso',
-                    detail: response.message
-                });
-                this.hideDialog();
-                this.isLoading = false;
-            },
-            error: (err: { error: { message: string } }) => {
-                this.isLoading = false;
-                this.showError('Falha ao salvar consulta: ' + err.error.message);
-            }
-        });
+        console.log('Consulta a ser enviada:', JSON.stringify(consultation));
+    
+        // const saveObservable = consultation.code != null
+        //     ? this.consultationService.updateConsultation(consultation.code, consultation) 
+        //     : this.consultationService.createConsultation(consultation);
+
+            const saveObservable =  this.consultationService.createConsultation(consultation);
+    
+            saveObservable.subscribe({
+                next: (response: ApiResponse<Consultation>) => {
+                    if (response?.ok && response.data) { // Certifique-se de que 'ok' está sendo validado
+                        this.messageService.add({
+                            severity: 'success',
+                            summary: 'Sucesso',
+                            detail: response.message
+                        });
+                        this.hideDialog();
+                    } else {
+                        this.showError('Falha ao salvar consulta: ' + (response.message || 'Erro desconhecido'));
+                        this.isLoading = false;
+                        return
+                    }
+                    this.isLoading = false;
+                },
+                error: (err: { error?: { message: string } }) => {
+                    this.isLoading = false;
+                    const errorMessage = err?.error?.message || 'Erro desconhecido';
+                    this.showError('Falha ao salvar consulta: ' + errorMessage);
+                }
+            });
+        
     }
-    
 }

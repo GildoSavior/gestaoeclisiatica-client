@@ -24,7 +24,7 @@ export class DepartmentDetailsModalComponent implements OnInit {
     ) {}
 
     @Input() visible: boolean = false;
-    @Input() department: Department = {id: "", code: "", description:""}
+    @Input() department: Department = {id: 0, code: "", description:""}
     @Output() onClose = new EventEmitter<void>(); 
     isLoading = false;
 
@@ -46,7 +46,7 @@ export class DepartmentDetailsModalComponent implements OnInit {
     saveDepartment(department: Department) {
         this.isLoading = true;
 
-        const saveObservable = department.id ? this.departmentService.updateDepartment(department.code, department) : this.departmentService.createDepartment(department);
+        const saveObservable = department.id ? this.departmentService.updateDepartment(department.id, department) : this.departmentService.createDepartment(department);
         saveObservable.subscribe({
             next: (response: { message: string; data: Department }) => {
                 this.messageService.add({

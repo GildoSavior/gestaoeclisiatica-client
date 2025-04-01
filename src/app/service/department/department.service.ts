@@ -37,11 +37,11 @@ export class DepartmentService {
         return this.http.post<ApiResponse<Department>>(this.baseUrl, department, { headers: this.getHeaders() });
     }
 
-    updateDepartment(code: string, department: Department): Observable<ApiResponse<Department>> {
-        return this.http.put<ApiResponse<Department>>(`${this.baseUrl}/${code}`, department, { headers: this.getHeaders() });
+    updateDepartment(id: number, department: Department): Observable<ApiResponse<Department>> {
+        return this.http.put<ApiResponse<Department>>(`${this.baseUrl}/${id}`, department, { headers: this.getHeaders() });
     }
 
-    deleteDepartment(code: string): Observable<ApiResponse<Department>> {
-        return this.http.delete<ApiResponse<Department>>(`${this.baseUrl}/${code}`, { headers: this.getHeaders() });
+    deleteDepartment(id: number): Observable<ApiResponse<Department>> {
+        return this.http.delete<ApiResponse<Department>>(`${this.baseUrl}/${id}`, { headers: this.getHeaders() });
     }
 }

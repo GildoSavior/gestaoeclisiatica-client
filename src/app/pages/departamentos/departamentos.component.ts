@@ -74,7 +74,7 @@ interface ExportColumn {
 export class DepartamentosComponent {
     departmentDialog: boolean = false;
     departments = signal<Department[]>([]);
-    department: Department = { id: '', code: '', description: '' };
+    department: Department = { id: 0, code: '', description: '' };
     selectedDepartment!: Department | null;
     submitted: boolean = false;
     statuses!: any[];
@@ -143,25 +143,13 @@ export class DepartamentosComponent {
     saveDepartment(departament: Department) {}
 
     deleteDepartment(departament: Department) {
-        console.log('departament:', departament);
-        console.log('departament.code:', departament?.code);
-        
-        if (!departament?.code) {
-            this.messageService.add({
-                severity: 'warn',
-                summary: 'Aviso',
-                detail: 'Codigo do departamento inválido',
-                life: 3000
-            });
-            return;
-        }
-
+      
         this.confirmationService.confirm({
             message: `Tem certeza de que deseja eliminar o departamento ${departament.code} - ${departament.description}?`,
             header: 'Confirmar',
             icon: 'pi pi-exclamation-triangle',
             accept: () => {
-                this.departmentService.deleteDepartment(departament?.code as string).subscribe({
+                this.departmentService.deleteDepartment(departament?.id as number).subscribe({
                     next: () => {
                         this.messageService.add({
                             severity: 'success',

@@ -3,18 +3,13 @@ import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { UserUtil } from '../user/userUtils';
 import { Consultation } from '../../models/consultation.model';
-
-
-interface ApiResponse<T> {
-    message: string;
-    data: T;
-}
+import { ApiResponse } from '../../dto/reponses';
 
 @Injectable({
     providedIn: 'root'
 })
 export class ConsultationService {
-    private readonly baseUrl = 'http://localhost:8080/api/conultations';
+    private readonly baseUrl = 'http://localhost:8080/api/consultations';
 
     constructor(private readonly http: HttpClient) {}
 

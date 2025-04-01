@@ -25,6 +25,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { Consultation } from '../../models/consultation.model';
 import { ConsultationService } from '../../service/consultation/consultation.service';
 import { ConsultationDetailsModalComponent } from './components/components/user-details-modal-component/consultation-details-modal-component.component';
+import {ApiResponse} from '../../dto/reponses';
 
 interface Column {
     field: string;
@@ -158,7 +159,7 @@ export class ConsultationsComponent implements OnInit {
             this.messageService.add({
                 severity: 'warn',
                 summary: 'Aviso',
-                detail: 'Codigo inválido',
+                detail: 'Código inválido',
                 life: 3000
             });
             return;
@@ -169,27 +170,37 @@ export class ConsultationsComponent implements OnInit {
             header: 'Confirmar',
             icon: 'pi pi-exclamation-triangle',
             accept: () => {
-                this.consultationService.deleteConsultation(consultation?.code as string).subscribe({
-                    next: () => {
-                        this.messageService.add({
-                            severity: 'success',
-                            summary: 'Sucesso',
-                            detail: 'Consulta eleminada com sucesso eliminado com sucesso',
-                            life: 3000
-                        });
+                // this.isLoading = true;?
     
-                        // Resetando usuário selecionado
-                        this.selectedConsultation = null;
-                        this.consultation = {} as Consultation;
+                this.consultationService.deleteConsultation(consultation.code as string).subscribe({
+                    next: (response: ApiResponse<string>) => {
     
-                        // Recarrega os dados após a exclusão
-                        this.loadDemoData();
+                        if (response?.ok) {
+                            this.messageService.add({
+                                severity: 'success',
+                                summary: 'Sucesso',
+                                detail: response.message || 'Consulta eliminada com sucesso',
+                                life: 3000
+                            });
+    
+                            this.selectedConsultation = null;
+                            this.consultation = {} as Consultation;
+    
+                            this.loadDemoData();
+                        } else {
+                            this.messageService.add({
+                                severity: 'error',
+                                summary: 'Erro',
+                                detail: response.message || 'Erro ao eliminar consulta',
+                                life: 3000
+                            });
+                        }
                     },
-                    error: (error: { message: any; }) => {
+                    error: (error: { error?: { message?: string } }) => {
                         this.messageService.add({
                             severity: 'error',
                             summary: 'Erro',
-                            detail: `Erro ao eliminar consulta: ${error.message}`,
+                            detail: `Erro ao eliminar consulta: ${error?.error?.message || 'Erro desconhecido'}`,
                             life: 3000
                         });
                     }
@@ -197,6 +208,7 @@ export class ConsultationsComponent implements OnInit {
             }
         });
     }
+    
     
     
 
