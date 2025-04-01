@@ -1,6 +1,6 @@
 <p-toast></p-toast>
 
-<p-dialog [(visible)]="visible" [style]="{ width: '500px', 'border-radius': '12px' }" header="Detalhes do Utilizador" [modal]="true" class="p-fluid" [closable]="!isLoading">
+<p-dialog [(visible)]="visible" [style]="{ width: '500px', 'border-radius': '12px' }" header="Detalhes da Consulta" [modal]="true" class="p-fluid" [closable]="!isLoading">
     <div *ngIf="isLoading" class="flex justify-center items-center p-6">
         <p-progressSpinner></p-progressSpinner>
     </div>
@@ -8,13 +8,14 @@
     <div class="card flex flex-col gap-6 p-4" [class.opacity-50]="isLoading">
         <!-- Campos organizados em duas colunas -->
 
+        <input pInputText class="p-inputtext border border-gray-300 rounded-md p-2 hidden" id="id" type="text" [(ngModel)]="consultation.id" />
         <div class="flex flex-col gap-2">
-            <label for="code" class="font-medium">Codigo</label>
-            <input pInputText class="p-inputtext border border-gray-300 rounded-md p-2" id="code" type="text" [(ngModel)]="consultation.code" />
+            <label for="description" class="font-medium">Titulo</label>
+            <input pInputText id="description" type="text" class="p-inputtext border border-gray-300 rounded-md p-2" [(ngModel)]="consultation.title" />
         </div>
         <div class="flex flex-col gap-2">
             <label for="description" class="font-medium">Descrição</label>
-            <input pInputText id="description" type="text" class="p-inputtext border border-gray-300 rounded-md p-2" [(ngModel)]="consultation.description" />
+            <textarea pInputText id="description" type="text" class="p-inputtext border border-gray-300 rounded-md p-2" [(ngModel)]="consultation.description" ></textarea>
         </div>
         <div class="flex flex-col gap-2">
             <label for="userEmail" class="font-medium">Utilizador</label>
@@ -22,7 +23,7 @@
         </div>
         <div class="flex flex-col gap-2">
             <label for="data" class="font-medium">Data</label>
-            <input pInputText id="data" type="datetime-local" class="p-inputtext border border-gray-300 rounded-md p-2" [(ngModel)]="consultation.data" />
+            <input pInputText id="data" type="datetime-local" class="p-inputtext border border-gray-300 rounded-md p-2" [(ngModel)]="consultation.date" />
         </div>
 
         <div class="flex flex-col gap-2">

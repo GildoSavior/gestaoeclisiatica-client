@@ -24,7 +24,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { DropdownModule } from 'primeng/dropdown';
 import { Consultation } from '../../models/consultation.model';
 import { ConsultationService } from '../../service/consultation/consultation.service';
-import { ConsultationDetailsModalComponent } from './components/components/user-details-modal-component/consultation-details-modal-component.component';
+import { ConsultationDetailsModalComponent } from './components/consultation-details-modal-component.component';
 import {ApiResponse} from '../../dto/reponses';
 
 interface Column {
@@ -114,10 +114,11 @@ export class ConsultationsComponent implements OnInit {
         );
 
         this.cols = [
-            { field: 'Code', header: 'Codigo' },
+            { field: 'code', header: 'Codigo' },
+            { field: 'title', header: 'Titulo' },
             { field: 'description', header: 'Descrição' },
             { field: 'userEmail', header: 'Utilizador' },
-            { field: 'data', header: 'Data' },
+            { field: 'date', header: 'Data' },
             { field: 'status', header: 'Estado' },
 
         ];
@@ -172,7 +173,7 @@ export class ConsultationsComponent implements OnInit {
             accept: () => {
                 // this.isLoading = true;?
     
-                this.consultationService.deleteConsultation(consultation.code as string).subscribe({
+                this.consultationService.deleteConsultation(consultation.id).subscribe({
                     next: (response: ApiResponse<string>) => {
     
                         if (response?.ok) {

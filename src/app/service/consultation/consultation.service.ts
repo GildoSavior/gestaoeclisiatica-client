@@ -33,11 +33,11 @@ export class ConsultationService {
         return this.http.post<ApiResponse<Consultation>>(this.baseUrl, consultation, { headers: this.getHeaders() });
     }
 
-    updateConsultation(code: string, consultation: Consultation): Observable<ApiResponse<Consultation>> {
-        return this.http.put<ApiResponse<Consultation>>(`${this.baseUrl}/${code}`, consultation, { headers: this.getHeaders() });
+    updateConsultation(consultationId: number, consultation: Consultation): Observable<ApiResponse<Consultation>> {
+        return this.http.put<ApiResponse<Consultation>>(`${this.baseUrl}/${consultationId}`, consultation, { headers: this.getHeaders() });
     }
 
-    deleteConsultation(code: string): Observable<ApiResponse<string>> {
-        return this.http.delete<ApiResponse<string>>(`${this.baseUrl}/${code}`, { headers: this.getHeaders() });
+    deleteConsultation(consultationId: number): Observable<ApiResponse<string>> {
+        return this.http.delete<ApiResponse<string>>(`${this.baseUrl}/${consultationId}`, { headers: this.getHeaders() });
     }
 }

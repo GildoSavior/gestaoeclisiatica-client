@@ -7,10 +7,10 @@ import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { CommonModule } from '@angular/common';
-import { Consultation } from '../../../../../models/consultation.model';
-import { ConsultationStatus } from '../../../../../models/enums/enums';
-import { ConsultationService } from '../../../../../service/consultation/consultation.service';
-import { ApiResponse } from '../../../../../dto/reponses';
+import { Consultation } from '../../../models/consultation.model';
+import { ConsultationStatus } from '../../../models/enums/enums';
+import { ConsultationService } from '../../../service/consultation/consultation.service';
+import { ApiResponse } from '../../../dto/reponses';
 
 
 @Component({
@@ -60,13 +60,13 @@ export class ConsultationDetailsModalComponent implements OnInit {
         this.isLoading = true;
     
         // Verifica se a data foi informada e é válida
-        if (typeof consultation.data !== 'string' || !consultation.data.trim()) {
+        if (typeof consultation.date !== 'string' || !consultation.date.trim()) {
             this.showError('Data da consulta não informada.');
             this.isLoading = false;
             return;
         }
     
-        const parsedDate = new Date(consultation.data);
+        const parsedDate = new Date(consultation.date);
         if (isNaN(parsedDate.getTime())) {
             this.showError('Data da consulta inválida.');
             this.isLoading = false;
@@ -74,15 +74,15 @@ export class ConsultationDetailsModalComponent implements OnInit {
         }
     
         // Converte a data para o formato aceito pelo Spring Boot (LocalDateTime sem milissegundos)
-        consultation.data = this.toLocalISOStringWithoutMs(parsedDate);
+        consultation.date = this.toLocalISOStringWithoutMs(parsedDate);
     
         console.log('Consulta a ser enviada:', JSON.stringify(consultation));
     
-        // const saveObservable = consultation.code != null
-        //     ? this.consultationService.updateConsultation(consultation.code, consultation) 
-        //     : this.consultationService.createConsultation(consultation);
+        const saveObservable = consultation.id != null
+            ? this.consultationService.updateConsultation(consultation.id, consultation) 
+            : this.consultationService.createConsultation(consultation);
 
-            const saveObservable =  this.consultationService.createConsultation(consultation);
+
     
             saveObservable.subscribe({
                 next: (response: ApiResponse<Consultation>) => {
