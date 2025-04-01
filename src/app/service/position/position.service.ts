@@ -39,11 +39,11 @@ export class PositionService {
         return this.http.post<ApiResponse<Position>>(this.baseUrl, position, { headers: this.getHeaders() });
     }
 
-    updatePosition(code: string, position: Position): Observable<ApiResponse<Position>> {
-        return this.http.put<ApiResponse<Position>>(`${this.baseUrl}/${code}`, position, { headers: this.getHeaders() });
+    updatePosition(positionId: number, position: Position): Observable<ApiResponse<Position>> {
+        return this.http.put<ApiResponse<Position>>(`${this.baseUrl}/${positionId}`, position, { headers: this.getHeaders() });
     }
 
-    deletePosition(code: string): Observable<ApiResponse<Position>> {
-        return this.http.delete<ApiResponse<Position>>(`${this.baseUrl}/${code}`, { headers: this.getHeaders() });
+    deletePosition(positionId: number): Observable<ApiResponse<Position>> {
+        return this.http.delete<ApiResponse<Position>>(`${this.baseUrl}/${positionId}`, { headers: this.getHeaders() });
     }
 }

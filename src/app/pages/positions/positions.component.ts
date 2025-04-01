@@ -79,7 +79,7 @@ export class PositionsComponent {
 
  positionDialog: boolean = false;
     positions = signal<Position[]>([]);
-    position: Position = { id: '', code: '', description: '' };
+    position: Position = { id: 0, code: '', description: '' };
     selectedPosition!: Position | null;
     submitted: boolean = false;
     statuses!: any[];
@@ -145,24 +145,13 @@ export class PositionsComponent {
     savePosition(position: Position) {}
 
     deletePosition(position: Position) {
-    
-        
-        if (!position?.code) {
-            this.messageService.add({
-                severity: 'warn',
-                summary: 'Aviso',
-                detail: 'Codigo do cargo inválido',
-                life: 3000
-            });
-            return;
-        }
 
         this.confirmationService.confirm({
             message: `Tem certeza de que deseja eliminar o cargo ${position.code} - ${position.description}?`,
             header: 'Confirmar',
             icon: 'pi pi-exclamation-triangle',
             accept: () => {
-                this.positionService.deletePosition(position?.code).subscribe({
+                this.positionService.deletePosition(position.id).subscribe({
                     next: () => {
                         this.messageService.add({
                             severity: 'success',

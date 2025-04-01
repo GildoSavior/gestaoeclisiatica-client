@@ -4,16 +4,12 @@
     <div *ngIf="isLoading" class="flex justify-center items-center p-6">
         <p-progressSpinner></p-progressSpinner>
     </div>
-
-    <div class="card flex flex-col gap-6 p-4" [class.opacity-50]="isLoading">        
-            <div class="flex flex-col gap-2">
-                <label for="code" class="font-medium">Codigo</label>
-                <input pInputText class="p-inputtext border border-gray-300 rounded-md p-2" id="code" type="text" [(ngModel)]="position.code" />
-            </div>
-            <div class="flex flex-col gap-2">
-                <label for="description" class="font-medium">Descrição</label>
-                <input pInputText id="description" type="text" class="p-inputtext border border-gray-300 rounded-md p-2" [(ngModel)]="position.description" />
-            </div>
+    <div class="card flex flex-col gap-6 p-4" [class.opacity-50]="isLoading">
+        <div class="flex flex-col gap-2">
+            <label for="description" class="font-medium">Descrição</label>
+            <input pInputText id="description" type="text" class="p-inputtext border border-gray-300 rounded-md p-2" [(ngModel)]="position.description" />
+        </div>
+        <input pInputText class="p-inputtext border border-gray-300 rounded-md p-2 hidden" id="id" type="text" [(ngModel)]="position.id" />
     </div>
 
     <ng-template #footer>
@@ -22,7 +18,4 @@
             <p-button label="Salvar" icon="pi pi-check" class="p-button-primary ml-2" (click)="savePosition(position)" [disabled]="isLoading" />
         </div>
     </ng-template>
-    
-
-
 </p-dialog>
