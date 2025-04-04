@@ -12,14 +12,12 @@ import { ConsultationStatus } from '../../../models/enums/enums';
 import { ConsultationService } from '../../../service/consultation/consultation.service';
 import { ApiResponse } from '../../../dto/reponses';
 
-
 @Component({
     selector: 'app-consultation-details-modal-component',
     imports: [DialogModule, FormsModule, DropdownModule, ButtonModule, ToastModule, ProgressSpinnerModule, CommonModule],
     templateUrl: './consultation-details-modal-component.html',
     styleUrl: './consultation-details-modal-component.scss'
 })
-
 export class ConsultationDetailsModalComponent implements OnInit {
     constructor(
         private readonly consultationService: ConsultationService,
@@ -50,62 +48,56 @@ export class ConsultationDetailsModalComponent implements OnInit {
         });
     }
 
+    private showSuccess(message: string) {
+        this.messageService.add({
+            severity: 'success',
+            summary: 'Sucesso',
+            detail: message,
+            life: 3000
+        });
+    }
+
     toLocalISOStringWithoutMs(date: Date): string {
         const pad = (n: number) => n.toString().padStart(2, '0');
-        return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T` +
-               `${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+        return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T` + `${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
     }
 
     saveConsultation(consultation: Consultation) {
         this.isLoading = true;
-    
-        // Verifica se a data foi informada e é válida
-        if (typeof consultation.date !== 'string' || !consultation.date.trim()) {
-            this.showError('Data da consulta não informada.');
+
+        if (!this.isValidDate(consultation.date)) {
+            this.showError('Data da consulta não informada ou inválida.');
             this.isLoading = false;
             return;
         }
-    
-        const parsedDate = new Date(consultation.date);
-        if (isNaN(parsedDate.getTime())) {
-            this.showError('Data da consulta inválida.');
-            this.isLoading = false;
-            return;
-        }
-    
-        // Converte a data para o formato aceito pelo Spring Boot (LocalDateTime sem milissegundos)
-        consultation.date = this.toLocalISOStringWithoutMs(parsedDate);
-    
-        console.log('Consulta a ser enviada:', JSON.stringify(consultation));
-    
-        const saveObservable = consultation.id != null
-            ? this.consultationService.updateConsultation(consultation.id, consultation) 
-            : this.consultationService.createConsultation(consultation);
 
+        consultation.date = this.toLocalISOStringWithoutMs(new Date(consultation.date));
 
-    
-            saveObservable.subscribe({
-                next: (response: ApiResponse<Consultation>) => {
-                    if (response?.ok && response.data) { // Certifique-se de que 'ok' está sendo validado
-                        this.messageService.add({
-                            severity: 'success',
-                            summary: 'Sucesso',
-                            detail: response.message
-                        });
-                        this.hideDialog();
-                    } else {
-                        this.showError('Falha ao salvar consulta: ' + (response.message || 'Erro desconhecido'));
-                        this.isLoading = false;
-                        return
-                    }
-                    this.isLoading = false;
-                },
-                error: (err: { error?: { message: string } }) => {
-                    this.isLoading = false;
-                    const errorMessage = err?.error?.message || 'Erro desconhecido';
-                    this.showError('Falha ao salvar consulta: ' + errorMessage);
+        const saveObservable = consultation.id != null ? this.consultationService.updateConsultation(consultation.id, consultation) : this.consultationService.createConsultation(consultation);
+
+        saveObservable.subscribe({
+            next: (response: ApiResponse<Consultation>) => {
+                console.log('API Response:', response);
+                if (response?.ok && response.data) {
+                    this.showSuccess(response.message);
+                    this.hideDialog();
+                } else {
+                    this.showError(response?.message || 'Erro desconhecido');
                 }
-            });
-        
+            },
+            error: (err: { error?: { message: string } }) => {
+                const errorMessage = err?.error?.message || 'Erro desconhecido';
+                this.showError('Falha ao salvar consulta: ' + errorMessage);
+            },
+            complete: () => {
+                this.isLoading = false;
+            }
+        });
+    }
+
+    private isValidDate(date: string | undefined): boolean {
+        if (typeof date !== 'string' || !date.trim()) return false;
+        const parsed = new Date(date);
+        return !isNaN(parsed.getTime());
     }
 }
