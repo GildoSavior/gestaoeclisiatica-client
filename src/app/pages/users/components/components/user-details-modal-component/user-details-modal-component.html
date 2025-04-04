@@ -84,13 +84,32 @@
         </div>
 
         <div class="grid grid-cols-2 gap-4">
+
+
             <div class="flex flex-col gap-2">
                 <label for="departament" class="font-medium">Departamento</label>
-                <input pInputText id="departament" type="text" class="p-inputtext-sm border border-gray-300 rounded-md p-2" [(ngModel)]="user.departament" />
+                <p-dropdown
+                    id="departament"
+                    [(ngModel)]="user.departament"
+                    [options]="dropdownDepartments"
+                    optionLabel="name"
+                    optionValue="value"
+                    placeholder="Selecione"
+                    class="w-full p-dropdown-sm border border-gray-300 rounded-md p-2"
+                ></p-dropdown>
             </div>
+
             <div class="flex flex-col gap-2">
-                <label for="position" class="font-medium">Posição</label>
-                <input pInputText id="position" type="text" class="p-inputtext-sm border border-gray-300 rounded-md p-2" [(ngModel)]="user.position" />
+                <label for="position" class="font-medium">Cargo</label>
+                <p-dropdown
+                    id="position"
+                    [(ngModel)]="user.position"
+                    [options]="dropdownPositions"
+                    optionLabel="name"
+                    optionValue="value"
+                    placeholder="Selecione"
+                    class="w-full p-dropdown-sm border border-gray-300 rounded-md p-2"
+                ></p-dropdown>
             </div>
         </div>
     </div>

@@ -35,6 +35,7 @@ export class ConsultationService {
 
     updateConsultation(consultationId: number, consultation: Consultation): Observable<ApiResponse<Consultation>> {
         return this.http.put<ApiResponse<Consultation>>(`${this.baseUrl}/${consultationId}`, consultation, { headers: this.getHeaders() });
+        
     }
 
     deleteConsultation(consultationId: number): Observable<ApiResponse<string>> {

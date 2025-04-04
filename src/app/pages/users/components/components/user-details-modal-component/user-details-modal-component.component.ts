@@ -10,6 +10,11 @@ import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { CommonModule } from '@angular/common';
+import { DepartmentService } from '../../../../../service/department/department.service';
+import { Position } from '../../../../../models/position.model';
+import { PositionService } from '../../../../../service/position/position.service';
+import { ApiResponse } from '../../../../../dto/reponses';
+import { Department } from '../../../../../models/departament.model';
 
 @Component({
     selector: 'app-user-details-modal-component',
@@ -20,11 +25,20 @@ import { CommonModule } from '@angular/common';
 export class UserDetailsModalComponent implements OnInit {
     constructor(
         private readonly userService: UserService,
+        private readonly departmentService: DepartmentService,
+        private readonly positionService: PositionService,
         private readonly messageService: MessageService
     ) {}
 
     dropdownYears: { name: string; value: string }[] = [];
     dropdownYear: { name: string; value: string } | null = null;
+
+    dropdownDepartments: { name: string; value: string }[] = [];
+    dropdownDepartment: { name: string; value: string } | null = null;
+
+    dropdownPositions: { name: string; value: string }[] = [];
+    dropdownPosition: { name: string; value: string } | null = null;
+
     selectedImage: string | ArrayBuffer | File | null = null;
 
     maritalStatusOptions = Object.entries(MaritalStatus).map(([key, value]) => ({
@@ -60,6 +74,8 @@ export class UserDetailsModalComponent implements OnInit {
 
     ngOnInit(): void {
         this.populateYears();
+        this.populateDepartments();
+        this.populatePositions();
     }
 
     getAuthenticatedUser() {
@@ -89,6 +105,50 @@ export class UserDetailsModalComponent implements OnInit {
         }
     }
 
+    populatePositions() {
+
+        this.dropdownPositions = [];
+        this.positionService.getAll().subscribe(
+            (response: Partial<ApiResponse<Position[]>>) => {
+                // Permite que 'ok' seja opcional
+                if (response?.data) {
+                    this.dropdownPositions = response.data.map((position) => ({
+                        name: position.description,
+                        value: position.code
+                    }));
+                } else {
+                    alert('A resposta da API não contém cargos.');
+                }
+            },
+
+            (error: any) => {
+                alert('Erro ao buscar cargos:' + error);
+            }
+        );
+    }
+
+    populateDepartments() {
+        this.dropdownDepartments = [];
+        
+        this.departmentService.getAll().subscribe(
+            (response: Partial<ApiResponse<Department[]>>) => {
+                // Permite que 'ok' seja opcional
+                if (response?.data) {
+                    this.dropdownDepartments = response.data.map((department) => ({
+                        name: department.description,
+                        value: department.code
+                    }));
+                } else {
+                    alert('A resposta da API não contém departamentos.');
+                }
+            },
+
+            (error: any) => {
+                console.error('Erro ao buscar departamentos:', error);
+            }
+        );
+    }
+
     triggerFileInput() {
         this.fileInput.nativeElement.click();
     }
@@ -113,7 +173,6 @@ export class UserDetailsModalComponent implements OnInit {
     }
 
     saveUser(user: User) {
-
         this.isLoading = true;
 
         const saveObservable = user.id ? this.userService.updateUser(user.email as string, user) : this.userService.createUser(user);
@@ -135,7 +194,7 @@ export class UserDetailsModalComponent implements OnInit {
                 }
             },
             error: (err: { error: { message: string } }) => {
-                this.isLoading = false; 
+                this.isLoading = false;
                 this.showError('Falha ao salvar utilizador: ' + err.error.message);
             }
         });
@@ -151,16 +210,16 @@ export class UserDetailsModalComponent implements OnInit {
                         summary: 'Sucesso',
                         detail: response.message
                     });
-                    this.isLoading = false; 
+                    this.isLoading = false;
                     this.hideDialog();
                 },
                 error: (err: { error: { message: string } }) => {
-                    this.isLoading = false; 
+                    this.isLoading = false;
                     this.showError('Falha ao fazer upload da imagem: ' + err.error.message);
                 }
             });
         } else {
-            this.isLoading = false; 
+            this.isLoading = false;
             this.showError('Erro: Nenhum arquivo válido selecionado.');
         }
     }

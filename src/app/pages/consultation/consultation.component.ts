@@ -156,16 +156,7 @@ export class ConsultationsComponent implements OnInit {
     saveConsultation(consultation: Consultation) {}
 
     deleteConsultation(consultation: Consultation) {
-        if (!consultation?.code) {
-            this.messageService.add({
-                severity: 'warn',
-                summary: 'Aviso',
-                detail: 'Código inválido',
-                life: 3000
-            });
-            return;
-        }
-    
+      
         this.confirmationService.confirm({
             message: `Tem certeza de que deseja eliminar a consulta ${consultation.code}?`,
             header: 'Confirmar',
