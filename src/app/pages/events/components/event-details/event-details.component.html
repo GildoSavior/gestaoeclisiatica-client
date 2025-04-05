@@ -1,0 +1,69 @@
+<p-toast></p-toast>
+
+<p-dialog [(visible)]="visible" [style]="{ width: '700px', 'border-radius': '12px' }" header="Detalhes do evento" [modal]="true" class="p-fluid" [closable]="!isLoading">
+    <div *ngIf="isLoading" class="flex justify-center items-center p-6">
+        <p-progressSpinner></p-progressSpinner>
+    </div>
+
+    <div class="card flex flex-col gap-6 p-4" [class.opacity-50]="isLoading">
+        <div class="flex flex-col gap-2">
+            <label for="title" class="font-medium">Titulo</label>
+            <input pInputText id="title" type="text" class="p-inputtext border border-gray-300 rounded-md p-2" [(ngModel)]="event.title" />
+        </div>
+
+        <div class="flex flex-col gap-2">
+            <label for="description" class="font-medium">Descrição</label>
+            <textarea pInputText id="description" type="text" class="p-inputtext border border-gray-300 rounded-md p-2" [(ngModel)]="event.description"> </textarea>
+        </div>
+
+        <div class="flex flex-col gap-2">
+            <label for="userEmail" class="font-medium">Email do utilizador</label>
+            <input pInputText id="userEmail" type="email" class="p-inputtext border border-gray-300 rounded-md p-2" [(ngModel)]="event.userEmail" />
+        </div>
+
+        <input pInputText class="p-inputtext border border-gray-300 rounded-md p-2 hidden" id="id" type="text" [(ngModel)]="event.id" />
+    </div>
+
+    <div class="grid grid-cols-2 gap-4 px-8 py-2">
+        <div class="flex flex-col gap-2">
+            <label for="initialDate" class="font-medium">Data de Inicío</label>
+            <input pInputText id="initialDate" type="datetime-local" class="p-inputtext border border-gray-300 rounded-md p-2 bg-gray-100" [(ngModel)]="event.initialDate" />
+        </div>
+        <div class="flex flex-col gap-2">
+            <label for="finalDate" class="font-medium">Data de Fim</label>
+            <input pInputText id="finalDate" type="datetime-local" class="p-inputtext border border-gray-300 rounded-md p-2 bg-gray-100" [(ngModel)]="event.finalDate" />
+        </div>
+    </div>
+
+    <div class="grid grid-cols-2 gap-4 px-8 py-4">
+        <div class="flex flex-col gap-2">
+            <label for="eventStatus" class="font-medium">Estado</label>
+            <p-dropdown id="eventStatus" [(ngModel)]="event.eventStatus" [options]="eventStatusOptions" optionLabel="name" optionValue="value" placeholder="Selecione" class="w-full p-dropdown-sm border border-gray-300 rounded-md p-2"></p-dropdown>
+        </div>
+        <div class="flex flex-col gap-2">
+            <label for="eventType" class="font-medium">Tipo</label>
+            <p-dropdown
+                id="eventType"
+                [(ngModel)]="event.eventType"
+                [options]="eventTypeOptions"
+                optionLabel="name"
+                optionValue="value"
+                placeholder="Selecione"
+                class="w-full p-dropdown-sm border border-gray-300 rounded-md p-2"
+                appendTo="body"
+            ></p-dropdown>
+        </div>
+    </div>
+
+    <div class="flex items-center gap-2 px-8 py-2 justify-end">
+        <input id="needContribution" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-2 focus:ring-blue-500" [(ngModel)]="event.needContribution" />
+        <label for="needContribution" class="font-medium text-gray-700 cursor-pointer select-none"> Permite Contribuições </label>
+    </div>    
+
+    <ng-template #footer>
+        <div class="flex justify-end w-full p-4">
+            <button pButton label="Cancelar" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+            <button pButton label="Salvar" icon="pi pi-check" (click)="onSave(event)" autofocus></button>
+        </div>
+    </ng-template>
+</p-dialog>

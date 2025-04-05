@@ -22,6 +22,7 @@ import { EventService } from '../../service/event.service';
 import { EventModel } from '../../models/event.model';
 import { HttpResponse } from '../../dto/http-response.model';
 import { EventStatus } from '../../models/enums/enums';
+import { EventDetailsComponent } from './components/event-details/event-details.component';
 
 interface Column {
     field: string;
@@ -54,7 +55,8 @@ interface ExportColumn {
         TagModule,
         InputIconModule,
         IconFieldModule,
-        ConfirmDialogModule
+        ConfirmDialogModule,
+        EventDetailsComponent
     ],
     templateUrl: './events.component.html',
     styleUrl: './events.component.scss',
@@ -206,7 +208,7 @@ export class EventsComponent {
         this.submitted = false;
     }
 
-    saveEvent() {}
+    saveEvent(event: EventModel) {}
 
     deleteEvent(event: EventModel) {
         this.confirmationService.confirm({

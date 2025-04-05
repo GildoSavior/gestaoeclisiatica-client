@@ -70,15 +70,12 @@
     </ng-template>
 </p-table>
 
-<p-dialog [(visible)]="eventDialog" [style]="{ width: '450px' }" header="Event Details" [modal]="true">
-    <ng-template #content>
-        
-    </ng-template>
+<app-event-details
+  [(visible)]="eventDialog"
+  [event]="event"
+  [submitted]="submitted"
+  (save)="saveEvent(event)"
+></app-event-details>
 
-    <ng-template #footer>
-        <p-button label="Cancel" icon="pi pi-times" text (click)="hideDialog()" />
-        <p-button label="Save" icon="pi pi-check" (click)="saveEvent()" />
-    </ng-template>
-</p-dialog>
 
 <p-confirmdialog [style]="{ width: '450px' }" /> 
