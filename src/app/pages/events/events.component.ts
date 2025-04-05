@@ -130,18 +130,17 @@ export class EventsComponent {
 
     openNew() {
         this.event = {
+            id: null,
             code: '',
             eventType: null,
-            user: null,
+            userEmail: '',
             title: '',
             description: '',
-            createdAt: new Date(),
-            updatedAt: new Date(),
-            initialDate: new Date(),
-            finalDate: new Date(),
+            initialDate: '',
+            finalDate: '',
             eventStatus: EventStatus.PENDING,
             needContribution: false,
-            images: []
+            imagesUrls: []
         };
         this.submitted = false;
         this.eventDialog = true;

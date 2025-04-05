@@ -9,7 +9,7 @@ export interface User {
     id: string;
     name?: string;
     lastName?: string;
-    birthDay?: Date;
+    birthDay?: string;
     email?: string;
     password?: string;
     address?: string;
@@ -20,12 +20,9 @@ export interface User {
     accessLevel?: AccessLevel;
     maritalStatus?: MaritalStatus;
     disciplinaryStatus?: DisciplinaryStatus;
-    department?: Department;
-    position?: Position;
-    contactsList?: Contact[];
+    departmentCode?: string;
+    positionCode?: string;
     imageUrl?: string;
-    events?: Event[];
-    consultations?: Consultation[];
-    lineContribs?: LineContrib[];
+
   }
   

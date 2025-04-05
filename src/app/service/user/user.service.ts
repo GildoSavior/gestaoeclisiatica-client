@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { User } from '../../models/user.model';
 import { UserUtil } from './userUtils';
+import { ApiResponse } from '../../dto/reponses';
 
 @Injectable({
     providedIn: 'root'
@@ -12,26 +13,26 @@ export class UserService {
 
     constructor(private readonly http: HttpClient) {}
 
-    getAllUsers(): Observable<{ message: string; data: User[] }> {
+    getAllUsers(): Observable<ApiResponse<User[]>> {
         const token = UserUtil.getUserData()?.jwtToken;
         const headers = new HttpHeaders({
             Authorization: `Bearer ${token}`
         });
 
-        return this.http.get<{ message: string; data: User[] }>(`${this.baseUrl}/users`, { headers });
+        return this.http.get<ApiResponse<User[]>>(`${this.baseUrl}/users`, { headers });
     }
 
-    getUserByEmail(): Observable<{ message: string; data: User }> {
+    getUserByEmail(): Observable<ApiResponse<User>> {
         const userData = UserUtil.getUserData();
 
         const headers = new HttpHeaders({
             Authorization: `Bearer ${userData?.jwtToken}`
         });
 
-        return this.http.get<{ message: string; data: User }>(`${this.baseUrl}/users/email/${userData?.email}`, { headers });
+        return this.http.get<ApiResponse<User>>(`${this.baseUrl}/users/email/${userData?.email}`, { headers });
     }
 
-    createUser(user: User): Observable<{ message: string; data: User }> {
+    createUser(user: User): Observable<ApiResponse<User>> {
         const userData = UserUtil.getUserData();
 
         const headers = new HttpHeaders({
@@ -42,10 +43,10 @@ export class UserService {
         console.log('Token JWT:', userData?.jwtToken);
 
         console.log(JSON.stringify(user, null, 2));
-        return this.http.post<{ message: string; data: User }>(`${this.baseUrl}/users`, user, { headers });
+        return this.http.post<ApiResponse<User>>(`${this.baseUrl}/users`, user, { headers });
     }
 
-    updateUser(email: string, user: User): Observable<{ message: string; data: User }> {
+    updateUser(email: string, user: User): Observable<ApiResponse<User>> {
         const userData = UserUtil.getUserData();
 
         const headers = new HttpHeaders({
@@ -53,20 +54,20 @@ export class UserService {
             Authorization: `Bearer ${userData?.jwtToken}`
         });
 
-        return this.http.put<{ message: string; data: User }>(`${this.baseUrl}/users/${email}`, user, { headers });
+        return this.http.put<ApiResponse<User>>(`${this.baseUrl}/users/${email}`, user, { headers });
     }
 
-    deleteUserByEmail(email: string): Observable<{ message: string; data: any }> {
+    deleteUserByEmail(email: string): Observable<ApiResponse<string>> {
         const userData = UserUtil.getUserData();
 
         const headers = new HttpHeaders({
             Authorization: `Bearer ${userData?.jwtToken}`
         });
 
-        return this.http.delete<{ message: string; data: User }>(`${this.baseUrl}/users/email/${email}`, { headers });
+        return this.http.delete<ApiResponse<string>>(`${this.baseUrl}/users/email/${email}`, { headers });
     }
 
-    uploadUserImage(email: string, file: File): Observable<{ message: string; data: any }> {
+    uploadUserImage(email: string, file: File): Observable<ApiResponse<string>> {
         const userData = UserUtil.getUserData();
 
         const headers = new HttpHeaders({
@@ -76,6 +77,6 @@ export class UserService {
         const formData = new FormData();
         formData.append('file', file);
         console.log(`${this.baseUrl}/users/upload/${email}`);
-        return this.http.post<{ message: string; data: any }>(`${this.baseUrl}/users/upload/${email}`, formData,   { headers } );
+        return this.http.post<ApiResponse<string>>(`${this.baseUrl}/users/upload/${email}`, formData,   { headers } );
     }
 }

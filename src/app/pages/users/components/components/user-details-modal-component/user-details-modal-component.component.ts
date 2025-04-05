@@ -80,7 +80,7 @@ export class UserDetailsModalComponent implements OnInit {
 
     getAuthenticatedUser() {
         this.userService.getUserByEmail().subscribe(
-            (response: { message: string; data: User }) => {
+            (response: ApiResponse<User>) => {
                 if (response?.data) {
                     console.log('Utilizador autenticado:', JSON.stringify(response.data, null, 2));
                     this.user = response.data;
@@ -172,13 +172,26 @@ export class UserDetailsModalComponent implements OnInit {
         });
     }
 
+
+    toLocalDateString(dateStr: string): string {
+        const date = new Date(dateStr);
+        if (isNaN(date.getTime())) {
+            throw new Error('Data inválida');
+        }
+    
+        const pad = (n: number) => n.toString().padStart(2, '0');
+        return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
+    }
+
     saveUser(user: User) {
         this.isLoading = true;
+
+        user.birthDay = this.toLocalDateString(user.birthDay as string);
 
         const saveObservable = user.id ? this.userService.updateUser(user.email as string, user) : this.userService.createUser(user);
 
         saveObservable.subscribe({
-            next: (response: { message: string; data: User }) => {
+            next: (response: ApiResponse<User>) => {
                 this.messageService.add({
                     severity: 'success',
                     summary: 'Sucesso',
@@ -204,7 +217,7 @@ export class UserDetailsModalComponent implements OnInit {
         if (this.selectedImage instanceof File) {
             // Garante que é um File
             this.userService.uploadUserImage(email, this.selectedImage).subscribe({
-                next: (response: { message: string; data: User }) => {
+                next: (response: ApiResponse<string>) => {
                     this.messageService.add({
                         severity: 'success',
                         summary: 'Sucesso',
@@ -222,5 +235,11 @@ export class UserDetailsModalComponent implements OnInit {
             this.isLoading = false;
             this.showError('Erro: Nenhum arquivo válido selecionado.');
         }
+    }
+
+    private isValidDate(date: string | undefined): boolean {
+        if (typeof date !== 'string' || !date.trim()) return false;
+        const parsed = new Date(date);
+        return !isNaN(parsed.getTime());
     }
 }

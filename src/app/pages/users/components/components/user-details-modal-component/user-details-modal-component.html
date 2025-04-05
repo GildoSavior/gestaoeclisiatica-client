@@ -79,22 +79,22 @@
                     optionValue="value"
                     placeholder="Selecione"
                     class="w-full p-dropdown-sm border border-gray-300 rounded-md p-2"
+                    appendTo="body"
                 ></p-dropdown>
             </div>
         </div>
 
         <div class="grid grid-cols-2 gap-4">
-
-
             <div class="flex flex-col gap-2">
                 <label for="departament" class="font-medium">Departamento</label>
                 <p-dropdown
                     id="departament"
-                    [(ngModel)]="user.departament"
+                    [(ngModel)]="user.departmentCode"
                     [options]="dropdownDepartments"
                     optionLabel="name"
                     optionValue="value"
                     placeholder="Selecione"
+                    appendTo="body"
                     class="w-full p-dropdown-sm border border-gray-300 rounded-md p-2"
                 ></p-dropdown>
             </div>
@@ -103,7 +103,7 @@
                 <label for="position" class="font-medium">Cargo</label>
                 <p-dropdown
                     id="position"
-                    [(ngModel)]="user.position"
+                    [(ngModel)]="user.positionCode"
                     [options]="dropdownPositions"
                     optionLabel="name"
                     optionValue="value"

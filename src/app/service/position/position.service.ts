@@ -3,11 +3,9 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { UserUtil } from '../user/userUtils';
 import { Observable } from 'rxjs';
 import { Position } from '../../models/position.model';
+import { ApiResponse } from '../../dto/reponses';
 
-interface ApiResponse<T> {
-    message: string;
-    data: T;
-}
+
 
 @Injectable({
     providedIn: 'root'

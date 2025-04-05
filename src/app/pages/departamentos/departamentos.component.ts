@@ -24,6 +24,7 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { DropdownModule } from 'primeng/dropdown';
 import { DepartmentDetailsModalComponent } from './components/department-details-modal-component.component';
+import { ApiResponse } from '../../dto/reponses';
 
 interface Column {
     field: string;
@@ -98,7 +99,7 @@ export class DepartamentosComponent {
 
     loadDemoData() {
         this.departmentService.getAll().subscribe(
-            (response: { message: string; data: Department[] }) => {
+            (response:  ApiResponse<Department[]>) => {
                 if (response && response.data) {
                     this.departments.set(response.data);
                 } else {

@@ -1,18 +1,17 @@
 
 import { Enum_EventType, EventStatus } from './enums/enums';
-import { User } from './user.model';
 
 export interface EventModel {
+
+  id: number | null;
   code: string;
-  eventType: Enum_EventType | null;
-  user?: User | null;
+  userEmail: string;
   title: string;
   description: string;
-  initialDate: Date;
-  finalDate: Date;
-  createdAt: Date;
-  updatedAt: Date;
-  eventStatus: EventStatus | null;
+  initialDate: string; // formato ISO, ex: '2025-04-05T19:00:00'
+  finalDate: string;
+  eventStatus:  EventStatus | null; // ajuste conforme os valores reais do enum
+  eventType: Enum_EventType | null;  // idem acima
   needContribution: boolean;
-  images: string[];
+  imagesUrls: string[];
 }

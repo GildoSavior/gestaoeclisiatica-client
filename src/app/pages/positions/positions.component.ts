@@ -24,6 +24,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { Position } from '../../models/position.model';
 import { PositionService } from '../../service/position/position.service';
 import { PositionDetailsModalComponent } from './components/position-details-modal-component.component';
+import { ApiResponse } from '../../dto/reponses';
 
 
 
@@ -105,7 +106,7 @@ export class PositionsComponent {
 
     loadDemoData() {
         this.positionService.getAll().subscribe(
-            (response: { message: string; data: Position[] }) => {
+            (response: ApiResponse<Position[]>) => {
                 if (response && response.data) {
                     this.positions.set(response.data);
                 } else {

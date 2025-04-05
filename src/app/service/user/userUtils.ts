@@ -43,13 +43,10 @@ export class UserUtil {
   accessLevel: undefined,
   maritalStatus: undefined,
   disciplinaryStatus: undefined,
-  department: undefined,
-  position: undefined,
-  contactsList: [],
+  departmentCode: undefined,
+  positionCode: undefined,
   imageUrl: '',
-  events: [],
-  consultations: [],
-  lineContribs: []
+
 };
 
 

@@ -120,7 +120,7 @@ export class UsersComponent implements OnInit {
             { field: 'age', header: 'Idade' },
             { field: 'phoneNumber', header: 'Telefone' },
             { field: 'address', header: 'Morada' },
-            { field: 'departament', header: 'Departamento' },
+            { field: 'departamentCode', header: 'Departamento' },
             { field: 'disciplinaryStatus', header: 'Estado Disciplinar' },
             { field: 'accessLevel', header: 'Nível de Acesso' },
             { field: 'maritalStatus', header: 'Marital' }
