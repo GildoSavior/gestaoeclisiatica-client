@@ -58,10 +58,27 @@
     <div class="flex items-center gap-2 px-8 py-2 justify-end">
         <input id="needContribution" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-2 focus:ring-blue-500" [(ngModel)]="event.needContribution" />
         <label for="needContribution" class="font-medium text-gray-700 cursor-pointer select-none"> Permite Contribuições </label>
-    </div>    
+    </div>
 
+    <div class="col-span-full lg:col-span-6">
+
+        <label for="imageUrls" class="font-medium px-8">Imagens</label>
+        <div class="card">
+            <p-fileupload name="files[]" (onUpload)="onUpload($event)" [multiple]="true" accept="image/*" maxFileSize="1000000" mode="basic"  mode="advanced" url="https://www.primefaces.org/cdn/api/upload.php">
+                <ng-template #empty>
+                    <div>Arraste os ficheiros aqui</div>
+                </ng-template>
+                <ng-template #content>
+                    <ul *ngIf="uploadedFiles.length">
+                        <li *ngFor="let file of uploadedFiles">{{ file.name }} - {{ file.size }} bytes</li>
+                    </ul>
+                </ng-template>
+            </p-fileupload>
+        </div>        
+    </div>
+    
     <ng-template #footer>
-        <div class="flex justify-end w-full p-4">
+        <div class="flex justify-end w-full px-8">
             <button pButton label="Cancelar" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
             <button pButton label="Salvar" icon="pi pi-check" (click)="onSave(event)" autofocus></button>
         </div>
