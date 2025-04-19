@@ -11,16 +11,20 @@ import { Consultation } from '../../../models/consultation.model';
 import { ConsultationStatus } from '../../../models/enums/enums';
 import { ConsultationService } from '../../../service/consultation/consultation.service';
 import { ApiResponse } from '../../../dto/reponses';
+import { User } from '../../../models/user.model';
+import { UserService } from '../../../service/user/user.service';
+import { AutoCompleteModule } from 'primeng/autocomplete';
 
 @Component({
     selector: 'app-consultation-details-modal-component',
-    imports: [DialogModule, FormsModule, DropdownModule, ButtonModule, ToastModule, ProgressSpinnerModule, CommonModule],
+    imports: [DialogModule, FormsModule, DropdownModule, ButtonModule, AutoCompleteModule , ToastModule, ProgressSpinnerModule, CommonModule],
     templateUrl: './consultation-details-modal-component.html',
     styleUrl: './consultation-details-modal-component.scss'
 })
 export class ConsultationDetailsModalComponent implements OnInit {
     constructor(
         private readonly consultationService: ConsultationService,
+        private readonly userService: UserService,
         private readonly messageService: MessageService
     ) {}
     statusOptions = Object.entries(ConsultationStatus).map(([key, value]) => ({
@@ -31,13 +35,52 @@ export class ConsultationDetailsModalComponent implements OnInit {
     @Input() visible: boolean = false;
     @Input() consultation!: any;
     @Output() onClose = new EventEmitter<void>();
+    users : User[] = [];
+    filteredUsers : User[] = [];
 
     isLoading = false;
 
-    ngOnInit(): void {}
+    ngOnInit(): void {
+        this.populateUsers();
+
+    }
 
     hideDialog() {
         this.visible = false;
+    }
+
+    getFullName(user: User): string {
+        return `${user.name} ${user.lastName}`;
+    }
+
+
+    filterUser(event: any) {
+        const query = event.query.toLowerCase();
+        this.filteredUsers = this.users
+          .filter(user =>
+            this.getFullName(user).toLowerCase().includes(query)
+          )
+          .map(user => ({
+            ...user,
+            fullName: this.getFullName(user) 
+          }));
+      }
+
+    populateUsers() {
+        this.userService.getAllUsers().subscribe(
+            (response: Partial<ApiResponse<User[]>>) => {
+                // Permite que 'ok' seja opcional
+                if (response?.data) {
+                    this.users = response.data;
+                } else {
+                    alert('A resposta da API não contém cargos.');
+                }
+            },
+
+            (error: any) => {
+                alert('Erro ao buscar utilizadores:' + error);
+            }
+        );
     }
 
     private showError(message: string) {
@@ -71,6 +114,7 @@ export class ConsultationDetailsModalComponent implements OnInit {
             return;
         }
 
+
         consultation.date = this.toLocalISOStringWithoutMs(new Date(consultation.date));
 
         const saveObservable = consultation.id != null ? this.consultationService.updateConsultation(consultation.id, consultation) : this.consultationService.createConsultation(consultation);
@@ -82,10 +126,12 @@ export class ConsultationDetailsModalComponent implements OnInit {
                     this.showSuccess(response.message);
                     this.hideDialog();
                 } else {
+                    this.isLoading = false;
                     this.showError(response?.message || 'Erro desconhecido');
                 }
             },
             error: (err: { error?: { message: string } }) => {
+                this.isLoading = false;
                 const errorMessage = err?.error?.message || 'Erro desconhecido';
                 this.showError('Falha ao salvar consulta: ' + errorMessage);
             },
