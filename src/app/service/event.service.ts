@@ -1,48 +1,57 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { EventModel } from "../models/event.model";
 import { HttpResponse } from '../dto/http-response.model';
-
-
+import { UserUtil } from './user/userUtils';
 
 
 @Injectable({
   providedIn: 'root',
 })
 export class EventService {
-  private readonly apiUrl = 'http://localhost:8080/api/events'; // Altere para a URL do seu backend
+  private readonly apiUrl = 'http://localhost:8080/api/events';
 
   constructor(private readonly http: HttpClient) {}
 
-  // Obter todos os eventos
+  private getHeaders(): HttpHeaders {
+    const token = UserUtil.getUserData()?.jwtToken;
+    return new HttpHeaders({
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`
+    });
+  }
+
   getAllEvents(): Observable<HttpResponse<EventModel[]>> {
-    const res =  this.http.get<HttpResponse<EventModel[]>>(this.apiUrl);
-    return res
+    return this.http.get<HttpResponse<EventModel[]>>(this.apiUrl, { headers: this.getHeaders() });
   }
 
-  // Obter eventos de um usuário específico
   getEventsByUser(userId: string): Observable<HttpResponse<EventModel[]>> {
-    return this.http.get<HttpResponse<EventModel[]>>(`${this.apiUrl}/user/${userId}`);
+    return this.http.get<HttpResponse<EventModel[]>>(`${this.apiUrl}/user/${userId}`, { headers: this.getHeaders() });
   }
 
-  // Criar um evento para um usuário
-  createEvent(userId: string, event: EventModel): Observable<HttpResponse<EventModel>> {
-    return this.http.post<HttpResponse<EventModel>>(`${this.apiUrl}/user/${userId}/`, event);
+  createEvent(event: EventModel): Observable<HttpResponse<EventModel>> {
+    return this.http.post<HttpResponse<EventModel>>(this.apiUrl, event, { headers: this.getHeaders() });
   }
 
-  // Atualizar um evento
-  updateEvent(eventCode: string, userId: string, event: EventModel): Observable<HttpResponse<EventModel>> {
-    return this.http.put<HttpResponse<EventModel>>(`${this.apiUrl}/${eventCode}/user/${userId}/`, event);
+  updateEvent(eventCode: string, event: EventModel): Observable<HttpResponse<EventModel>> {
+    return this.http.put<HttpResponse<EventModel>>(`${this.apiUrl}/${eventCode}`, event, { headers: this.getHeaders() });
   }
 
-  // Deletar um evento pelo código
   deleteEvent(eventCode: string): Observable<HttpResponse<string>> {
-    return this.http.delete<HttpResponse<string>>(`${this.apiUrl}/${eventCode}`);
+    return this.http.delete<HttpResponse<string>>(`${this.apiUrl}/${eventCode}`, { headers: this.getHeaders() });
   }
 
-  // Deletar todos os eventos de um usuário
   deleteEventsByUser(userId: string): Observable<HttpResponse<string>> {
-    return this.http.delete<HttpResponse<string>>(`${this.apiUrl}/user/${userId}`);
+    return this.http.delete<HttpResponse<string>>(`${this.apiUrl}/user/${userId}`, { headers: this.getHeaders() });
+  }
+
+  uploadImages(eventId: number, formData: FormData): Observable<any> {
+    // Nesse caso, não setamos Content-Type pois o Angular define automaticamente como multipart/form-data
+    return this.http.post(`${this.apiUrl}/upload/${eventId}`, formData, {
+      headers: new HttpHeaders({
+        Authorization: `Bearer ${UserUtil.getUserData()?.jwtToken}`
+      })
+    });
   }
 }

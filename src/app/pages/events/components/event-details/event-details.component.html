@@ -9,6 +9,7 @@
         <div class="flex flex-col gap-2">
             <label for="title" class="font-medium">Titulo</label>
             <input pInputText id="title" type="text" class="p-inputtext border border-gray-300 rounded-md p-2" [(ngModel)]="event.title" />
+            <input pInputText class="p-inputtext border border-gray-300 rounded-md p-2 hidden" id="id" type="text" [(ngModel)]="event.id" />
         </div>
 
         <div class="flex flex-col gap-2">
@@ -64,7 +65,7 @@
 
         <label for="imageUrls" class="font-medium px-8">Imagens</label>
         <div class="card">
-            <p-fileupload name="files[]" (onUpload)="onUpload($event)" [multiple]="true" accept="image/*" maxFileSize="1000000" mode="basic"  mode="advanced" url="https://www.primefaces.org/cdn/api/upload.php">
+            <p-fileupload name="files[]" (onUpload)="onUpload($event)" [multiple]="true" accept="image/*" maxFileSize="1000000" mode="advanced" url="https://www.primefaces.org/cdn/api/upload.php">
                 <ng-template #empty>
                     <div>Arraste os ficheiros aqui</div>
                 </ng-template>
