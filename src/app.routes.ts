@@ -12,13 +12,13 @@ export const appRoutes: Routes = [
         path: '',
         component: AppLayout,
         children: [
-            { path: 'client', component: Landing},
             { path: 'admin/dashboard', component: Dashboard},
             { path: 'pages', loadChildren: () => import('./app/pages/pages.routes') },
             { path: 'uikit', loadChildren: () => import('./app/pages/uikit/uikit.routes') },
             { path: 'documentation', component: Documentation },
         ]
     },
+    { path: 'client', component: Landing},
     { path: 'landing', component: Landing },
     { path: 'notfound', component: Notfound },
     { path: 'auth', loadChildren: () => import('./app/pages/auth/auth.routes') },

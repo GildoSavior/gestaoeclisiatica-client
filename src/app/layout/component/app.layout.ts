@@ -13,10 +13,10 @@ import { LayoutService } from '../service/layout.service';
     imports: [CommonModule, AppTopbar, AppSidebar, RouterModule, AppFooter],
     template: `<div class="layout-wrapper" [ngClass]="containerClass">
         <app-topbar></app-topbar>
-        
+
         <!-- Sidebar só aparece se não estiver na rota "/" -->
         <app-sidebar *ngIf="showSidebar"></app-sidebar>
-        
+
         <div class="layout-main-container" [ngStyle]="{'margin': showSidebar ? '' : '0'}">
             <div class="layout-main">
                 <router-outlet></router-outlet>
@@ -55,7 +55,9 @@ export class AppLayout implements OnInit, OnDestroy {
 
         this.router.events.pipe(filter((event) => event instanceof NavigationEnd)).subscribe((event: NavigationEnd) => {
             this.hideMenu();
-            this.showSidebar = event.url !== '/'; // Oculta sidebar quando a rota for "/"
+             const currentUrl = event.url.split('?')[0].split('#')[0];
+            this.showSidebar = currentUrl !== '/' && currentUrl !== '/client'
+//        this.showSidebar = event.url !== '/'; // Oculta sidebar quando a rota for "/"
         });
     }
 

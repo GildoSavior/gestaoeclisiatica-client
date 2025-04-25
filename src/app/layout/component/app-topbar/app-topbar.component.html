@@ -4,8 +4,32 @@
             <i class="pi pi-bars"></i>
         </button>
         <a class="layout-topbar-logo" routerLink="/">
-            <span>Igreja</span>
+            <img src="assets/logo-igreja.jpeg" alt="Logo" class="layout-topbar-logo-image rounded-full" width="50" height="50" />
+            <!-- <span class="text-surface-900 dark:text-surface-0 font-medium text-1xl leading-normal mr-20 pr-10 whitespace-nowrap">Centro Emanuel</span> -->
         </a>
+    </div>
+
+    <div class="items-center bg-surface-0 dark:bg-surface-900 grow justify-between hidden lg:flex absolute lg:static w-full left-0 top-full px-12 lg:px-0 z-20 rounded-border">
+        <ul class="list-none p-0 m-0 flex lg:items-center select-none flex-col lg:flex-row cursor-pointer gap-8">
+            <li>
+                <a pRipple class="px-0 py-4 text-surface-900 dark:text-surface-0 font-medium text-xl">
+                    <i class="pi pi-home mr-2"></i>
+                    <span>Inicio</span>
+                </a>
+            </li>
+            <li>
+                <a pRipple class="px-0 py-4 text-surface-900 dark:text-surface-0 font-medium text-xl">
+                    <i class="pi pi-book mr-2"></i>
+                    <span>Oque a Biblia Diz?</span>
+                </a>
+            </li>
+            <li>
+                <a pRipple class="px-0 py-4 text-surface-900 dark:text-surface-0 font-medium text-xl">
+                    <i class="pi pi-users mr-2"></i>
+                    <span>Sobre Nós</span>
+                </a>
+            </li>
+        </ul>
     </div>
 
     <div class="layout-topbar-actions">
@@ -20,23 +44,14 @@
             <i class="pi pi-user"></i>
             <span>Profile</span>
         </button>
-
-        <!-- Overlay Panel para opções do usuário -->
-        <p-overlayPanel #profileMenu>
-            <div class="p-2">
-                <button class="p-button p-button-text w-full text-left" (click)="openProfile()"><i class="pi pi-user mr-2"></i> Ver Perfil</button>
-                <button class="p-button p-button-text w-full text-left text-red-500" (click)="logout()"><i class="pi pi-sign-out mr-2"></i> Logout</button>
-            </div>
-        </p-overlayPanel>
     </div>
 </div>
 
 
-<app-user-details-modal-component 
-    [visible]="isProfileDialogVisible" 
-    [user]="user" 
+<app-user-details-modal-component
+    [visible]="isProfileDialogVisible"
+    [user]="user"
     [isAdmin]="false">
 </app-user-details-modal-component>
 
 
-    
