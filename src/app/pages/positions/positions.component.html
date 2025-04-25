@@ -61,4 +61,10 @@
     </ng-template>
 </p-table>
 
+<app-position-details-modal-component 
+    [visible]="positionDialog" 
+    [position]="position" 
+    (close)="closeModal()">
+</app-position-details-modal-component>
+
 <p-confirmdialog [style]="{ width: '450px' }"></p-confirmdialog>

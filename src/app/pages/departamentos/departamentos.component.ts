@@ -25,25 +25,22 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { DropdownModule } from 'primeng/dropdown';
 import { DepartmentDetailsModalComponent } from './components/department-details-modal-component.component';
 
-
-
 interface Column {
-  field: string;
-  header: string;
-  customExportHeader?: string;
+    field: string;
+    header: string;
+    customExportHeader?: string;
 }
 
 interface ExportColumn {
-  title: string;
-  dataKey: string;
+    title: string;
+    dataKey: string;
 }
 
-
 @Component({
-  selector: 'app-positions',
-  providers: [ConfirmationService],
-  imports: [
-    CommonModule,
+    selector: 'app-positions',
+    providers: [ConfirmationService],
+    imports: [
+        CommonModule,
         FormsModule,
         RouterModule,
         TableModule,
@@ -70,14 +67,12 @@ interface ExportColumn {
         TextareaModule,
         DropdownModule,
         DepartmentDetailsModalComponent
-  ],
-  templateUrl: './departamentos.component.html',
-  styleUrl: './departamentos.component.scss'
+    ],
+    templateUrl: './departamentos.component.html',
+    styleUrl: './departamentos.component.scss'
 })
-
 export class DepartamentosComponent {
-
- departmentDialog: boolean = false;
+    departmentDialog: boolean = false;
     departments = signal<Department[]>([]);
     department: Department = { id: '', code: '', description: '' };
     selectedDepartment!: Department | null;
@@ -93,8 +88,6 @@ export class DepartamentosComponent {
         private readonly confirmationService: ConfirmationService
     ) {}
 
-
-
     exportCSV() {
         this.dt.exportCSV();
     }
@@ -104,9 +97,22 @@ export class DepartamentosComponent {
     }
 
     loadDemoData() {
+        this.departmentService.getAll().subscribe(
+            (response: { message: string; data: Department[] }) => {
+                if (response && response.data) {
+                    this.departments.set(response.data);
+                } else {
+                    console.warn('A resposta da API não contém Departamentos.');
+                }
+            },
+            (error: any) => {
+                console.error('Erro ao buscar Departamentos:', error);
+            }
+        );
+
         this.cols = [
             { field: 'code', header: 'Codigo' },
-            { field: 'description', header: 'Descrição' },
+            { field: 'description', header: 'Descrição' }
         ];
 
         this.exportColumns = this.cols.map((col) => ({ title: col.header, dataKey: col.field }));
@@ -136,10 +142,58 @@ export class DepartamentosComponent {
 
     saveDepartment(departament: Department) {}
 
-    deleteDepartment(departament: Department) {}
+    deleteDepartment(departament: Department) {
+        console.log('departament:', departament);
+        console.log('departament.code:', departament?.code);
+        
+        if (!departament?.code) {
+            this.messageService.add({
+                severity: 'warn',
+                summary: 'Aviso',
+                detail: 'Codigo do departamento inválido',
+                life: 3000
+            });
+            return;
+        }
+
+        this.confirmationService.confirm({
+            message: `Tem certeza de que deseja eliminar o departamento ${departament.code} - ${departament.description}?`,
+            header: 'Confirmar',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+                this.departmentService.deleteDepartment(departament?.code as string).subscribe({
+                    next: () => {
+                        this.messageService.add({
+                            severity: 'success',
+                            summary: 'Sucesso',
+                            detail: 'Departamento eliminado com sucesso',
+                            life: 3000
+                        });
+
+                        // Resetando usuário selecionado
+                        this.selectedDepartment = null;
+                        this.department = {} as Department;
+
+                        // Recarrega os dados após a exclusão
+                        this.loadDemoData();
+                    },
+                    error: (error) => {
+                        this.messageService.add({
+                            severity: 'error',
+                            summary: 'Erro',
+                            detail: `Erro ao eliminar departamento: ${error.message}`,
+                            life: 3000
+                        });
+                    }
+                });
+            }
+        });
+    }
 
     editDepartment(departament: Department) {
         this.department = { ...departament };
+        this.submitted = false;
         this.departmentDialog = true;
     }
 }
+

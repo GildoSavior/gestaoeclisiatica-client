@@ -7,24 +7,25 @@ import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { CommonModule } from '@angular/common';
-import { DepartmentService } from '../../../service/department/department.service';
-import { Department } from '../../../models/departament.model';
+import { PositionService } from '../../../service/position/position.service';
+import { Position } from '../../../models/position.model';
+
 
 @Component({
-    selector: 'app-department-details-modal-component',
+    selector: 'app-position-details-modal-component',
     standalone: true,
     imports: [DialogModule, FormsModule, DropdownModule, ButtonModule, ToastModule, ProgressSpinnerModule, CommonModule],
-    templateUrl: './department-details-modal-component.html',
-    styleUrl: './department-details-modal-component.scss'
+    templateUrl: './position-details-modal-component.html',
+    styleUrl: './position-details-modal-component.scss'
 })
-export class DepartmentDetailsModalComponent implements OnInit {
+export class PositionDetailsModalComponent implements OnInit {
     constructor(
-        private readonly departmentService: DepartmentService,
+        private readonly positionService: PositionService,
         private readonly messageService: MessageService
     ) {}
 
     @Input() visible: boolean = false;
-    @Input() department: Department = {id: "", code: "", description:""}
+    @Input() position: Position = {id: '', code: '', description:''}
     @Output() onClose = new EventEmitter<void>(); 
     isLoading = false;
 
@@ -43,12 +44,12 @@ export class DepartmentDetailsModalComponent implements OnInit {
         });
     }
 
-    saveDepartment(department: Department) {
+    savePosition(position: Position) {
         this.isLoading = true;
 
-        const saveObservable = department.id ? this.departmentService.updateDepartment(department.code, department) : this.departmentService.createDepartment(department);
+        const saveObservable = position.id ? this.positionService.updatePosition(position.code, position) : this.positionService.createPosition(position);
         saveObservable.subscribe({
-            next: (response: { message: string; data: Department }) => {
+            next: (response: { message: string; data: Position }) => {
                 this.messageService.add({
                     severity: 'success',
                     summary: 'Sucesso',
@@ -60,7 +61,7 @@ export class DepartmentDetailsModalComponent implements OnInit {
             },
             error: (err: { error: { message: string } }) => {
                 this.isLoading = false;
-                this.showError('Falha ao salvar departamento: ' + err.error.message);
+                this.showError('Falha ao salvar Cargo: ' + err.error.message);
             }
         });
     }

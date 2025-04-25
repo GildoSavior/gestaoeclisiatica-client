@@ -26,7 +26,11 @@ export class UserDetailsModalComponent implements OnInit {
     dropdownYears: { name: string; value: string }[] = [];
     dropdownYear: { name: string; value: string } | null = null;
     selectedImage: string | ArrayBuffer | File | null = null;
-    maritalStatusOptions = Object.values(MaritalStatus).map((status) => ({ name: status, value: status }));
+
+    maritalStatusOptions = Object.entries(MaritalStatus).map(([key, value]) => ({
+        name: value, // Exibe a descrição no dropdown
+        value: key // Mantém o valor real para envio
+    }));
     maritalStatus: MaritalStatus | null = null;
     accessOptions = Object.values(AccessLevel).map((access) => ({
         name: access,

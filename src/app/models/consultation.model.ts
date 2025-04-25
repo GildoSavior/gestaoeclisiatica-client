@@ -1,12 +1,12 @@
-import { User } from "./user.model";
+
 import { ConsultationStatus } from "./enums/enums";
 
 export interface Consultation {
   code: string;
   description: string;
-  data: Date;
+  data: string;
   createdAt: Date;
   updatedAt: Date;
-  user: User;
+  userEmail: string;
   status: ConsultationStatus;
 }

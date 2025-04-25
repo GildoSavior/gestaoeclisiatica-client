@@ -77,7 +77,7 @@ export class Login {
                 const accessLevel = userData?.accessLevel;
                 const isFirstLogin = userData?.isFirstLogin;
 
-                if (isFirstLogin) {
+                if (accessLevel == AccessLevel.ROLE_ADMIN ) {
                     // Abre o modal para alterar a senha (primeiro login)
                     this.openChangePasswordDialog();
                 } else {

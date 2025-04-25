@@ -1,13 +1,13 @@
-import { Component, signal, ViewChild } from '@angular/core';
-import { Table, TableModule } from 'primeng/table';
-import { ConfirmationService, MessageService } from 'primeng/api';
-import { ToolbarModule } from 'primeng/toolbar';
+import { Component, OnInit, ViewChild, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { Table } from 'primeng/table';
+import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { RippleModule } from 'primeng/ripple';
 import { ToastModule } from 'primeng/toast';
+import { ToolbarModule } from 'primeng/toolbar';
 import { RatingModule } from 'primeng/rating';
 import { InputTextModule } from 'primeng/inputtext';
 import { TextareaModule } from 'primeng/textarea';
@@ -19,31 +19,29 @@ import { TagModule } from 'primeng/tag';
 import { InputIconModule } from 'primeng/inputicon';
 import { IconFieldModule } from 'primeng/iconfield';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { DropdownModule } from 'primeng/dropdown';
-import { Position } from '../../models/position.model';
-import { PositionService } from '../../service/position/position.service';
-import { PositionDetailsModalComponent } from './components/position-details-modal-component.component';
-
-
+import { Consultation } from '../../models/consultation.model';
+import { ConsultationService } from '../../service/consultation/consultation.service';
+import { ConsultationDetailsModalComponent } from './components/components/user-details-modal-component/consultation-details-modal-component.component';
 
 interface Column {
-  field: string;
-  header: string;
-  customExportHeader?: string;
+    field: string;
+    header: string;
+    customExportHeader?: string;
 }
 
 interface ExportColumn {
-  title: string;
-  dataKey: string;
+    title: string;
+    dataKey: string;
 }
 
-
 @Component({
-  selector: 'app-positions',
-  providers: [ConfirmationService],
-  imports: [
-    CommonModule,
+    selector: 'app-consultations',
+    standalone: true,
+    imports: [
+        CommonModule,
         FormsModule,
         RouterModule,
         TableModule,
@@ -69,18 +67,17 @@ interface ExportColumn {
         FormsModule,
         TextareaModule,
         DropdownModule,
-        PositionDetailsModalComponent
-  ],
-  templateUrl: './positions.component.html',
-  styleUrl: './positions.component.scss'
+        ConsultationDetailsModalComponent
+    ],
+    templateUrl: './consultations.component.html',
+    styleUrls: ['./consultations.component.scss'],
+    providers: [MessageService, ConfirmationService]
 })
-
-export class PositionsComponent {
-
- positionDialog: boolean = false;
-    positions = signal<Position[]>([]);
-    position: Position = { id: '', code: '', description: '' };
-    selectedPosition!: Position | null;
+export class ConsultationsComponent implements OnInit {
+    consultationDialog: boolean = false;
+    consultations = signal<Consultation[]>([]);
+    consultation: Consultation = {} as Consultation
+    selectedConsultation!: Consultation | null;
     submitted: boolean = false;
     statuses!: any[];
     @ViewChild('dt') dt!: Table;
@@ -88,12 +85,10 @@ export class PositionsComponent {
     cols!: Column[];
 
     constructor(
-        private readonly positionService: PositionService,
+        private readonly consultationService: ConsultationService,
         private readonly messageService: MessageService,
         private readonly confirmationService: ConfirmationService
     ) {}
-
-
 
     exportCSV() {
         this.dt.exportCSV();
@@ -104,22 +99,26 @@ export class PositionsComponent {
     }
 
     loadDemoData() {
-        this.positionService.getAll().subscribe(
-            (response: { message: string; data: Position[] }) => {
+        this.consultationService.getAll().subscribe(
+            (response: { message: string; data: Consultation[] }) => {
                 if (response && response.data) {
-                    this.positions.set(response.data);
+                    this.consultations.set(response.data);
                 } else {
-                    console.warn('A resposta da API não contém Cargos.');
+                    console.warn('A resposta da API não contém consultas.');
                 }
             },
             (error: any) => {
-                console.error('Erro ao buscar Cargos:', error);
+                console.error('Erro ao buscar usuários:', error);
             }
         );
 
         this.cols = [
-            { field: 'code', header: 'Codigo' },
-            { field: 'description', header: 'Descrição' }
+            { field: 'Code', header: 'Codigo' },
+            { field: 'description', header: 'Descrição' },
+            { field: 'userEmail', header: 'Utilizador' },
+            { field: 'data', header: 'Data' },
+            { field: 'status', header: 'Estado' },
+
         ];
 
         this.exportColumns = this.cols.map((col) => ({ title: col.header, dataKey: col.field }));
@@ -130,57 +129,67 @@ export class PositionsComponent {
     }
 
     openNew() {
-        this.position = {} as Position;
+        this.consultation = {} as Consultation;
         this.submitted = false;
-        this.positionDialog = true;
+        this.consultationDialog = true;
     }
 
-    closeModal() {
-        this.positionDialog = false;
+    hideDialog() {
+        this.consultationDialog = false;
         this.submitted = false;
     }
 
-    deleteSelectedPosition() {}
-
-    savePosition(position: Position) {}
-
-    deletePosition(position: Position) {
-    
-        
-        if (!position?.code) {
+    deleteSelectedConsultation() {
+        if (!this.selectedConsultation?.code) {
             this.messageService.add({
                 severity: 'warn',
                 summary: 'Aviso',
-                detail: 'Codigo do cargo inválido',
+                detail: 'Nenhum consulta selecionada para excluir.',
                 life: 3000
             });
             return;
         }
+    }
 
+    saveConsultation(consultation: Consultation) {}
+
+    deleteConsultation(consultation: Consultation) {
+        if (!consultation?.code) {
+            this.messageService.add({
+                severity: 'warn',
+                summary: 'Aviso',
+                detail: 'Codigo inválido',
+                life: 3000
+            });
+            return;
+        }
+    
         this.confirmationService.confirm({
-            message: `Tem certeza de que deseja eliminar o cargo ${position.code} - ${position.description}?`,
+            message: `Tem certeza de que deseja eliminar a consulta ${consultation.code}?`,
             header: 'Confirmar',
             icon: 'pi pi-exclamation-triangle',
             accept: () => {
-                this.positionService.deletePosition(position?.code).subscribe({
+                this.consultationService.deleteConsultation(consultation?.code as string).subscribe({
                     next: () => {
                         this.messageService.add({
                             severity: 'success',
                             summary: 'Sucesso',
-                            detail: 'CArgo eliminado com sucesso',
+                            detail: 'Consulta eleminada com sucesso eliminado com sucesso',
                             life: 3000
                         });
-                        
-                        this.selectedPosition = null;
-                        this.position = {} as Position;
-
+    
+                        // Resetando usuário selecionado
+                        this.selectedConsultation = null;
+                        this.consultation = {} as Consultation;
+    
+                        // Recarrega os dados após a exclusão
                         this.loadDemoData();
                     },
-                    error: (error) => {
+                    error: (error: { message: any; }) => {
                         this.messageService.add({
                             severity: 'error',
                             summary: 'Erro',
-                            detail: `Erro ao eliminar cargo: ${error.message}`,
+                            detail: `Erro ao eliminar consulta: ${error.message}`,
                             life: 3000
                         });
                     }
@@ -189,8 +198,10 @@ export class PositionsComponent {
         });
     }
     
-    editPosition(position: Position) {
-        this.position = { ...position };
-        this.positionDialog = true;
+    
+
+    editConsultation(consultation: Consultation) {
+        this.consultation = { ...consultation };
+        this.consultationDialog = true;
     }
 }
