@@ -7,39 +7,32 @@
         <div style="border-radius: 56px; padding: 0.3rem; background: linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%)">
             <div class="w-full bg-surface-0 dark:bg-surface-900 py-20 px-8 sm:px-20" style="border-radius: 53px">
                 <div class="text-center mb-8">
-                    <div class="text-surface-900 dark:text-surface-0 text-3xl font-medium mb-4">Welcome to PrimeLand!</div>
-                    <span class="text-muted-color font-medium">Sign in to continue</span>
+                    <div class="text-surface-900 dark:text-surface-0 text-3xl font-medium mb-4">Bem vindo a igreja Emanuel</div>
+                    <span class="text-muted-color font-medium">Inicie sessão para continuar</span>
                 </div>
 
                 <div>
                     <label for="email1" class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2">Email</label>
                     <input pInputText id="email1" type="text" placeholder="Email address" class="w-full md:w-[30rem] mb-8" [(ngModel)]="email" />
 
-                    <label for="password1" class="block text-surface-900 dark:text-surface-0 font-medium text-xl mb-2">Password</label>
-                    <p-password id="password1" [(ngModel)]="password" placeholder="Password" [toggleMask]="true" styleClass="mb-4" [fluid]="true" [feedback]="false"></p-password>
+                    <label for="password1" class="block text-surface-900 dark:text-surface-0 font-medium text-xl mb-2">Palavra-passe</label>
+                    <p-password id="password1" [(ngModel)]="password" placeholder="Palavra-passe" [toggleMask]="true" styleClass="mb-4" [fluid]="true" [feedback]="false"></p-password>
 
                     <div class="flex items-center justify-between mt-2 mb-8 gap-8">
                         <div class="flex items-center">
                             <p-checkbox [(ngModel)]="checked" id="rememberme1" binary class="mr-2"></p-checkbox>
-                            <label for="rememberme1">Remember me</label>
+                            <label for="rememberme1">Lembrar-me</label>
                         </div>
-                        <span class="font-medium no-underline ml-2 text-right cursor-pointer text-primary" (click)="openForgotPasswordDialog()">Forgot password?</span>
+                        <span class="font-medium no-underline ml-2 text-right cursor-pointer text-primary" style="color: #0b1288" (click)="openForgotPasswordDialog()">Esqueceu a palavra-passe</span>
                     </div>
-                    <p-button label="Sign In" styleClass="w-full" (click)="onLogin()"></p-button>
+                    <p-button label="Iniciar Sessão" [style]="{ backgroundColor: '#0B1288' }" styleClass="w-full" (click)="onLogin()"> </p-button>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<p-dialog
-    header="Esqueci a senha"
-    [(visible)]="showForgotPasswordDialog"
-    [modal]="true"
-    [closable]="false"
-    [style]="{ width: '450px', height: '400px' }"  
-    appendTo="body"
->
+<p-dialog header="Esqueci a senha" [(visible)]="showForgotPasswordDialog" [modal]="true" [closable]="false" [style]="{ width: '450px', height: '400px' }" appendTo="body">
     <!-- Contêiner principal ocupa 100% da altura do modal -->
     <div class="h-full flex flex-col p-4">
         <!-- Área principal que cresce para preencher espaço -->
@@ -48,13 +41,7 @@
             <div *ngIf="forgotPasswordStep === 'email'" class="h-full flex flex-col justify-center">
                 <div class="field mb-3">
                     <label for="forgotEmail" class="block font-semibold mb-2">Informe seu Email</label>
-                    <input
-                        id="forgotEmail"
-                        pInputText
-                        [(ngModel)]="forgotPasswordData.email"
-                        placeholder="seu.email@example.com"
-                        class="w-full"
-                    />
+                    <input id="forgotEmail" pInputText [(ngModel)]="forgotPasswordData.email" placeholder="seu.email@example.com" class="w-full" />
                 </div>
             </div>
 
@@ -62,13 +49,7 @@
             <div *ngIf="forgotPasswordStep === 'code'" class="h-full flex flex-col justify-center">
                 <div class="field mb-3">
                     <label for="confirmationCode" class="block font-semibold mb-2">Código de Confirmação</label>
-                    <input
-                        id="confirmationCode"
-                        pInputText
-                        [(ngModel)]="forgotPasswordData.code"
-                        placeholder="Ex: 123456"
-                        class="w-full"
-                    />
+                    <input id="confirmationCode" pInputText [(ngModel)]="forgotPasswordData.code" placeholder="Ex: 123456" class="w-full" />
                 </div>
             </div>
 
@@ -76,59 +57,24 @@
             <div *ngIf="forgotPasswordStep === 'newPassword'" class="h-full flex flex-col justify-center">
                 <div class="field mb-10">
                     <label for="newPassword" class="block font-semibold mb-2">Nova Senha</label>
-                    <p-password
-                        id="newPassword"
-                        [(ngModel)]="forgotPasswordData.newPassword"
-                        [toggleMask]="true"
-                        [feedback]="true"
-                        placeholder="Digite a nova senha"
-                        class="w-full mb-3"
-                    ></p-password>
+                    <p-password id="newPassword" [(ngModel)]="forgotPasswordData.newPassword" [toggleMask]="true" [feedback]="true" placeholder="Digite a nova senha" class="w-full mb-3"></p-password>
                 </div>
                 <div class="field mb-10">
                     <label for="confirmPassword" class="block font-semibold mb-2">Confirmar Nova Senha</label>
-                    <p-password
-                        id="confirmPassword"
-                        [(ngModel)]="forgotPasswordData.confirmPassword"
-                        [toggleMask]="true"
-                        [feedback]="false"
-                        placeholder="Confirme a nova senha"
-                        class="w-full"
-                    ></p-password>
+                    <p-password id="confirmPassword" [(ngModel)]="forgotPasswordData.confirmPassword" [toggleMask]="true" [feedback]="false" placeholder="Confirme a nova senha" class="w-full"></p-password>
                 </div>
             </div>
         </div>
 
         <!-- Rodapé (botões) -->
         <div class="flex justify-end gap-2">
-            <button
-                *ngIf="forgotPasswordStep === 'email'"
-                pButton
-                label="Enviar código"
-                (click)="sendConfirmationCode()"
-            ></button>
-            <button
-                *ngIf="forgotPasswordStep === 'code'"
-                pButton
-                label="Validar código"
-                (click)="validateConfirmationCode()"
-            ></button>
-            <button
-                *ngIf="forgotPasswordStep === 'newPassword'"
-                pButton
-                label="Definir senha"
-                (click)="setNewPassword()"
-            ></button>
-            <button
-                pButton
-                label="Fechar"
-                class="p-button-secondary"
-                (click)="closeForgotPasswordDialog()"
-            ></button>
+            <button *ngIf="forgotPasswordStep === 'email'" pButton label="Enviar código" (click)="sendConfirmationCode()"></button>
+            <button *ngIf="forgotPasswordStep === 'code'" pButton label="Validar código" (click)="validateConfirmationCode()"></button>
+            <button *ngIf="forgotPasswordStep === 'newPassword'" pButton label="Definir senha" (click)="setNewPassword()"></button>
+            <button pButton label="Fechar" class="p-button-secondary" (click)="closeForgotPasswordDialog()"></button>
         </div>
     </div>
 </p-dialog>
-
 
 <!-- Modal de Alterar Senha (Primeiro Login) -->
 <p-dialog header="Alterar Palavra-passe" [(visible)]="showChangePasswordDialog" [modal]="true" [closable]="false" [style]="{ width: '400px' }" appendTo="body">

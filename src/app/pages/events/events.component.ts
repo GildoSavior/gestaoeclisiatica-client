@@ -134,6 +134,7 @@ export class EventsComponent {
         this.event = {
             id: null,
             code: '',
+            name: '',
             eventType: null,
             userEmail: '',
             title: '',

@@ -1,112 +1,243 @@
-<div class="bg-surface-0 dark:bg-surface-900 relative w-full min-h-[80vh] overflow-hidden">
-    <p-carousel
-      [value]="imagens"
-      [circular]="true"
-      [autoplayInterval]="5000"
-      [showIndicators]="true"
-      [showNavigators]="false"
-      styleClass="h-full"
-    >
-      <ng-template let-imagem pTemplate="item">
-        <div class="relative w-full h-[75vh]">
-          <img
-            [src]="imagem.src"
-            [alt]="imagem.alt"
-            class="w-full h-[75vh] object-cover"
-          />
+<div class="bg-surface-0 dark:bg-surface-900 relative w-full min-h-[75vh] overflow-hidden">
+    <p-carousel [value]="imagens" [circular]="true" [autoplayInterval]="5000" [showIndicators]="true" [showNavigators]="false" styleClass="h-full">
+        <ng-template let-imagem pTemplate="item">
+            <div class="relative w-full h-[75vh]">
+                <!-- Imagem -->
+                <img [src]="imagem.src" [alt]="imagem.alt" class="w-full h-[75vh] object-cover" />
 
-          <!-- Texto centralizado SEM opacidade no fundo -->
-          <div class="absolute inset-0 flex items-center justify-center  p-4">
-            <div class="text-center max-w-2xl bg-opacity-70 px-8 py-6 rounded-lg">
-              <h1 class="text-5xl font-bold mb-4 text-green-500">Seja bem vindo à Igreja Emanuel de Adoração e Promessa!</h1>
-              <p class="text-xl mb-6 text-white">
-                "Procurando por Jesus? Buscando consolo, paz e amor! Mais que uma igreja, a Igreja Emanuel de Adoração e Promessa será sua casa, e nós seremos sua família."
-              </p>
+                <!-- Camada preta com opacidade -->
+                <div class="absolute inset-0 bg-black opacity-70"></div>
+
+
+                <!-- Texto centralizado -->
+                <div class="absolute inset-0 flex items-center justify-center p-4">
+                    <div class="text-center max-w-2xl bg-opacity-70 px-8 py-6 rounded-lg">
+                        <h1 class="text-5xl font-bold mb-4 text-white">Seja bem vindo à Igreja Emanuel`</h1>
+                        <p class="text-xl mb-6 text-white">"Procurando por Jesus? Buscando consolo, paz e amor! Mais que uma igreja, a Igreja Emanuel de Adoração e Promessa será sua casa, e nós seremos sua família."</p>
+                    </div>
+                </div>
             </div>
-          </div>
-        </div>
-      </ng-template>
+        </ng-template>
     </p-carousel>
 
     <!-- Seção "O que a Bíblia diz?" abaixo do carrossel -->
-<!-- Seção Bíblica com 4 cards por linha -->
-<section class="bg-surface-50 dark:bg-surface-800 py-12 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-7xl mx-auto">
-      <h2 class="text-3xl font-bold text-center mb-12 text-green-600 dark:text-green-400">O que a Bíblia diz?</h2>
+    <!-- Seção Bíblica com 4 cards por linha -->
+    <section class="bg-surface-50 dark:bg-surface-800 py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto">
+            <h5 class="text-primary text-center">O que a Bíblia diz?</h5>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Card 1 - Pecado -->
+                <div class="bg-white dark:bg-surface-700 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                    <h3 class="text-lg font-semibold mb-3 text-gray-800 dark:text-white">O que a Bíblia diz sobre o pecado?</h3>
+                    <p class="text-gray-600 dark:text-gray-300 italic mb-2 text-sm">"Porque o salário do pecado é a morte, mas o dom gratuito de Deus é a vida eterna em Cristo Jesus, nosso Senhor."</p>
+                    <p class="text-right font-medium text-green-600 dark:text-green-400 text-sm">— Romanos 6:23</p>
+                </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        <!-- Card 1 - Pecado -->
-        <div class="bg-white dark:bg-surface-700 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-          <h3 class="text-lg font-semibold mb-3 text-gray-800 dark:text-white">O que a Bíblia diz sobre o pecado?</h3>
-          <p class="text-gray-600 dark:text-gray-300 italic mb-2 text-sm">
-            "Porque o salário do pecado é a morte, mas o dom gratuito de Deus é a vida eterna em Cristo Jesus, nosso Senhor."
-          </p>
-          <p class="text-right font-medium text-green-600 dark:text-green-400 text-sm">— Romanos 6:23</p>
+                <!-- Card 2 - Amor de Deus -->
+                <div class="bg-white dark:bg-surface-700 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                    <h3 class="text-lg font-semibold mb-3 text-gray-800 dark:text-white">O que a Bíblia diz sobre o amor de Deus?</h3>
+                    <p class="text-gray-600 dark:text-gray-300 italic mb-2 text-sm">"Porque Deus amou o mundo de tal maneira que deu o seu Filho unigênito, para que todo o que nele crê não pereça, mas tenha a vida eterna."</p>
+                    <p class="text-right font-medium text-green-600 dark:text-green-400 text-sm">— João 3:16</p>
+                </div>
+
+                <!-- Card 3 - Perdão -->
+                <div class="bg-white dark:bg-surface-700 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                    <h3 class="text-lg font-semibold mb-3 text-gray-800 dark:text-white">O que a Bíblia diz sobre o perdão?</h3>
+                    <p class="text-gray-600 dark:text-gray-300 italic mb-2 text-sm">"Se confessarmos os nossos pecados, ele é fiel e justo para nos perdoar os pecados e nos purificar de toda injustiça."</p>
+                    <p class="text-right font-medium text-green-600 dark:text-green-400 text-sm">— 1 João 1:9</p>
+                </div>
+
+                <!-- Card 4 - Fé -->
+                <div class="bg-white dark:bg-surface-700 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                    <h3 class="text-lg font-semibold mb-3 text-gray-800 dark:text-white">O que a Bíblia diz sobre a fé?</h3>
+                    <p class="text-gray-600 dark:text-gray-300 italic mb-2 text-sm">"Ora, a fé é a certeza de coisas que se esperam, a convicção de fatos que não se veem."</p>
+                    <p class="text-right font-medium text-green-600 dark:text-green-400 text-sm">— Hebreus 11:1</p>
+                </div>
+
+                <!-- Card 5 - Salvação -->
+                <div class="bg-white dark:bg-surface-700 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                    <h3 class="text-lg font-semibold mb-3 text-gray-800 dark:text-white">O que a Bíblia diz sobre a salvação?</h3>
+                    <p class="text-gray-600 dark:text-gray-300 italic mb-2 text-sm">"Crê no Senhor Jesus e serás salvo, tu e tua casa."</p>
+                    <p class="text-right font-medium text-green-600 dark:text-green-400 text-sm">— Atos 16:31</p>
+                </div>
+
+                <!-- Card 6 - Oração -->
+                <div class="bg-white dark:bg-surface-700 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                    <h3 class="text-lg font-semibold mb-3 text-gray-800 dark:text-white">O que a Bíblia diz sobre a oração?</h3>
+                    <p class="text-gray-600 dark:text-gray-300 italic mb-2 text-sm">"Orem sem cessar."</p>
+                    <p class="text-right font-medium text-green-600 dark:text-green-400 text-sm">— 1 Tessalonicenses 5:17</p>
+                </div>
+
+                <!-- Card 7 - Esperança -->
+                <div class="bg-white dark:bg-surface-700 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                    <h3 class="text-lg font-semibold mb-3 text-gray-800 dark:text-white">O que a Bíblia diz sobre a esperança?</h3>
+                    <p class="text-gray-600 dark:text-gray-300 italic mb-2 text-sm">"Ora, o Deus de esperança vos encha de todo o gozo e paz na vossa fé."</p>
+                    <p class="text-right font-medium text-green-600 dark:text-green-400 text-sm">— Romanos 15:13</p>
+                </div>
+
+                <!-- Card 8 - Amor ao próximo -->
+                <div class="bg-white dark:bg-surface-700 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                    <h3 class="text-lg font-semibold mb-3 text-gray-800 dark:text-white">O que a Bíblia diz sobre o amor ao próximo?</h3>
+                    <p class="text-gray-600 dark:text-gray-300 italic mb-2 text-sm">"Amai-vos uns aos outros como eu vos amei."</p>
+                    <p class="text-right font-medium text-green-600 dark:text-green-400 text-sm">— João 13:34</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="bg-surface-50 dark:bg-surface-800 py-12 px-4 sm:px-6 lg:px-8">
+        <!-- Título principal -->
+        <div class="text-center p-5">
+            <h5 class="text-primary">Nossos Cultos</h5>
+            <h1 class="font-bold text-5xl mb-3">Encontre Inspiração</h1>
+            <p class="text-2xl text-color-secondary">em nossa programação</p>
         </div>
 
-        <!-- Card 2 - Amor de Deus -->
-        <div class="bg-white dark:bg-surface-700 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-          <h3 class="text-lg font-semibold mb-3 text-gray-800 dark:text-white">O que a Bíblia diz sobre o amor de Deus?</h3>
-          <p class="text-gray-600 dark:text-gray-300 italic mb-2 text-sm">
-            "Porque Deus amou o mundo de tal maneira que deu o seu Filho unigênito, para que todo o que nele crê não pereça, mas tenha a vida eterna."
-          </p>
-          <p class="text-right font-medium text-green-600 dark:text-green-400 text-sm">— João 3:16</p>
+        <!-- Descrição -->
+        <div class="text-center p-5">
+            <p class="text-lg">
+                Cada templo adventista é um <b>lugar de adoração a Deus e de comunhão</b> com outras pessoas que buscam fortalecer sua relação com Ele. Ao longo da semana, programas especiais reforçam o estudo da Bíblia com reuniões de louvor, oração
+                e testemunho.
+            </p>
         </div>
 
-        <!-- Card 3 - Perdão -->
-        <div class="bg-white dark:bg-surface-700 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-          <h3 class="text-lg font-semibold mb-3 text-gray-800 dark:text-white">O que a Bíblia diz sobre o perdão?</h3>
-          <p class="text-gray-600 dark:text-gray-300 italic mb-2 text-sm">
-            "Se confessarmos os nossos pecados, ele é fiel e justo para nos perdoar os pecados e nos purificar de toda injustiça."
-          </p>
-          <p class="text-right font-medium text-green-600 dark:text-green-400 text-sm">— 1 João 1:9</p>
+        <!-- Programação dos cultos -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-5">
+            <div class="col-span-1" *ngFor="let evento of eventos">
+                <div class="bg-white dark:bg-surface-700 p-6 rounded-lg shadow-md border-l-4 border-primary">
+                    <div class="mb-4">
+                        <span class="text-2xl font-bold text-primary block">{{ evento.horario }}</span>
+                        <span class="text-xl font-medium text-gray-900 dark:text-white block">{{ evento.titulo }}</span>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300">{{ evento.descricao }}</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="bg-surface-50 dark:bg-surface-800 py-12 px-4 sm:px-6 lg:px-8">
+        <!-- Cabeçalho -->
+        <div class="text-center p-5">
+            <h5 class="text-primary">Conheça Nossa História</h5>
+            <h1 class="font-bold text-5xl mb-3">Sobre Nós</h1>
+            <p class="text-2xl text-color-secondary">uma comunidade de fé e amor</p>
         </div>
 
-        <!-- Card 4 - Fé -->
-        <div class="bg-white dark:bg-surface-700 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-          <h3 class="text-lg font-semibold mb-3 text-gray-800 dark:text-white">O que a Bíblia diz sobre a fé?</h3>
-          <p class="text-gray-600 dark:text-gray-300 italic mb-2 text-sm">
-            "Ora, a fé é a certeza de coisas que se esperam, a convicção de fatos que não se veem."
-          </p>
-          <p class="text-right font-medium text-green-600 dark:text-green-400 text-sm">— Hebreus 11:1</p>
-        </div>
+        <!-- Conteúdo Principal -->
+        <div class="max-w-6xl mx-auto space-y-16">
+            <!-- Missão e Visão - Layout amplo -->
+            <div class="space-y-12">
+                <!-- Missão -->
+                <div class="bg-white dark:bg-surface-700 p-10 rounded-2xl shadow-sm">
+                    <h2 class="text-4xl font-bold text-primary mb-6 pb-3 border-b border-primary/30">Nossa Missão</h2>
+                    <p class="text-xl text-gray-600 dark:text-gray-300 leading-relaxed">
+                        Levar o evangelho eterno de Jesus Cristo a todas as pessoas, promovendo um relacionamento transformador com Deus através do ensino bíblico, comunhão e serviço à comunidade. Cada atividade, programa e iniciativa em nossa igreja
+                        é projetada para cumprir esta missão fundamental que recebemos de Cristo.
+                    </p>
+                </div>
 
-        <!-- Card 5 - Salvação -->
-        <div class="bg-white dark:bg-surface-700 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-          <h3 class="text-lg font-semibold mb-3 text-gray-800 dark:text-white">O que a Bíblia diz sobre a salvação?</h3>
-          <p class="text-gray-600 dark:text-gray-300 italic mb-2 text-sm">
-            "Crê no Senhor Jesus e serás salvo, tu e tua casa."
-          </p>
-          <p class="text-right font-medium text-green-600 dark:text-green-400 text-sm">— Atos 16:31</p>
-        </div>
+                <!-- Visão -->
+                <div class="bg-white dark:bg-surface-700 p-10 rounded-2xl shadow-sm">
+                    <h2 class="text-4xl font-bold text-primary mb-6 pb-3 border-b border-primary/30">Nossa Visão</h2>
+                    <p class="text-xl text-gray-600 dark:text-gray-300 leading-relaxed">
+                        Ser uma igreja relevante e acolhedora no coração da comunidade, onde cada membro cresce espiritualmente e participa ativamente na missão de compartilhar o amor de Cristo. Visualizamos uma comunidade de fé que impacta
+                        positivamente nossa cidade através de serviço autêntico e testemunho consistente.
+                    </p>
+                </div>
+            </div>
 
-        <!-- Card 6 - Oração -->
-        <div class="bg-white dark:bg-surface-700 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-          <h3 class="text-lg font-semibold mb-3 text-gray-800 dark:text-white">O que a Bíblia diz sobre a oração?</h3>
-          <p class="text-gray-600 dark:text-gray-300 italic mb-2 text-sm">
-            "Orem sem cessar."
-          </p>
-          <p class="text-right font-medium text-green-600 dark:text-green-400 text-sm">— 1 Tessalonicenses 5:17</p>
-        </div>
+            <!-- História - Seção ampla -->
+            <div class="bg-white dark:bg-surface-700 p-12 rounded-2xl shadow-sm">
+                <div class="flex flex-col lg:flex-row gap-10">
+                    <div class="lg:w-1/2">
+                        <img src="caminho/para/historia-igreja.jpg" alt="Nossa História" class="w-full h-auto rounded-xl object-cover" />
+                    </div>
+                    <div class="lg:w-1/2">
+                        <h2 class="text-4xl font-bold text-primary mb-8">Nossa História</h2>
+                        <div class="space-y-6 text-gray-600 dark:text-gray-300 text-lg">
+                            <p>
+                                Fundada em 1965, nossa igreja começou como um pequeno grupo de 15 fiéis reunidos numa casa simples no bairro Jardim das Oliveiras. Sob a liderança do Pastor Eduardo Martins, realizamos nosso primeiro batismo em 1967
+                                com 8 pessoas.
+                            </p>
+                            <p>
+                                Em 1982 construímos nosso primeiro templo próprio, e desde então temos crescido tanto em números quanto em impacto espiritual na comunidade. Hoje contamos com mais de 1.200 membros ativos e um complexo que serve como
+                                centro de influência positiva na região.
+                            </p>
+                            <p>Mantemos vivos os princípios adventistas do sétimo dia, com ênfase especial no estudo da Bíblia, saúde integral e serviço comunitário, honrando nossa herança enquanto nos adaptamos para alcançar as novas gerações.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-        <!-- Card 7 - Esperança -->
-        <div class="bg-white dark:bg-surface-700 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-          <h3 class="text-lg font-semibold mb-3 text-gray-800 dark:text-white">O que a Bíblia diz sobre a esperança?</h3>
-          <p class="text-gray-600 dark:text-gray-300 italic mb-2 text-sm">
-            "Ora, o Deus de esperança vos encha de todo o gozo e paz na vossa fé."
-          </p>
-          <p class="text-right font-medium text-green-600 dark:text-green-400 text-sm">— Romanos 15:13</p>
-        </div>
+            <!-- Valores (ÚNICA SEÇÃO EM CARDS - conforme imagem) -->
+            <div class="mx-auto max-w-5xl">
+                <h2 class="text-3xl font-bold text-primary mb-10 text-center">Nossos Valores</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Card 1 -->
+                    <div class="bg-white dark:bg-surface-700 p-6 rounded-lg shadow-md border-l-4 border-primary">
+                        <h3 class="text-xl font-bold text-primary mb-3">Fé Cristocêntrica</h3>
+                        <p class="text-gray-600 dark:text-gray-300">Jesus como fundamento de nossa doutrina e prática</p>
+                    </div>
 
-        <!-- Card 8 - Amor ao próximo -->
-        <div class="bg-white dark:bg-surface-700 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-          <h3 class="text-lg font-semibold mb-3 text-gray-800 dark:text-white">O que a Bíblia diz sobre o amor ao próximo?</h3>
-          <p class="text-gray-600 dark:text-gray-300 italic mb-2 text-sm">
-            "Amai-vos uns aos outros como eu vos amei."
-          </p>
-          <p class="text-right font-medium text-green-600 dark:text-green-400 text-sm">— João 13:34</p>
+                    <!-- Card 2 -->
+                    <div class="bg-white dark:bg-surface-700 p-6 rounded-lg shadow-md border-l-4 border-primary">
+                        <h3 class="text-xl font-bold text-primary mb-3">Autoridade Bíblica</h3>
+                        <p class="text-gray-600 dark:text-gray-300">A Bíblia como nossa única regra de fé e prática</p>
+                    </div>
+
+                    <!-- Card 3 -->
+                    <div class="bg-white dark:bg-surface-700 p-6 rounded-lg shadow-md border-l-4 border-primary">
+                        <h3 class="text-xl font-bold text-primary mb-3">Comunhão</h3>
+                        <p class="text-gray-600 dark:text-gray-300">Vida em comunidade e apoio mútuo</p>
+                    </div>
+
+                    <!-- Card 4 -->
+                    <div class="bg-white dark:bg-surface-700 p-6 rounded-lg shadow-md border-l-4 border-primary">
+                        <h3 class="text-xl font-bold text-primary mb-3">Serviço</h3>
+                        <p class="text-gray-600 dark:text-gray-300">Amor prático ao próximo e à comunidade</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Liderança - Seção ampla -->
+            <div class="bg-white dark:bg-surface-700 p-12 rounded-2xl shadow-sm">
+                <h2 class="text-4xl font-bold text-primary mb-12 text-center">Nossa Liderança</h2>
+
+                <div class="flex flex-col gap-12">
+                    <!-- Pastor Titular -->
+                    <div class="flex flex-col md:flex-row gap-8 items-center">
+                        <div class="md:w-1/3 flex justify-center">
+                            <div class="w-64 h-64 rounded-full overflow-hidden border-4 border-primary/20 shadow-md">
+                                <img src="caminho/para/pastor.jpg" alt="Pastor Titular" class="w-full h-full object-cover" />
+                            </div>
+                        </div>
+                        <div class="md:w-2/3">
+                            <h3 class="text-3xl font-bold text-primary">Pr. João Silva</h3>
+                            <p class="text-xl text-primary font-medium mb-4">Pastor Titular</p>
+                            <p class="text-gray-600 dark:text-gray-300 text-lg leading-relaxed">
+                                Formado em Teologia pelo Seminário Adventista Latino-Americano, com especialização em Aconselhamento Familiar. Ministra há 15 anos, liderando nossa igreja desde 2018. Casado com Ana Silva, pai de Pedro e Mariana. Sua
+                                paixão é tornar os princípios bíblicos relevantes para o cotidiano.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Líder de Jovens -->
+                    <div class="flex flex-col md:flex-row gap-8 items-center">
+                        <div class="md:w-1/3 flex justify-center">
+                            <div class="w-64 h-64 rounded-full overflow-hidden border-4 border-primary/20 shadow-md">
+                                <img src="caminho/para/lider-jovem.jpg" alt="Líder de Jovens" class="w-full h-full object-cover" />
+                            </div>
+                        </div>
+                        <div class="md:w-2/3">
+                            <h3 class="text-3xl font-bold text-primary">Marcos Oliveira</h3>
+                            <p class="text-xl text-primary font-medium mb-4">Líder do Ministério Jovem</p>
+                            <p class="text-gray-600 dark:text-gray-300 text-lg leading-relaxed">
+                                Engenheiro de formação e voluntário por vocação, lidera nosso ministério jovem há 5 anos. Criador do projeto "Juventude Missionária" que já envolveu mais de 200 jovens em atividades evangelísticas. Casado com Juliana,
+                                é conhecido por sua abordagem criativa para engajar a nova geração.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  </section>
-  </div>
+    </section>
+</div>
