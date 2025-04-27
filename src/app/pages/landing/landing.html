@@ -1,7 +1,112 @@
-<div class="bg-surface-0 dark:bg-surface-900">
-    <div id="home" class="landing-wrapper overflow-hidden">
-        <topbar-widget class="py-6 px-6 mx-0 md:mx-12 lg:mx-20 lg:px-20 flex items-center justify-between relative lg:static" />
-        
-        <footer-widget />
+<div class="bg-surface-0 dark:bg-surface-900 relative w-full min-h-[80vh] overflow-hidden">
+    <p-carousel
+      [value]="imagens"
+      [circular]="true"
+      [autoplayInterval]="5000"
+      [showIndicators]="true"
+      [showNavigators]="false"
+      styleClass="h-full"
+    >
+      <ng-template let-imagem pTemplate="item">
+        <div class="relative w-full h-[75vh]">
+          <img
+            [src]="imagem.src"
+            [alt]="imagem.alt"
+            class="w-full h-[75vh] object-cover"
+          />
+
+          <!-- Texto centralizado SEM opacidade no fundo -->
+          <div class="absolute inset-0 flex items-center justify-center  p-4">
+            <div class="text-center max-w-2xl bg-opacity-70 px-8 py-6 rounded-lg">
+              <h1 class="text-5xl font-bold mb-4 text-green-500">Seja bem vindo à Igreja Emanuel de Adoração e Promessa!</h1>
+              <p class="text-xl mb-6 text-white">
+                "Procurando por Jesus? Buscando consolo, paz e amor! Mais que uma igreja, a Igreja Emanuel de Adoração e Promessa será sua casa, e nós seremos sua família."
+              </p>
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </p-carousel>
+
+    <!-- Seção "O que a Bíblia diz?" abaixo do carrossel -->
+<!-- Seção Bíblica com 4 cards por linha -->
+<section class="bg-surface-50 dark:bg-surface-800 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto">
+      <h2 class="text-3xl font-bold text-center mb-12 text-green-600 dark:text-green-400">O que a Bíblia diz?</h2>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Card 1 - Pecado -->
+        <div class="bg-white dark:bg-surface-700 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+          <h3 class="text-lg font-semibold mb-3 text-gray-800 dark:text-white">O que a Bíblia diz sobre o pecado?</h3>
+          <p class="text-gray-600 dark:text-gray-300 italic mb-2 text-sm">
+            "Porque o salário do pecado é a morte, mas o dom gratuito de Deus é a vida eterna em Cristo Jesus, nosso Senhor."
+          </p>
+          <p class="text-right font-medium text-green-600 dark:text-green-400 text-sm">— Romanos 6:23</p>
+        </div>
+
+        <!-- Card 2 - Amor de Deus -->
+        <div class="bg-white dark:bg-surface-700 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+          <h3 class="text-lg font-semibold mb-3 text-gray-800 dark:text-white">O que a Bíblia diz sobre o amor de Deus?</h3>
+          <p class="text-gray-600 dark:text-gray-300 italic mb-2 text-sm">
+            "Porque Deus amou o mundo de tal maneira que deu o seu Filho unigênito, para que todo o que nele crê não pereça, mas tenha a vida eterna."
+          </p>
+          <p class="text-right font-medium text-green-600 dark:text-green-400 text-sm">— João 3:16</p>
+        </div>
+
+        <!-- Card 3 - Perdão -->
+        <div class="bg-white dark:bg-surface-700 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+          <h3 class="text-lg font-semibold mb-3 text-gray-800 dark:text-white">O que a Bíblia diz sobre o perdão?</h3>
+          <p class="text-gray-600 dark:text-gray-300 italic mb-2 text-sm">
+            "Se confessarmos os nossos pecados, ele é fiel e justo para nos perdoar os pecados e nos purificar de toda injustiça."
+          </p>
+          <p class="text-right font-medium text-green-600 dark:text-green-400 text-sm">— 1 João 1:9</p>
+        </div>
+
+        <!-- Card 4 - Fé -->
+        <div class="bg-white dark:bg-surface-700 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+          <h3 class="text-lg font-semibold mb-3 text-gray-800 dark:text-white">O que a Bíblia diz sobre a fé?</h3>
+          <p class="text-gray-600 dark:text-gray-300 italic mb-2 text-sm">
+            "Ora, a fé é a certeza de coisas que se esperam, a convicção de fatos que não se veem."
+          </p>
+          <p class="text-right font-medium text-green-600 dark:text-green-400 text-sm">— Hebreus 11:1</p>
+        </div>
+
+        <!-- Card 5 - Salvação -->
+        <div class="bg-white dark:bg-surface-700 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+          <h3 class="text-lg font-semibold mb-3 text-gray-800 dark:text-white">O que a Bíblia diz sobre a salvação?</h3>
+          <p class="text-gray-600 dark:text-gray-300 italic mb-2 text-sm">
+            "Crê no Senhor Jesus e serás salvo, tu e tua casa."
+          </p>
+          <p class="text-right font-medium text-green-600 dark:text-green-400 text-sm">— Atos 16:31</p>
+        </div>
+
+        <!-- Card 6 - Oração -->
+        <div class="bg-white dark:bg-surface-700 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+          <h3 class="text-lg font-semibold mb-3 text-gray-800 dark:text-white">O que a Bíblia diz sobre a oração?</h3>
+          <p class="text-gray-600 dark:text-gray-300 italic mb-2 text-sm">
+            "Orem sem cessar."
+          </p>
+          <p class="text-right font-medium text-green-600 dark:text-green-400 text-sm">— 1 Tessalonicenses 5:17</p>
+        </div>
+
+        <!-- Card 7 - Esperança -->
+        <div class="bg-white dark:bg-surface-700 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+          <h3 class="text-lg font-semibold mb-3 text-gray-800 dark:text-white">O que a Bíblia diz sobre a esperança?</h3>
+          <p class="text-gray-600 dark:text-gray-300 italic mb-2 text-sm">
+            "Ora, o Deus de esperança vos encha de todo o gozo e paz na vossa fé."
+          </p>
+          <p class="text-right font-medium text-green-600 dark:text-green-400 text-sm">— Romanos 15:13</p>
+        </div>
+
+        <!-- Card 8 - Amor ao próximo -->
+        <div class="bg-white dark:bg-surface-700 p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+          <h3 class="text-lg font-semibold mb-3 text-gray-800 dark:text-white">O que a Bíblia diz sobre o amor ao próximo?</h3>
+          <p class="text-gray-600 dark:text-gray-300 italic mb-2 text-sm">
+            "Amai-vos uns aos outros como eu vos amei."
+          </p>
+          <p class="text-right font-medium text-green-600 dark:text-green-400 text-sm">— João 13:34</p>
+        </div>
+      </div>
     </div>
-</div>
+  </section>
+  </div>
