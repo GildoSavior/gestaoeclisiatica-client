@@ -9,6 +9,9 @@ import { LayoutService } from '../../service/layout.service';
 import { UserDetailsModalComponent } from '../../../pages/users/components/components/user-details-modal-component/user-details-modal-component.component';
 import { emptyUser } from '../../../service/user/userUtils';
 import { User } from '../../../models/user.model';
+import { CarouselModule } from 'primeng/carousel';
+import { ButtonModule } from 'primeng/button';
+import { CardModule } from 'primeng/card';
 
 @Component({
     selector: 'app-topbar',
@@ -20,7 +23,10 @@ import { User } from '../../../models/user.model';
         AppConfigurator,
         DialogModule,
         OverlayPanelModule, // ✅ Adicionado
-        UserDetailsModalComponent
+        UserDetailsModalComponent,
+        CarouselModule,
+        ButtonModule,
+        CardModule
     ],
     templateUrl: './app-topbar.component.html'
 })

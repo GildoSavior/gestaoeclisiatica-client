@@ -15,7 +15,7 @@ import { UserUtil } from '../../../service/user/userUtils';
 })
 export class Access {
     buttonLabel: string = 'Go to Dashboard';
-    buttonLink: string = '/admin/dashboard';
+    buttonLink: string = '/admin';
     userData: any;
 
     constructor() {

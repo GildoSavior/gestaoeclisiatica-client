@@ -73,7 +73,7 @@ export class EventDetailsComponent {
                 }
             },
             error: (err) => {
-                x   this.isLoading = false;
+                this.isLoading = false;
                 this.messageService.add({
                     severity: 'error',
                     summary: 'Erro',

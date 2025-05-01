@@ -82,7 +82,7 @@ export class Login {
                     this.openChangePasswordDialog();
                 } else {
                     // Redireciona de acordo com o nível de acesso
-                    this.router.navigate(accessLevel !== AccessLevel.ROLE_USER ? ['/admin/dashboard'] : ['/client']);
+                    this.router.navigate(accessLevel !== AccessLevel.ROLE_USER ? ['/admin'] : ['/client']);
                 }
             },
             error: () => {
@@ -129,7 +129,7 @@ export class Login {
                 // Redireciona após a alteração
                 const userData = UserUtil.getUserData();
                 const accessLevel = userData?.accessLevel;
-                this.router.navigate(accessLevel !== AccessLevel.ROLE_USER ? ['/admin/dashboard'] : ['/client']);
+                this.router.navigate(accessLevel !== AccessLevel.ROLE_USER ? ['/admin'] : ['/client']);
             },
             error: (err: { error: { message: string } }) => {
                 this.showError('Falha ao atualizar a palavra-passe: ' + err.error.message);
