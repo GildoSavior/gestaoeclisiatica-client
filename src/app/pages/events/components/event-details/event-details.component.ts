@@ -11,18 +11,28 @@ import { Enum_EventType, EventStatus } from '../../../../models/enums/enums';
 import { MessageService } from 'primeng/api';
 import { FileUploadModule } from 'primeng/fileupload';
 import { EventService } from '../../../../service/event.service';
+import { User } from '../../../../models/user.model';
+import { UserService } from '../../../../service/user/user.service';
+import { ApiResponse } from '../../../../dto/reponses';
+import { AutoCompleteModule } from 'primeng/autocomplete';
 
 @Component({
     selector: 'app-event-details',
     templateUrl: './event-details.component.html',
-    imports: [DialogModule, FormsModule, DropdownModule, ButtonModule, ToastModule, ProgressSpinnerModule, CommonModule, FileUploadModule],
+    imports: [DialogModule, FormsModule, DropdownModule, ButtonModule, ToastModule, ProgressSpinnerModule, CommonModule, FileUploadModule, AutoCompleteModule],
     standalone: true
 })
 export class EventDetailsComponent {
     constructor(
         private readonly messageService: MessageService,
-        private readonly eventService: EventService
+        private readonly eventService: EventService,
+        private readonly userService: UserService
     ) {}
+
+    ngOnInit(): void {
+        this.populateUsers();
+
+    }
 
     @Input() event: EventModel = {} as EventModel;
     @Input() visible: boolean = false;
@@ -46,17 +56,65 @@ export class EventDetailsComponent {
 
     uploadedFiles: any[] = [];
 
+
+    filteredUsers : User[] = [];
+    users : User[] = [];
+
+    getFullName(user: User): string {
+        return `${user.name} ${user.lastName}`;
+    }
+
+    filterUser(event: any) {
+        const query = event.query.toLowerCase();
+        this.filteredUsers = this.users
+            .filter((user) => this.getFullName(user).toLowerCase().includes(query))
+            .map((user) => ({
+                ...user,
+                fullName: this.getFullName(user)
+            }));
+    }
+
+
+    populateUsers() {
+        this.userService.getAllUsers().subscribe(
+            (response: Partial<ApiResponse<User[]>>) => {
+                // Permite que 'ok' seja opcional
+                if (response?.data) {
+                    this.users = response.data;
+                } 
+            },
+
+            (error: any) => {
+                this.showError('Erro ao buscar utilizadores:' + error);
+            }
+        );
+    }
+
+    private showError(message: string) {
+        this.messageService.add({
+            severity: 'error',
+            summary: 'Erro',
+            detail: message
+        });
+    }
+
+    private showSuccess(message: string) {
+        this.messageService.add({
+            severity: 'success',
+            summary: 'Sucesso',
+            detail: message,
+            life: 3000
+        });
+    }
     hideDialog() {
         this.visibleChange.emit(false);
     }
 
     onSave(event: EventModel) {
         this.isLoading = true;
-    
-        const saveObservable = event.id
-            ? this.eventService.updateEvent(event.code, event)
-            : this.eventService.createEvent(event);
-    
+
+        const saveObservable = event.id ? this.eventService.updateEvent(event.code, event) : this.eventService.createEvent(event);
+
         saveObservable.subscribe({
             next: (response: any) => {
                 const savedEvent = response.data;
@@ -65,7 +123,7 @@ export class EventDetailsComponent {
                     summary: 'Sucesso',
                     detail: 'Evento salvo com sucesso.'
                 });
-    
+
                 if (this.uploadedFiles.length > 0) {
                     this.uploadImages(savedEvent.id);
                 } else {
@@ -88,7 +146,7 @@ export class EventDetailsComponent {
         for (const file of this.uploadedFiles) {
             formData.append('files', file);
         }
-    
+
         this.eventService.uploadImages(eventId, formData).subscribe({
             next: () => {
                 this.messageService.add({
@@ -115,7 +173,6 @@ export class EventDetailsComponent {
         this.save.emit();
         this.uploadedFiles = []; // limpa o estado dos arquivos
     }
-    
 
     onUpload(event: any) {
         for (const file of event.files) {

@@ -47,7 +47,9 @@ export class AppMenu {
                         { label: 'Utilizadores', icon: 'pi pi-fw pi-users', routerLink: ['/pages/users'] },
                         { label: 'Departamentos', icon: 'pi pi-fw pi-sitemap', routerLink: ['/pages/departments'] },
                         { label: 'Cargos', icon: 'pi pi-fw pi-briefcase', routerLink: ['/pages/positions'] },
-                        { label: 'Consultas', icon: 'pi pi-calendar', routerLink: ['/pages/consultations'] }
+                        { label: 'Consultas', icon: 'pi pi-calendar', routerLink: ['/pages/consultations'] },
+                        { label: 'Notícias', icon: 'pi pi-fw pi-book', routerLink: ['/pages/news'] },
+                        { label: 'Relatórios', icon: 'pi pi-fw pi-chart-line', routerLink: ['/pages/reports'] }
                     ]
                 }
             ];
@@ -68,7 +70,22 @@ export class AppMenu {
                     label: 'Páginas',
                     icon: 'pi pi-fw pi-briefcase',
                     items: [
-                        { label: 'Eventos', icon: 'pi pi-fw pi-calendar', routerLink: ['/pages/events'] },
+                        {
+                            label: 'Eventos',
+                            icon: 'pi pi-fw pi-calendar',
+                            items: [
+                                {
+                                    label: 'Todos',
+                                    icon: 'pi pi-fw pi-calendar',
+                                    routerLink: ['/pages/events']
+                                },
+                                {
+                                    label: 'Meus Eventos',
+                                    icon: 'pi pi-calendar-plus',
+                                    routerLink: ['/pages/events']
+                                }
+                            ]
+                        },
                         { label: 'Notícias', icon: 'pi pi-fw pi-book', routerLink: ['/pages/news'] }
                     ]
                 }

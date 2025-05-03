@@ -17,9 +17,30 @@
             <textarea pInputText id="description" type="text" class="p-inputtext border border-gray-300 rounded-md p-2" [(ngModel)]="event.description"> </textarea>
         </div>
 
-        <div class="flex flex-col gap-2">
+        <!-- <div class="flex flex-col gap-2">
             <label for="userEmail" class="font-medium">Email do utilizador</label>
             <input pInputText id="userEmail" type="email" class="p-inputtext border border-gray-300 rounded-md p-2" [(ngModel)]="event.userEmail" />
+        </div> -->
+
+        <div class="flex flex-col gap-2">
+            <label for="userEmail" class="font-medium">Utilizador</label>
+            <p-autoComplete
+                inputId="userEmail"
+                [(ngModel)]="event.userEmail"
+                [suggestions]="filteredUsers"
+                [dropdown]="true"
+                [forceSelection]="true"
+                (completeMethod)="filterUser($event)"
+                [field]="'fullName'"
+                [optionLabel]="'fullName'"
+                [optionValue]="'email'"
+                class="w-full w-[400px]"
+                inputStyleClass="p-inputtext border border-gray-300 rounded-md p-2 w-full "
+            >
+                <ng-template let-user pTemplate="item"> {{ user.name }} {{ user.lastName || '' }} </ng-template>
+
+                <ng-template let-user pTemplate="selectedItem"> {{ user.name }} {{ user.lastName || '' }} </ng-template>
+            </p-autoComplete>
         </div>
 
         <input pInputText class="p-inputtext border border-gray-300 rounded-md p-2 hidden" id="id" type="text" [(ngModel)]="event.id" />
