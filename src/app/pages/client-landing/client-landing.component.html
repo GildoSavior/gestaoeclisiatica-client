@@ -1,43 +1,30 @@
 <div class="bg-surface-0 dark:bg-surface-900 min-h-[80vh] px-4 py-10">
-    <p-carousel
-      [value]="formattedEvents"
-      [numVisible]="1"
-      [numScroll]="1"
-      [circular]="true"
-      [autoplayInterval]="0"
-      [showIndicators]="true"
-      [showNavigators]="true"
-    >
-      <ng-template pTemplate="item" let-event>
-        <div class="w-full bg-white dark:bg-gray-800 shadow-lg rounded-2xl p-6 border border-gray-200 dark:border-gray-700 mx-auto h-[80vh]">
-          <h2 class="text-3xl font-extrabold text-primary-700 dark:text-primary-300 mb-4">
-            {{ event.title }}
-          </h2>
-  
-          <p class="text-lg text-gray-800 dark:text-gray-200 mb-3 font-medium leading-relaxed">
-            {{ event.description }}
-          </p>
-  
-          <p class="text-base text-primary-600 dark:text-primary-400 font-semibold mb-4">
-            📅 Início: {{ event.initialDate | date:'short' }} — Fim: {{ event.finalDate | date:'short' }}
-          </p>
-  
-          <p-galleria
-            [value]="event.galleryImages"
-            [responsiveOptions]="galleriaResponsiveOptions"
-            [containerStyle]="{ 'width': '100%', 'margin-top': '1rem' }"
-            [numVisible]="3"
-            [showThumbnails]="true"
-          >
-            <ng-template #item let-item>
-              <img [src]="item.itemImageSrc" class="w-full h-auto object-cover rounded-md" />
-            </ng-template>
-            <ng-template #thumbnail let-item>
-              <img [src]="item.thumbnailImageSrc" class="h-16 rounded" />
-            </ng-template>
-          </p-galleria>
-        </div>
-      </ng-template>
+    <div class="w-full max-w-screen-xl mx-auto px-6">
+        <h1 class="text-5xl font-bold text-primary-700 dark:text-primary-300 mb-6">Todos Eventos</h1>
+    </div>
+
+    <p-carousel [value]="formattedEvents" [numVisible]="1" [numScroll]="1" [circular]="true" [autoplayInterval]="0" [showIndicators]="true" [showNavigators]="true">
+        <ng-template pTemplate="item" let-event>
+            <div class="w-full bg-white dark:bg-gray-800 shadow-lg rounded-2xl p-6 border border-gray-200 dark:border-gray-700 mx-auto h-[80vh] max-w-screen-xl">
+                <h2 class="text-3xl font-extrabold text-primary-700 dark:text-primary-300 mb-4">
+                    {{ event.title }}
+                </h2>
+
+                <p class="text-lg text-gray-800 dark:text-gray-200 mb-3 font-medium leading-relaxed">
+                    {{ event.description }}
+                </p>
+
+                <p class="text-base text-primary-600 dark:text-primary-400 font-semibold mb-4">📅 Início: {{ event.initialDate | date: 'short' }} — Fim: {{ event.finalDate | date: 'short' }}</p>
+
+                <p-galleria [value]="event.galleryImages" [responsiveOptions]="galleriaResponsiveOptions" [containerStyle]="{ width: '100%', 'margin-top': '1rem', 'max-height': '600px' }" [numVisible]="3" [showThumbnails]="true">
+                    <ng-template #item let-item>
+                        <img [src]="item.itemImageSrc" class="w-full h-[500px] object-cover rounded-md" />
+                    </ng-template>
+                    <ng-template #thumbnail let-item>
+                        <img [src]="item.thumbnailImageSrc" class="h-16 rounded" />
+                    </ng-template>
+                </p-galleria>
+            </div>
+        </ng-template>
     </p-carousel>
-  </div>
-  
+</div>
