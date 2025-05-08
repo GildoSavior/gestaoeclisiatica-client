@@ -6,6 +6,7 @@ import { UsersComponent } from './users/users.component';
 import { DepartamentosComponent } from './departamentos/departamentos.component';
 import { PositionsComponent } from './positions/positions.component';
 import { ConsultationsComponent } from './consultation/consultation.component';
+import { NewsComponent } from './news/news.component';
 
 export default [
     { path: 'events', component: EventsComponent },
@@ -13,6 +14,7 @@ export default [
     { path: 'departments', component: DepartamentosComponent },
     { path: 'positions', component: PositionsComponent },
     { path: 'consultations', component: ConsultationsComponent },
+    { path: 'news', component: NewsComponent },
     { path: 'crud', component: Crud },
     { path: 'empty', component: Empty },
     { path: '**', redirectTo: '/notfound' }
