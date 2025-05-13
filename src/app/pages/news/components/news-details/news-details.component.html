@@ -1,0 +1,54 @@
+<p-toast></p-toast>
+
+<p-dialog [(visible)]="visible" [style]="{ width: '700px', 'border-radius': '12px' }" header="Detalhes da Noticia" [modal]="true" class="p-fluid" [closable]="!isLoading">
+    <div *ngIf="isLoading" class="flex justify-center items-center p-6">
+        <p-progressSpinner></p-progressSpinner>
+    </div>
+
+    <div class="card flex flex-col gap-6 p-4" [class.opacity-50]="isLoading">
+        <div class="flex flex-col gap-2">
+            <label for="title" class="font-medium">Titulo</label>
+            <input pInputText id="title" type="text" class="p-inputtext border border-gray-300 rounded-md p-2" [(ngModel)]="news.title" />
+            <input pInputText class="p-inputtext border border-gray-300 rounded-md p-2 hidden" id="id" type="text" [(ngModel)]="news.id" />
+        </div>
+
+        <div class="flex flex-col gap-2">
+            <label for="description" class="font-medium">Descrição</label>
+            <textarea pInputText id="description" type="text" class="p-inputtext border border-gray-300 rounded-md p-2" [(ngModel)]="news.content"> </textarea>
+        </div>
+
+        <input pInputText class="p-inputtext border border-gray-300 rounded-md p-2 hidden" id="id" type="text" [(ngModel)]="news.id" />
+    </div>
+
+    <div class="grid grid-cols-2 gap-4 px-8 py-2">
+        <div class="flex flex-col gap-2">
+            <label for="publishDate" class="font-medium">Data de Publicação</label>
+            <input pInputText id="publishDate" type="datetime-local" class="p-inputtext border border-gray-300 rounded-md p-2 bg-gray-100" [(ngModel)]="news.publishDate" />
+        </div>
+    </div>
+
+
+    <!-- <div class="col-span-full lg:col-span-6">
+
+        <label for="imageUrls" class="font-medium px-8">Imagens</label>
+        <div class="card">
+            <p-fileupload name="files[]" (onUpload)="onUpload($event)" [multiple]="true" accept="image/*" maxFileSize="1000000" mode="advanced" url="https://www.primefaces.org/cdn/api/upload.php">
+                <ng-template #empty>
+                    <div>Arraste os ficheiros aqui</div>
+                </ng-template>
+                <ng-template #content>
+                    <ul *ngIf="uploadedFiles.length">
+                        <li *ngFor="let file of uploadedFiles">{{ file.name }} - {{ file.size }} bytes</li>
+                    </ul>
+                </ng-template>
+            </p-fileupload>
+        </div>        
+    </div> -->
+    
+    <ng-template #footer>
+        <div class="flex justify-end w-full px-8">
+            <button pButton label="Cancelar" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+            <button pButton label="Salvar" icon="pi pi-check" (click)="onSave(news)" autofocus></button>
+        </div>
+    </ng-template>
+</p-dialog>

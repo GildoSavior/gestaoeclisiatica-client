@@ -21,6 +21,7 @@ import { InputIconModule } from 'primeng/inputicon';
 import { TagModule } from 'primeng/tag';
 import { IconFieldModule } from 'primeng/iconfield';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { NewsDetailsComponent } from './components/news-details/news-details.component';
 
 interface Column {
     field: string;
@@ -53,14 +54,16 @@ interface ExportColumn {
         TagModule,
         InputIconModule,
         IconFieldModule,
-        ConfirmDialogModule
+        ConfirmDialogModule,
+        NewsDetailsComponent,
+        ToastModule,
     ],
     providers: [ConfirmationService],
     templateUrl: './news.component.html',
     styleUrl: './news.component.scss'
 })
 export class NewsComponent {
-    eventDialog: boolean = false;
+    newsDialog: boolean = false;
 
     Allnews = signal<NewsModel[]>([]);
 
@@ -130,6 +133,8 @@ export class NewsComponent {
             imagesUrls: []
         };
         this.submitted = false;
-        this.eventDialog = true;
+        this.newsDialog = true;
     }
+
+    saveNews(news: NewsModel) {}
 }
