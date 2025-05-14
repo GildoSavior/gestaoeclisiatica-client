@@ -52,15 +52,24 @@
             <td style="width: 3rem">
                 <p-tableCheckbox [value]="news" />
             </td>
+    
+            <!-- Primeira imagem da notícia -->
+            <td style="min-width: 9.5rem">
+                <div class="flex items-center gap-2 w-44">
+                    <img [alt]="news.title"
+                         [src]="news.imagesUrls?.[0] || 'https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png'"
+                         width="32"
+                         class="w-10 h-10 rounded-full object-cover border border-gray-300" />
+                </div>
+            </td>
             <td style="min-width: 9.5rem">{{ news.title }}</td>
             <td style="min-width: 9.5rem">{{ news.content }}</td>
             <td style="min-width: 9.5rem">{{ news.publishDate }}</td>
-            <td style="min-width: 9.5rem">{{ news.author }}r</td>
-            <td style="min-width: 9.5rem">{{ news.description }}</td>
+            <td style="min-width: 9.5rem">{{ news.author }}</td>
     
             <td>
-                <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true"  (click) ="editNews(news)" />
-                <p-button icon="pi pi-trash" severity="danger" [rounded]="true" [outlined]="true" (click)="deleteNews(news)"/>
+                <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true" (click)="editNews(news)" />
+                <p-button icon="pi pi-trash" severity="danger" [rounded]="true" [outlined]="true" (click)="deleteNews(news)" />
             </td>
         </tr>
     </ng-template>

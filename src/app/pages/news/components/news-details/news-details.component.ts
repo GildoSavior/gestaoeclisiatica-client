@@ -37,7 +37,36 @@ export class NewsDetailsComponent {
         this.visibleChange.emit(false);
     }
 
-    onSave(news: NewsModel) {}
+    onSave(news: NewsModel) {
+      this.isLoading = true;
+
+      const saveObservable = news.id ? this.newsService.updateNews(news.id, news) : this.newsService.createNews(news);
+
+      saveObservable.subscribe({
+          next: (response: any) => {
+              const savedEvent = response.data;
+              this.messageService.add({
+                  severity: 'success',
+                  summary: 'Sucesso',
+                  detail: 'Noticia criada com sucesso.'
+              });
+
+              if (this.uploadedFiles.length > 0) {
+                  this.uploadImages(savedEvent.id);
+              } else {
+                  this.finishSaving();
+              }
+          },
+          error: (err) => {
+              this.isLoading = false;
+              this.messageService.add({
+                  severity: 'error',
+                  summary: 'Erro',
+                  detail: err?.error?.message || 'Falha ao salvar a noticia.'
+              });
+          }
+      });
+    }
 
     onUpload(news: any) {
         for (const file of news.files) {
@@ -45,5 +74,37 @@ export class NewsDetailsComponent {
         }
 
         this.messageService.add({ severity: 'info', summary: 'Success', detail: 'File Uploaded' });
+    }
+
+     finishSaving() {
+        this.isLoading = false;
+        this.hideDialog();
+        this.save.emit();
+        this.uploadedFiles = []; // limpa o estado dos arquivos
+    }
+    uploadImages(newsId: number) {
+        const formData = new FormData();
+        for (const file of this.uploadedFiles) {
+            formData.append('files', file);
+        }
+
+        this.newsService.uploadImages(newsId, formData).subscribe({
+            next: () => {
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Sucesso',
+                    detail: 'Imagens enviadas com sucesso.'
+                });
+                this.finishSaving();
+            },
+            error: (err) => {
+                this.isLoading = false;
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Erro',
+                    detail: err?.error?.message || 'Falha ao enviar imagens.'
+                });
+            }
+        });
     }
 }

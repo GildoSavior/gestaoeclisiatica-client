@@ -110,6 +110,7 @@ export class NewsComponent {
         );
 
         this.cols = [
+            { field: 'image', header: 'Imagem' },
             { field: 'title', header: 'Titúlo' },
             { field: 'content', header: 'Conteúdo' },
             { field: 'publishDate', header: 'Data publicação' },
@@ -125,7 +126,7 @@ export class NewsComponent {
 
     openNew() {
         this.news = {
-            id: 0,
+            id: null,
             title: '',
             content: '',
             publishDate: '',
