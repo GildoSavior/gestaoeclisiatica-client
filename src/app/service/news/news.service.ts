@@ -45,7 +45,7 @@ export class NewsService {
     });
   }
 
-  deleteNews(id: number): Observable<HttpResponse<string>> {
+  deleteNews(id: number | null): Observable<HttpResponse<string>> {
     return this.http.delete<HttpResponse<string>>(`${this.apiUrl}/${id}`, {
       headers: this.getHeaders()
     });

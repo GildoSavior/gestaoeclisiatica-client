@@ -120,8 +120,50 @@ export class NewsComponent {
         this.exportColumns = this.cols.map((col) => ({ title: col.header, dataKey: col.field }));
     }
 
-    deleteNews(news: NewsModel) {}
-    editNews(news: NewsModel) {}
+    deleteNews(news: NewsModel) {
+        if (!this.selectedNews?.id) {
+            this.messageService.add({
+                severity: 'warn',
+                summary: 'Aviso',
+                detail: 'Nenhuma noticia selecionada para excluir.',
+                life: 3000
+            });
+            return;
+        }
+    
+        this.confirmationService.confirm({
+            message: 'Tem a certeza que pretende eliminar esta noticia?',
+            header: 'Confirmar',
+            icon: 'pi pi-exclamation-triangle',
+            accept: () => {
+                this.newsService.deleteNews(this.selectedNews?.id ?? null).subscribe({
+                    next: () => {
+                        this.selectedNews = null;
+                        this.messageService.add({
+                            severity: 'success',
+                            summary: 'Sucesso',
+                            detail: 'Evento eliminado com sucesso',
+                            life: 3000
+                        });
+                    },
+                    error: (error) => {
+                        console.error('Erro ao excluir noticia:', error);
+                        this.messageService.add({
+                            severity: 'error',
+                            summary: 'Erro',
+                            detail: 'Erro ao eliminar noticia',
+                            life: 3000
+                        });
+                    }
+                });
+            }
+        });
+    }
+    editNews(news: NewsModel) {
+        this.news = { ...news };
+        this.submitted = false;
+        this.newsDialog = true;
+    }
     deleteSelectedNews() {}
 
     openNew() {
