@@ -27,8 +27,7 @@
         </div>
     </div>
 
-
-    <!-- <div class="col-span-full lg:col-span-6">
+    <div class="col-span-full lg:col-span-6">
 
         <label for="imageUrls" class="font-medium px-8">Imagens</label>
         <div class="card">
@@ -43,12 +42,12 @@
                 </ng-template>
             </p-fileupload>
         </div>        
-    </div> -->
-    
-    <ng-template #footer>
+    </div>
+
+    <ng-template pTemplate="footer">
         <div class="flex justify-end w-full px-8">
             <button pButton label="Cancelar" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
-            <button pButton label="Salvar" icon="pi pi-check" (click)="onSave(news)" autofocus></button>
+            <button pButton label="Salvar" icon="pi pi-check" (click)="onSave(news)" [disabled]="isLoading" autofocus></button>
         </div>
     </ng-template>
 </p-dialog>

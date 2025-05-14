@@ -98,14 +98,6 @@ export class EventDetailsComponent {
         });
     }
 
-    private showSuccess(message: string) {
-        this.messageService.add({
-            severity: 'success',
-            summary: 'Sucesso',
-            detail: message,
-            life: 3000
-        });
-    }
     hideDialog() {
         this.visibleChange.emit(false);
     }
