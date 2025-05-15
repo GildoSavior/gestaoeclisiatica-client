@@ -4,6 +4,6 @@ export interface NewsModel {
     content: string | null;
     publishDate: string | null;
     author: string | null;
-    imagesUrls: string[];
+    imagesUrls: string[] | null;
   }
   

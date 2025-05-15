@@ -58,7 +58,7 @@ interface ExportColumn {
         NewsDetailsComponent,
         ToastModule,
     ],
-    providers: [ConfirmationService],
+    providers: [ConfirmationService, MessageService],
     templateUrl: './news.component.html',
     styleUrl: './news.component.scss'
 })
@@ -121,24 +121,15 @@ export class NewsComponent {
     }
 
     deleteNews(news: NewsModel) {
-        if (!this.selectedNews?.id) {
-            this.messageService.add({
-                severity: 'warn',
-                summary: 'Aviso',
-                detail: 'Nenhuma noticia selecionada para excluir.',
-                life: 3000
-            });
-            return;
-        }
+     
     
         this.confirmationService.confirm({
             message: 'Tem a certeza que pretende eliminar esta noticia?',
             header: 'Confirmar',
             icon: 'pi pi-exclamation-triangle',
             accept: () => {
-                this.newsService.deleteNews(this.selectedNews?.id ?? null).subscribe({
+                this.newsService.deleteNews(news?.id ?? null).subscribe({
                     next: () => {
-                        this.selectedNews = null;
                         this.messageService.add({
                             severity: 'success',
                             summary: 'Sucesso',

@@ -12,12 +12,21 @@ import { MessageService } from 'primeng/api';
 
 @Component({
     selector: 'app-news-details',
-    imports: [ToastModule, FormsModule, CommonModule, ProgressSpinner, DialogModule, ButtonModule, FileUploadModule],
+    imports: [ToastModule, FormsModule, CommonModule, ProgressSpinner, DialogModule, ButtonModule, FileUploadModule, FileUploadModule],
     templateUrl: './news-details.component.html',
     styleUrl: './news-details.component.scss'
 })
 export class NewsDetailsComponent {
-    @Input() news: NewsModel = {} as NewsModel;
+    // @Input() news: any;
+
+    @Input() news: NewsModel = {
+        id: null,
+        title: '',
+        content: '',
+        author: '',
+        publishDate: '',
+        imagesUrls: null
+      };
     @Input() visible: boolean = false;
     @Input() submitted: boolean = false;
     @Output() visibleChange = new EventEmitter<boolean>();
