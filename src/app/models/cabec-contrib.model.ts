@@ -4,15 +4,15 @@ import { ContribStatus } from "./enums/enums";
 
 
 export interface CabecContrib {
-  id: number;
-  title: string;
-  type: string; // Ajuste os valores conforme o enum ContribType
-  description: string;
-  total: number;
-  totalApproved: number;
-  createdAt: string; // ISO 8601 format (ex: '2025-05-24T12:34:56')
-  updatedAt: string;
-  event_id: number;
-  eventCode: string;
-  cabecStatus: string;
+  id: number | null;
+  title: string | null;
+  type: string | null; // Ajuste os valores conforme o enum ContribType
+  description: string | null;
+  total: number | 0;
+  totalApproved: number | 0;
+  createdAt: string | null; // ISO 8601 format (ex: '2025-05-24T12:34:56')
+  updatedAt: string | null ;
+  event_id: number | null;
+  eventCode: string | null;
+  cabecStatus: string | null; // Ajuste os valores conforme o enum ContribStatus
 }
