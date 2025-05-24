@@ -49,6 +49,7 @@ export class AppMenu {
                         { label: 'Cargos', icon: 'pi pi-fw pi-briefcase', routerLink: ['/pages/positions'] },
                         { label: 'Consultas', icon: 'pi pi-calendar', routerLink: ['/pages/consultations'] },
                         { label: 'Notícias', icon: 'pi pi-fw pi-book', routerLink: ['/pages/news'] },
+                        { label: 'Contribuições', icon: 'pi pi-credit-card', routerLink: ['/pages/contribuicoes'] },
                         { label: 'Relatórios', icon: 'pi pi-fw pi-chart-line', routerLink: ['/pages/reports'] }
                     ]
                 }
