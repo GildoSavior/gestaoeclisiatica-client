@@ -1,1 +1,66 @@
-<p>contribuitions-details works!</p>
+<p-toast></p-toast>
+
+<p-dialog [(visible)]="visible" [style]="{ width: '700px', 'border-radius': '12px' }" header="Detalhes da contribuição" [modal]="true" class="p-fluid" [closable]="!isLoading">
+    <div *ngIf="isLoading" class="flex justify-center items-center p-6">
+        <p-progressSpinner></p-progressSpinner>
+    </div>
+
+    <div class="card flex flex-col gap-6 p-4" [class.opacity-50]="isLoading">
+        <div class="flex flex-col gap-2">
+            <label for="title" class="font-medium">Titulo</label>
+            <input pInputText id="title" type="text" class="p-inputtext border border-gray-300 rounded-md p-2" [(ngModel)]="contrib.title" />
+            <input pInputText class="p-inputtext border border-gray-300 rounded-md p-2 hidden" id="id" type="text" [(ngModel)]="contrib.id" />
+        </div>
+
+        <div class="flex flex-col gap-2">
+            <label for="type" class="font-medium">Tipo</label>
+            <p-dropdown
+                id="type"
+                [(ngModel)]="contrib.type"
+                [options]="contribTypeOptions"
+                optionLabel="name"
+                optionValue="value"
+                placeholder="Selecione"
+                class="w-full p-dropdown-sm border border-gray-300 rounded-md p-2"
+                appendTo="body"
+            ></p-dropdown>
+        </div>
+
+        <div *ngIf="showEvents" class="flex flex-col gap-2">
+            <label for="eventCode" class="font-medium">Evento</label>
+            <p-autoComplete
+                inputId="eventCode"
+                [(ngModel)]="contrib.eventCode"
+                [suggestions]="filteredEvents"
+                [dropdown]="true"
+                [forceSelection]="true"
+                (completeMethod)="filterEvent($event)"
+                [field]="'fullName'"
+                [optionLabel]="'fullName'"
+                [optionValue]="'code'"
+                class="w-full w-[400px]"
+                inputStyleClass="p-inputtext border border-gray-300 rounded-md p-2 w-full "
+            >
+                <ng-template let-event pTemplate="item"> {{ event.code }} - {{ event.title || '' }} </ng-template>
+
+                <ng-template let-event pTemplate="selectedItem"> {{ event.code }} {{ event.title || '' }} </ng-template>
+            </p-autoComplete>
+        </div>
+        <div class="flex items-center gap-2 px-8 py-2 justify-end">
+            <input id="showEvents" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-2 focus:ring-blue-500" [(ngModel)]="showEvents" />
+            <label for="showEvents" class="font-medium text-gray-700 cursor-pointer select-none">Mostrar eventos</label>
+        </div>
+    </div>
+
+    <!-- <div class="flex items-center gap-2 px-8 py-2 justify-end">
+        <input id="needContribution" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-2 focus:ring-blue-500" [(ngModel)]="event.needContribution" />
+        <label for="needContribution" class="font-medium text-gray-700 cursor-pointer select-none"> Permite Contribuições </label>
+    </div> -->
+
+    <ng-template #footer>
+        <div class="flex justify-end w-full px-8">
+            <button pButton label="Cancelar" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+            <button pButton label="Salvar" icon="pi pi-check" (click)="onSave(contrib)" autofocus></button>
+        </div>
+    </ng-template>
+</p-dialog>

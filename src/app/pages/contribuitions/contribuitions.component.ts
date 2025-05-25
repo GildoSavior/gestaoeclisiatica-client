@@ -62,19 +62,19 @@ interface ExportColumn {
     providers: [MessageService, CabecService, ConfirmationService]
 })
 export class ContribuitionsComponent {
-    cabecDialog: boolean = false;
+    contribDialog: boolean = false;
 
     contribuitions = signal<CabecContrib[]>([]);
 
     contrib!: CabecContrib;
 
-    selectedContribuition = signal<CabecContrib | null>(null);
+    selectedContrib = signal<CabecContrib | null>(null);
 
     submitted: boolean = false;
 
     statuses!: any[];
 
-    @ViewChild('dt') table!: Table;
+    @ViewChild('dt') dt!: Table;
 
     exportColumns!: ExportColumn[];
 
@@ -138,7 +138,7 @@ export class ContribuitionsComponent {
             cabecStatus: '' // certifique-se de usar um valor válido de ContribStatus (enum)
         };
         this.submitted = false;
-        this.cabecDialog = true;
+        this.contribDialog = true;
     }
 
     saveContrib(contrib: CabecContrib) {}
@@ -147,7 +147,7 @@ export class ContribuitionsComponent {
 
     deleteSelectedContrib() {}
 
-    editEvent(contrib: CabecContrib) {
-        this.cabecDialog = true;
+    editContrib(contrib: CabecContrib) {
+        this.contribDialog = true;
     }
 }

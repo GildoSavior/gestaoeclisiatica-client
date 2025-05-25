@@ -7,6 +7,7 @@ import { DepartamentosComponent } from './departamentos/departamentos.component'
 import { PositionsComponent } from './positions/positions.component';
 import { ConsultationsComponent } from './consultation/consultation.component';
 import { NewsComponent } from './news/news.component';
+import { ContribuitionsComponent } from './contribuitions/contribuitions.component';
 
 export default [
     { path: 'events', component: EventsComponent },
@@ -14,7 +15,7 @@ export default [
     { path: 'departments', component: DepartamentosComponent },
     { path: 'positions', component: PositionsComponent },
     { path: 'consultations', component: ConsultationsComponent },
-    { path: 'contribuicoes', component: ConsultationsComponent },
+    { path: 'contribuicoes', component: ContribuitionsComponent },
     { path: 'news', component: NewsComponent },
     { path: 'crud', component: Crud },
     { path: 'empty', component: Empty },

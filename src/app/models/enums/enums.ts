@@ -42,3 +42,9 @@ export enum Enum_EventType {
     PROPOSAL = 'PEDIDO',
     FUNERAL = 'FUNERAL'
 }
+
+export enum ContribType {
+    WEDDING = 'CASAMENTO',
+    FUNERAL = 'FUNERAL',
+    TRIP = 'EXCURSÃO'
+}
