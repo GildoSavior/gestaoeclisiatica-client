@@ -101,6 +101,7 @@ export class ContribuitionsDetailsComponent {
 
     onSave(contrib: CabecContrib) {
         this.isLoading = true;
+        console.log('Saving contribution:', JSON.stringify (contrib));
 
         const saveObservable = contrib.id ? this.cabecService.update(contrib.id, contrib) : this.cabecService.create(contrib);
 

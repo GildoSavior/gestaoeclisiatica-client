@@ -67,7 +67,7 @@ export class ContribuitionsComponent {
     contribuitions = signal<CabecContrib[]>([]);
 
     contrib!: CabecContrib;
-
+    
     selectedContrib = signal<CabecContrib | null>(null);
 
     submitted: boolean = false;
