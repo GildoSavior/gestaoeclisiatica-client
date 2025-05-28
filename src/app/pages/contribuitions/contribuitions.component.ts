@@ -117,6 +117,8 @@ export class ContribuitionsComponent {
             { field: 'cabecStatus', header: 'Estado' }
         ];
 
+        
+
         this.exportColumns = this.cols.map((col) => ({ title: col.header, dataKey: col.field }));
     }
     onGlobalFilter(table: Table, event: Event) {

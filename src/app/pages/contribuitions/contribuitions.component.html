@@ -47,7 +47,7 @@
         </tr>
     </ng-template>
 
-    <ng-template #body let-contribuitions>
+    <ng-template #body let-contrib>
         <tr>
             <td style="width: 3rem">
                 <p-tableCheckbox [value]="contrib" />
@@ -55,7 +55,7 @@
 
             <td style="min-width: 9.5rem">{{ contrib.title }}</td>
             <td style="min-width: 9.5rem">{{ contrib.type }}</td>
-            <td style="min-width: 9.5rem">{{ contrib.description }}</td>
+            <td style="min-width: 14.5rem">{{ contrib.description }}</td>
             <td style="min-width: 9.5rem">{{ contrib.createdAt }}</td>
             <td style="min-width: 9.5rem">{{ contrib.total }}</td>
             <td style="min-width: 9.5rem">{{ contrib.totalApproved }}</td>

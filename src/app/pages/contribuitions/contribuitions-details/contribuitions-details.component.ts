@@ -101,7 +101,9 @@ export class ContribuitionsDetailsComponent {
 
     onSave(contrib: CabecContrib) {
         this.isLoading = true;
-        console.log('Saving contribution:', JSON.stringify (contrib));
+        contrib.cabecStatus = 'PENDING';
+
+        console.log('Saving contribution:', JSON.stringify(contrib));
 
         const saveObservable = contrib.id ? this.cabecService.update(contrib.id, contrib) : this.cabecService.create(contrib);
 
@@ -113,6 +115,7 @@ export class ContribuitionsDetailsComponent {
                     summary: 'Sucesso',
                     detail: 'Contribuição salva com sucesso.'
                 });
+                this.isLoading = false;
             },
             error: (err) => {
                 this.isLoading = false;
