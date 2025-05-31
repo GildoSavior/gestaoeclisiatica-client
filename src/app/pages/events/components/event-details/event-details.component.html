@@ -22,7 +22,7 @@
             <input pInputText id="userEmail" type="email" class="p-inputtext border border-gray-300 rounded-md p-2" [(ngModel)]="event.userEmail" />
         </div> -->
 
-        <div class="flex flex-col gap-2">
+        <div *ngIf="mode !== 'client'"  class="flex flex-col gap-2">
             <label for="userEmail" class="font-medium">Utilizador</label>
             <p-autoComplete
                 inputId="userEmail"
@@ -58,7 +58,7 @@
     </div>
 
     <div class="grid grid-cols-2 gap-4 px-8 py-4">
-        <div class="flex flex-col gap-2">
+        <div *ngIf="mode !== 'client'"  class="flex flex-col gap-2">
             <label for="eventStatus" class="font-medium">Estado</label>
             <p-dropdown id="eventStatus" [(ngModel)]="event.eventStatus" [options]="eventStatusOptions" optionLabel="name" optionValue="value" placeholder="Selecione" class="w-full p-dropdown-sm border border-gray-300 rounded-md p-2"></p-dropdown>
         </div>

@@ -15,6 +15,9 @@ import { User } from '../../../../models/user.model';
 import { UserService } from '../../../../service/user/user.service';
 import { ApiResponse } from '../../../../dto/reponses';
 import { AutoCompleteModule } from 'primeng/autocomplete';
+import { Router } from '@angular/router';
+import { ModeUtil } from '../../../../mode.utils';
+import { UserUtil } from '../../../../service/user/userUtils';
 
 @Component({
     selector: 'app-event-details',
@@ -23,15 +26,18 @@ import { AutoCompleteModule } from 'primeng/autocomplete';
     standalone: true
 })
 export class EventDetailsComponent {
+    mode: 'admin' | 'client' = 'client';
+
     constructor(
         private readonly messageService: MessageService,
         private readonly eventService: EventService,
-        private readonly userService: UserService
+        private readonly userService: UserService,
+        private router: Router
     ) {}
 
     ngOnInit(): void {
+        this.mode = ModeUtil.getCurrentMode(this.router.url);
         this.populateUsers();
-
     }
 
     @Input() event: EventModel = {} as EventModel;
@@ -56,9 +62,8 @@ export class EventDetailsComponent {
 
     uploadedFiles: any[] = [];
 
-
-    filteredUsers : User[] = [];
-    users : User[] = [];
+    filteredUsers: User[] = [];
+    users: User[] = [];
 
     getFullName(user: User): string {
         return `${user.name} ${user.lastName}`;
@@ -74,14 +79,13 @@ export class EventDetailsComponent {
             }));
     }
 
-
     populateUsers() {
         this.userService.getAllUsers().subscribe(
             (response: Partial<ApiResponse<User[]>>) => {
                 // Permite que 'ok' seja opcional
                 if (response?.data) {
                     this.users = response.data;
-                } 
+                }
             },
 
             (error: any) => {
@@ -103,6 +107,12 @@ export class EventDetailsComponent {
     }
 
     onSave(event: EventModel) {
+        const email = UserUtil.getUserData()?.email;
+        if (this.mode === 'client' && email) {
+            event.eventStatus = 'PENDING';
+            event.userEmail = email; 
+        }
+
         this.isLoading = true;
 
         const saveObservable = event.id ? this.eventService.updateEvent(event.code, event) : this.eventService.createEvent(event);
