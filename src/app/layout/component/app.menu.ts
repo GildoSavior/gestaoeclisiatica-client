@@ -43,14 +43,14 @@ export class AppMenu {
                     label: 'Pages',
                     icon: 'pi pi-fw pi-briefcase',
                     items: [
-                        { label: 'Eventos', icon: 'pi pi-fw pi-calendar', routerLink: ['/pages/events'] },
-                        { label: 'Utilizadores', icon: 'pi pi-fw pi-users', routerLink: ['/pages/users'] },
-                        { label: 'Departamentos', icon: 'pi pi-fw pi-sitemap', routerLink: ['/pages/departments'] },
-                        { label: 'Cargos', icon: 'pi pi-fw pi-briefcase', routerLink: ['/pages/positions'] },
-                        { label: 'Consultas', icon: 'pi pi-calendar', routerLink: ['/pages/consultations'] },
-                        { label: 'Notícias', icon: 'pi pi-fw pi-book', routerLink: ['/pages/news'] },
-                        { label: 'Contribuições', icon: 'pi pi-credit-card', routerLink: ['/pages/contribuicoes'] },
-                        { label: 'Relatórios', icon: 'pi pi-fw pi-chart-line', routerLink: ['/pages/reports'] }
+                        { label: 'Eventos', icon: 'pi pi-fw pi-calendar', routerLink: ['/admin/pages/events'] },
+                        { label: 'Utilizadores', icon: 'pi pi-fw pi-users', routerLink: ['/admin/pages/users'] },
+                        { label: 'Departamentos', icon: 'pi pi-fw pi-sitemap', routerLink: ['/admin/pages/departments'] },
+                        { label: 'Cargos', icon: 'pi pi-fw pi-briefcase', routerLink: ['/admin/pages/positions'] },
+                        { label: 'Consultas', icon: 'pi pi-calendar', routerLink: ['/admin/pages/consultations'] },
+                        { label: 'Notícias', icon: 'pi pi-fw pi-book', routerLink: ['/admin/pages/news'] },
+                        { label: 'Contribuições', icon: 'pi pi-credit-card', routerLink: ['/admin/pages/contribuicoes'] },
+                        { label: 'Relatórios', icon: 'pi pi-fw pi-chart-line', routerLink: ['/admin/pages/reports'] }
                     ]
                 }
             ];
@@ -78,16 +78,16 @@ export class AppMenu {
                                 {
                                     label: 'Todos',
                                     icon: 'pi pi-fw pi-calendar',
-                                    routerLink: ['/pages/events']
+                                    routerLink: ['/client/pages/events']
                                 },
                                 {
                                     label: 'Meus Eventos',
                                     icon: 'pi pi-calendar-plus',
-                                    routerLink: ['/pages/events']
+                                    routerLink: ['/client/pages/my-events']
                                 }
                             ]
                         },
-                        { label: 'Notícias', icon: 'pi pi-fw pi-book', routerLink: ['/pages/news'] }
+                        { label: 'Notícias', icon: 'pi pi-fw pi-book', routerLink: ['/client/pages/news'] }
                     ]
                 }
             ];
