@@ -26,8 +26,8 @@ export class EventService {
     return this.http.get<HttpResponse<EventModel[]>>(this.apiUrl, { headers: this.getHeaders() });
   }
 
-  getEventsByUser(userId: string): Observable<HttpResponse<EventModel[]>> {
-    return this.http.get<HttpResponse<EventModel[]>>(`${this.apiUrl}/user/${userId}`, { headers: this.getHeaders() });
+  getEventsByUser(email: string): Observable<HttpResponse<EventModel[]>> {
+    return this.http.get<HttpResponse<EventModel[]>>(`${this.apiUrl}/user/${email}`, { headers: this.getHeaders() });
   }
 
   createEvent(event: EventModel): Observable<HttpResponse<EventModel>> {

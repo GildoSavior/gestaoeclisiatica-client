@@ -1,4 +1,4 @@
-import { Component, signal, ViewChild } from '@angular/core';
+import { Component, Input, signal, ViewChild } from '@angular/core';
 import { Table, TableModule } from 'primeng/table';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { CommonModule } from '@angular/common';
@@ -23,6 +23,9 @@ import { EventModel } from '../../models/event.model';
 import { HttpResponse } from '../../dto/http-response.model';
 import { EventStatus } from '../../models/enums/enums';
 import { EventDetailsComponent } from './components/event-details/event-details.component';
+import { ModeUtil } from '../../mode.utils';
+import { Router } from '@angular/router';
+import { UserUtil } from '../../service/user/userUtils';
 
 interface Column {
     field: string;
@@ -63,6 +66,8 @@ interface ExportColumn {
     providers: [MessageService, EventService, ConfirmationService]
 })
 export class EventsComponent {
+    mode: 'admin' | 'client' = 'client';
+
     eventDialog: boolean = false;
 
     events = signal<EventModel[]>([]);
@@ -84,7 +89,8 @@ export class EventsComponent {
     constructor(
         private readonly eventService: EventService,
         private readonly messageService: MessageService,
-        private readonly confirmationService: ConfirmationService
+        private readonly confirmationService: ConfirmationService,
+        private router: Router
     ) {}
 
     exportCSV() {
@@ -92,19 +98,32 @@ export class EventsComponent {
     }
 
     ngOnInit() {
+        this.mode = ModeUtil.getCurrentMode(this.router.url);
         this.loadDemoData();
     }
 
     loadDemoData() {
-        this.eventService.getAllEvents().subscribe(
-            (response: HttpResponse<EventModel[]>) => {
-                this.events.set(response.data);
-            },
 
-            (error) => {
-                console.error('Erro ao buscar eventos:', error);
-            }
-        );
+        const userData = UserUtil.getUserData();
+        const email = userData?.email;
+         // Exemplo: 'admin' ou 'client'
+    
+        if (this.mode === 'admin') {
+            // Se for admin, busca todos eventos
+            this.eventService.getAllEvents().subscribe(
+                (response: HttpResponse<EventModel[]>) => this.events.set(response.data),
+                (error) => console.error('Erro ao buscar eventos:', error)
+            );
+        } else if (this.mode === 'client' && email) {
+            
+            // Se for client, busca eventos só do usuário
+            this.eventService.getEventsByUser(email).subscribe(
+                (response: HttpResponse<EventModel[]>) => this.events.set(response.data),
+                (error) => console.error('Erro ao buscar eventos:', error)
+            );
+        } else {
+            console.error('Role do usuário desconhecida ou email ausente');
+        }
 
         this.statuses = [
             { label: 'PENDENTE', value: 'PENDING' },
@@ -116,11 +135,11 @@ export class EventsComponent {
             { field: 'code', header: 'Codigo', customExportHeader: 'Event Code' },
             { field: 'eventType', header: 'Tipo de Evento' },
             { field: 'title', header: 'Titulo' },
-            { field: 'name', header: 'Utilizador' },
+            ...(this.mode === 'admin' ? [{ field: 'name', header: 'Utilizador' }] : []),
             { field: 'description', header: 'Descrição' },
             { field: 'initialDate', header: 'Data inicial' },
             { field: 'finalDate', header: 'Data final' },
-            { field: 'eventStatus', header: 'Estado' },
+            { field: 'eventStatus', header: 'Estado' }
         ];
 
         this.exportColumns = this.cols.map((col) => ({ title: col.header, dataKey: col.field }));
@@ -150,19 +169,17 @@ export class EventsComponent {
     }
 
     getSeverity(status: string) {
-      switch (status) {
-          case 'APPROVED':
-              return 'success';
-          case 'PENDING':
-              return 'warn';
-          case 'REJECTED':
-              return 'danger';
-          default:
-              return 'info';
-      }
-  }
-
- 
+        switch (status) {
+            case 'APPROVED':
+                return 'success';
+            case 'PENDING':
+                return 'warn';
+            case 'REJECTED':
+                return 'danger';
+            default:
+                return 'info';
+        }
+    }
 
     deleteSelectedEvent() {
         if (!this.selectedEvent?.code) {
@@ -174,7 +191,7 @@ export class EventsComponent {
             });
             return;
         }
-    
+
         this.confirmationService.confirm({
             message: 'Tem a certeza que pretende eliminar este evento?',
             header: 'Confirmar',
@@ -226,7 +243,7 @@ export class EventsComponent {
                     });
                     return;
                 }
-    
+
                 this.eventService.deleteEvent(event.code).subscribe({
                     next: () => {
                         this.loadDemoData();
@@ -252,13 +269,8 @@ export class EventsComponent {
             }
         });
     }
-    
-    editEvent(event: EventModel) {
 
+    editEvent(event: EventModel) {
         this.eventDialog = true;
     }
-    
 }
-
-
-

@@ -76,14 +76,9 @@ export class AppMenu {
                             icon: 'pi pi-fw pi-calendar',
                             items: [
                                 {
-                                    label: 'Todos',
-                                    icon: 'pi pi-fw pi-calendar',
-                                    routerLink: ['/client/pages/events']
-                                },
-                                {
                                     label: 'Meus Eventos',
                                     icon: 'pi pi-calendar-plus',
-                                    routerLink: ['/client/pages/my-events']
+                                    routerLink: ['/client/pages/events']
                                 }
                             ]
                         },
