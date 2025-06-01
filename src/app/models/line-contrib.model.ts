@@ -6,6 +6,7 @@ export interface LineContrib {
   id: number | null;
   cabec_id: number | null;
   cabecCode: string | null;
+  cabecTitle:string | null;
   userEmail: string | null;
   description: string | null;
   createdAt: string | null;

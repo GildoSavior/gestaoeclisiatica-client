@@ -1,0 +1,75 @@
+<!-- <p-toolbar *ngIf="mode !== 'client'" styleClass="mb-6">
+    <ng-template #start>
+        <p-button label="Adicionar contribuição" icon="pi pi-plus" severity="secondary" class="mr-2" (onClick)="openNew()" />
+        <p-button severity="secondary" label="Delete" icon="pi pi-trash" outlined (onClick)="deleteSelectedContrib()" [disabled]="!selectedContrib" />
+    </ng-template>
+
+    <ng-template #end>
+        <p-button label="Export" icon="pi pi-upload" severity="secondary" (onClick)="exportCSV()" />
+    </ng-template>
+</p-toolbar> -->
+
+<p-table
+    #dt
+    [value]="lines()"
+    [rows]="10"
+    [columns]="cols"
+    [paginator]="true"
+    [globalFilterFields]="['name', 'country.name', 'representative.name', 'status']"
+    [tableStyle]="{ width: '100%' }"
+    [(selection)]="selectedLine"
+    [rowHover]="true"
+    [selectionMode]="'single'"
+    dataKey="id"
+    currentPageReportTemplate="Contribuição {first} até {last} de {totalRecords} Contribuições"
+    [showCurrentPageReport]="true"
+    [rowsPerPageOptions]="[10, 20, 30]"
+>
+    <ng-template #caption>
+        <div class="flex items-center justify-between">
+            <h5 class="m-0 ml-4">Minhas Contribuições</h5>
+            <p-iconfield>
+                <p-inputicon styleClass="pi pi-search" />
+                <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Search..." />
+            </p-iconfield>
+        </div>
+    </ng-template>
+
+    <ng-template #header>
+        <tr>
+            <th style="width: 3rem" scope="col">
+                <p-tableHeaderCheckbox />
+            </th>
+            <th style="width: 20%">Código</th>
+            <th style="width: 15%">Título</th>
+            <th style="width: 8%">Descrição</th>
+            <th style="width: 10%">Total</th>
+            <th style="width: 10%">Data</th>
+            <th style="width: 10%">Estado</th>
+            <th style="width: 5%">Ações</th>
+        </tr>
+    </ng-template>
+
+    <ng-template #body let-line>
+        <tr>
+            <td style="width: 3rem">
+                <p-tableCheckbox [value]="line" />
+            </td>
+            <td style="width: 8%">{{ line.cabecCode }}</td>
+            <td style="width: 10%">{{ line.cabecTitle }}</td>
+            <td style="width: 8%">{{ line.description }}</td>
+            <td style="width: 10%">{{ line.total }}</td>
+            <td style="width: 18%">{{ line.createdAt }}</td>
+            <td style="width: 18%">{{ line.status }}</td>
+
+            <td style="width: 10%">
+                <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true" (click)="editLine(line)" />
+                <p-button icon="pi pi-trash" severity="danger" [rounded]="true" [outlined]="true" (click)="deleteLine(line)" />
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+
+<!-- <app-line-contribuitions-details [(visible)]="showLineContribModal" [contrib]="contrib" [submitted]="submitted" (save)="handleSave(line)"></app-line-contribuitions-details> -->
+
+<p-confirmdialog [style]="{ width: '450px' }" />

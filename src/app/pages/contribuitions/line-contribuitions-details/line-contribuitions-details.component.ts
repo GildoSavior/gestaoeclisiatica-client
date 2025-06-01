@@ -51,6 +51,7 @@ export class LineContribuitionsDetailsComponent {
     line: LineContrib = {
         id: 0,
         cabec_id: 0,
+        cabecTitle: '',
         cabecCode: '',
         userEmail: '',
         description: '',
@@ -91,6 +92,7 @@ export class LineContribuitionsDetailsComponent {
         this.isLoading = true;
         line.cabecCode = this.contrib.code;
         line.cabec_id = this.contrib.id;
+        line.cabecTitle = this.contrib.title;
 
         const saveObservable = this.lineService.createLine(line);
 
