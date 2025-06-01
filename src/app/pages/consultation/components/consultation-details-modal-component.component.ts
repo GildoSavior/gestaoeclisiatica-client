@@ -14,18 +14,24 @@ import { ApiResponse } from '../../../dto/reponses';
 import { User } from '../../../models/user.model';
 import { UserService } from '../../../service/user/user.service';
 import { AutoCompleteModule } from 'primeng/autocomplete';
+import { Router } from '@angular/router';
+import { ModeUtil } from '../../../mode.utils';
+import { UserUtil } from '../../../service/user/userUtils';
 
 @Component({
     selector: 'app-consultation-details-modal-component',
-    imports: [DialogModule, FormsModule, DropdownModule, ButtonModule, AutoCompleteModule , ToastModule, ProgressSpinnerModule, CommonModule],
+    imports: [DialogModule, FormsModule, DropdownModule, ButtonModule, AutoCompleteModule, ToastModule, ProgressSpinnerModule, CommonModule],
     templateUrl: './consultation-details-modal-component.html',
     styleUrl: './consultation-details-modal-component.scss'
 })
 export class ConsultationDetailsModalComponent implements OnInit {
+    mode: 'admin' | 'client' = 'client';
+
     constructor(
         private readonly consultationService: ConsultationService,
         private readonly userService: UserService,
-        private readonly messageService: MessageService
+        private readonly messageService: MessageService,
+        private router: Router
     ) {}
     statusOptions = Object.entries(ConsultationStatus).map(([key, value]) => ({
         name: value, // Exibe a descrição no dropdown
@@ -35,14 +41,14 @@ export class ConsultationDetailsModalComponent implements OnInit {
     @Input() visible: boolean = false;
     @Input() consultation!: any;
     @Output() onClose = new EventEmitter<void>();
-    users : User[] = [];
-    filteredUsers : User[] = [];
+    users: User[] = [];
+    filteredUsers: User[] = [];
 
     isLoading = false;
 
     ngOnInit(): void {
+        this.mode = ModeUtil.getCurrentMode(this.router.url);
         this.populateUsers();
-
     }
 
     hideDialog() {
@@ -53,18 +59,15 @@ export class ConsultationDetailsModalComponent implements OnInit {
         return `${user.name} ${user.lastName}`;
     }
 
-
     filterUser(event: any) {
         const query = event.query.toLowerCase();
         this.filteredUsers = this.users
-          .filter(user =>
-            this.getFullName(user).toLowerCase().includes(query)
-          )
-          .map(user => ({
-            ...user,
-            fullName: this.getFullName(user) 
-          }));
-      }
+            .filter((user) => this.getFullName(user).toLowerCase().includes(query))
+            .map((user) => ({
+                ...user,
+                fullName: this.getFullName(user)
+            }));
+    }
 
     populateUsers() {
         this.userService.getAllUsers().subscribe(
@@ -114,6 +117,11 @@ export class ConsultationDetailsModalComponent implements OnInit {
             return;
         }
 
+        const email = UserUtil.getUserData()?.email;
+        if (this.mode === 'client' && email) {
+            consultation.status = 'PENDING';
+            consultation.userEmail = email; 
+        }
 
         consultation.date = this.toLocalISOStringWithoutMs(new Date(consultation.date));
 

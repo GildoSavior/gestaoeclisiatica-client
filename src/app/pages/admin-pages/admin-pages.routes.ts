@@ -6,6 +6,7 @@ import { UsersComponent } from '../users/users.component';
 import { DepartamentosComponent } from '../departamentos/departamentos.component';
 import { PositionsComponent } from '../positions/positions.component';
 import { ConsultationsComponent } from '../consultation/consultation.component';
+
 import { ContribuitionsComponent } from '../contribuitions/contribuitions.component';
 
 export default [

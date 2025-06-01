@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { Table } from 'primeng/table';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
@@ -25,7 +25,9 @@ import { DropdownModule } from 'primeng/dropdown';
 import { Consultation } from '../../models/consultation.model';
 import { ConsultationService } from '../../service/consultation/consultation.service';
 import { ConsultationDetailsModalComponent } from './components/consultation-details-modal-component.component';
-import {ApiResponse} from '../../dto/reponses';
+import { ApiResponse } from '../../dto/reponses';
+import { ModeUtil } from '../../mode.utils';
+import { UserUtil } from '../../service/user/userUtils';
 
 interface Column {
     field: string;
@@ -75,9 +77,12 @@ interface ExportColumn {
     providers: [MessageService, ConfirmationService]
 })
 export class ConsultationsComponent implements OnInit {
+    
+    mode: 'admin' | 'client' = 'client';
+    
     consultationDialog: boolean = false;
     consultations = signal<Consultation[]>([]);
-    consultation: Consultation = {} as Consultation
+    consultation: Consultation = {} as Consultation;
     selectedConsultation!: Consultation | null;
     submitted: boolean = false;
     statuses!: any[];
@@ -88,7 +93,8 @@ export class ConsultationsComponent implements OnInit {
     constructor(
         private readonly consultationService: ConsultationService,
         private readonly messageService: MessageService,
-        private readonly confirmationService: ConfirmationService
+        private readonly confirmationService: ConfirmationService,
+        private router: Router,
     ) {}
 
     exportCSV() {
@@ -96,35 +102,50 @@ export class ConsultationsComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        this.mode = ModeUtil.getCurrentMode(this.router.url);
         this.loadDemoData();
     }
 
     loadDemoData() {
-        this.consultationService.getAll().subscribe(
-            (response: { message: string; data: Consultation[] }) => {
-                if (response && response.data) {
-                    this.consultations.set(response.data);
-                } else {
-                    console.warn('A resposta da API não contém consultas.');
-                }
-            },
-            (error: any) => {
-                console.error('Erro ao buscar usuários:', error);
+        if (this.mode === 'client') {
+            const email = UserUtil.getUserData()?.email;
+    
+            if (!email) {
+                console.warn('Usuário não autenticado ou email indefinido.');
+                return;
             }
-        );
-
+    
+            this.consultationService.getAllByUserEmail(email).subscribe(
+                (response: { message: string; data: Consultation[] }) => {
+                    this.consultations.set(response.data || []);
+                },
+                (error: any) => {
+                    console.error('Erro ao buscar consultas do usuário:', error);
+                }
+            );
+        } else {
+            this.consultationService.getAll().subscribe(
+                (response: { message: string; data: Consultation[] }) => {
+                    this.consultations.set(response.data || []);
+                },
+                (error: any) => {
+                    console.error('Erro ao buscar todas as consultas:', error);
+                }
+            );
+        }
+    
         this.cols = [
-            { field: 'code', header: 'Codigo' },
-            { field: 'title', header: 'Titulo' },
+            { field: 'code', header: 'Código' },
+            { field: 'title', header: 'Título' },
             { field: 'description', header: 'Descrição' },
-            { field: 'userEmail', header: 'Utilizador' },
+            ...(this.mode === 'admin' ? [{ field: 'userEmail', header: 'Utilizador' }] : []),
             { field: 'date', header: 'Data' },
-            { field: 'status', header: 'Estado' },
-
+            { field: 'status', header: 'Estado' }
         ];
-
+    
         this.exportColumns = this.cols.map((col) => ({ title: col.header, dataKey: col.field }));
     }
+    
 
     onGlobalFilter(table: Table, event: Event) {
         table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
@@ -156,17 +177,15 @@ export class ConsultationsComponent implements OnInit {
     saveConsultation(consultation: Consultation) {}
 
     deleteConsultation(consultation: Consultation) {
-      
         this.confirmationService.confirm({
             message: `Tem certeza de que deseja eliminar a consulta ${consultation.code}?`,
             header: 'Confirmar',
             icon: 'pi pi-exclamation-triangle',
             accept: () => {
                 // this.isLoading = true;?
-    
+
                 this.consultationService.deleteConsultation(consultation.id).subscribe({
                     next: (response: ApiResponse<string>) => {
-    
                         if (response?.ok) {
                             this.messageService.add({
                                 severity: 'success',
@@ -174,10 +193,10 @@ export class ConsultationsComponent implements OnInit {
                                 detail: response.message || 'Consulta eliminada com sucesso',
                                 life: 3000
                             });
-    
+
                             this.selectedConsultation = null;
                             this.consultation = {} as Consultation;
-    
+
                             this.loadDemoData();
                         } else {
                             this.messageService.add({
@@ -200,9 +219,6 @@ export class ConsultationsComponent implements OnInit {
             }
         });
     }
-    
-    
-    
 
     editConsultation(consultation: Consultation) {
         this.consultation = { ...consultation };

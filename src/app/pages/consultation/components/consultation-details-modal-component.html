@@ -17,12 +17,9 @@
             <label for="description" class="font-medium">Descrição</label>
             <textarea pInputText id="description" type="text" class="p-inputtext border border-gray-300 rounded-md p-2" [(ngModel)]="consultation.description"></textarea>
         </div>
-        <!-- <div class="flex flex-col gap-2">
-            <label for="userEmail" class="font-medium">Utilizador</label>
-            <input pInputText id="userEmail" type="text" class="p-inputtext border border-gray-300 rounded-md p-2" [(ngModel)]="consultation.userEmail" />
-        </div> -->
+       
 
-        <div class="flex flex-col gap-2">
+        <div *ngIf="mode !== 'client'" class="flex flex-col gap-2">
             <label for="userEmail" class="font-medium">Utilizador</label>
             <p-autoComplete
                 inputId="userEmail"
@@ -47,7 +44,7 @@
             <input pInputText id="data" type="datetime-local" class="p-inputtext border border-gray-300 rounded-md p-2" [(ngModel)]="consultation.date" />
         </div>
 
-        <div class="flex flex-col gap-2">
+        <div *ngIf="mode !== 'client'" class="flex flex-col gap-2">
             <label for="status" class="font-medium">Estado</label>
             <p-dropdown
                 id="status"

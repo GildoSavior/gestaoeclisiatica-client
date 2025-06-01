@@ -24,6 +24,10 @@ export class ConsultationService {
     getAll(): Observable<ApiResponse<Consultation[]>> {
         return this.http.get<ApiResponse<Consultation[]>>(this.baseUrl, { headers: this.getHeaders() });
     }
+    
+    getAllByUserEmail(email: string): Observable<ApiResponse<Consultation[]>> {
+        return this.http.get<ApiResponse<Consultation[]>>(`${this.baseUrl}/user/${email}`, { headers: this.getHeaders() });
+    }
 
     getConsultationCode(code: string): Observable<ApiResponse<Consultation>> {
         return this.http.get<ApiResponse<Consultation>>(`${this.baseUrl}/${code}`, { headers: this.getHeaders() });

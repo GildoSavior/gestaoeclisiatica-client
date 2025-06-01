@@ -1,7 +1,6 @@
-
-<p-toolbar styleClass="mb-6">
+<p-toolbar *ngIf="mode !== 'client'" styleClass="mb-6">
     <ng-template #start>
-        <p-button label="Adicionar contrituição" icon="pi pi-plus" severity="secondary" class="mr-2" (onClick)="openNew()" />
+        <p-button label="Adicionar contribuição" icon="pi pi-plus" severity="secondary" class="mr-2" (onClick)="openNew()" />
         <p-button severity="secondary" label="Delete" icon="pi pi-trash" outlined (onClick)="deleteSelectedContrib()" [disabled]="!selectedContrib" />
     </ng-template>
 
@@ -17,9 +16,11 @@
     [columns]="cols"
     [paginator]="true"
     [globalFilterFields]="['name', 'country.name', 'representative.name', 'status']"
-    [tableStyle]="{ 'min-width': '70rem' }"
+    [tableStyle]="{ 'width': '100%' }"
     [(selection)]="selectedContrib"
     [rowHover]="true"
+    [selectionMode]="'single'"
+    (onRowSelect)="onContribClick($event.data)"
     dataKey="id"
     currentPageReportTemplate="Contribuição {first} até {last} de {totalRecords} Contribuições"
     [showCurrentPageReport]="true"
@@ -27,49 +28,57 @@
 >
     <ng-template #caption>
         <div class="flex items-center justify-between">
-            <h5 class="m-0">Eventos</h5>
+            <h5 class="m-0 ml-4">Todas Contribuições</h5>
             <p-iconfield>
                 <p-inputicon styleClass="pi pi-search" />
                 <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Search..." />
             </p-iconfield>
         </div>
     </ng-template>
+
     <ng-template #header>
         <tr>
-            <th style="width: 3rem" scope="col">
+            <th *ngIf="mode !== 'client'" style="width: 3rem" scope="col">
                 <p-tableHeaderCheckbox />
             </th>
-            <th *ngFor="let col of cols" [pSortableColumn]="col.field" style="min-width: 9.5rem" scope="col">
-                {{ col.header }}
-                <p-sortIcon [field]="col.field" />
-            </th>  
-            <th style="min-width: 12rem" scope="col"></th> 
+            <th style="width: 20%">Código</th>
+            <th style="width: 15%">Título</th>
+            <th style="width: 8%">Tipo</th>
+            <th style="width: 18%">Descrição</th>
+            <th style="width: 10%">Criado em</th>
+            <th *ngIf="mode !== 'client'" style="width: 8%">Total</th>
+            <th *ngIf="mode !== 'client'" style="width: 8%">Aprovado</th>
+            <th style="width: 15%">Evento</th>
+            <th *ngIf="mode !== 'client'" style="width: 7%">Estado</th>
+            <th style="width: 5%">Ações</th>
         </tr>
     </ng-template>
 
     <ng-template #body let-contrib>
         <tr>
-            <td style="width: 3rem">
+            <td *ngIf="mode !== 'client'" style="width: 3rem">
                 <p-tableCheckbox [value]="contrib" />
             </td>
+            <td style="width: 8%">{{ contrib.code }}</td>
+            <td style="width: 10%">{{ contrib.title }}</td>
+            <td style="width: 8%">{{ contrib.type }}</td>
+            <td style="width: 18%">{{ contrib.description }}</td>
+            <td style="width: 10%">{{ contrib.createdAt }}</td>
+            <td *ngIf="mode !== 'client'" style="width: 8%">{{ contrib.total }}</td>
+            <td *ngIf="mode !== 'client'" style="width: 8%">{{ contrib.totalApproved }}</td>
+            <td style="width: 10%">{{ contrib.eventCode }}</td>
+            <td *ngIf="mode !== 'client'" style="width: 7%">{{ contrib.cabecStatus }}</td>
 
-            <td style="min-width: 9.5rem">{{ contrib.title }}</td>
-            <td style="min-width: 9.5rem">{{ contrib.type }}</td>
-            <td style="min-width: 14.5rem">{{ contrib.description }}</td>
-            <td style="min-width: 9.5rem">{{ contrib.createdAt }}</td>
-            <td style="min-width: 9.5rem">{{ contrib.total }}</td>
-            <td style="min-width: 9.5rem">{{ contrib.totalApproved }}</td>
-            <td style="min-width: 9.5rem">{{ contrib.eventCode }}</td>
-            <td style="min-width: 9.5rem">{{ contrib.cabecStatus }}</td>
-            <td>
-                <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true"  (click) ="editContrib(contrib)" />
-                <p-button icon="pi pi-trash" severity="danger" [rounded]="true" [outlined]="true" (click)="deleteContrib(contrib)"/>
+            <td *ngIf="mode !== 'client'" style="width: 10%">
+                <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true" (click)="editContrib(contrib)" />
+                <p-button icon="pi pi-trash" severity="danger" [rounded]="true" [outlined]="true" (click)="deleteContrib(contrib)" />
+            </td>
+            <td *ngIf="mode === 'client'" style="width: 20%">
+                <p-button icon="pi pi-plus" class="mr-2" [rounded]="true" [outlined]="true" (click)="onContribClick(contrib)" />
             </td>
         </tr>
     </ng-template>
 </p-table>
-
-
 
 <app-contribuitions-details
   [(visible)]="contribDialog"
@@ -79,4 +88,17 @@
 ></app-contribuitions-details>
 
 
-<p-confirmdialog [style]="{ width: '450px' }" /> 
+<app-line-contribuitions-details
+  [(visible)]="showLineContribModal"
+  [contrib]="contrib"
+  [submitted]="submitted"
+  (save)="handleSave(line)"
+></app-line-contribuitions-details>
+
+
+
+
+
+
+
+<p-confirmdialog [style]="{ width: '450px' }" />

@@ -5,6 +5,7 @@ import { ContribStatus } from "./enums/enums";
 
 export interface CabecContrib {
   id: number | null;
+  code: string | null;
   title: string | null;
   type: string | null; // Ajuste os valores conforme o enum ContribType
   description: string | null;

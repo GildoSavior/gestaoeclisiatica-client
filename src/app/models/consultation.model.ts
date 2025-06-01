@@ -10,5 +10,5 @@ export interface Consultation {
   createdAt: Date;
   updatedAt: Date;
   userEmail: string;
-  status: ConsultationStatus;
+  status: string;
 }

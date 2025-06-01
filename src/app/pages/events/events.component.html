@@ -1,3 +1,4 @@
+
 <p-toolbar styleClass="mb-6">
     <ng-template #start>
         <p-button label="Adicionar evento" icon="pi pi-plus" severity="secondary" class="mr-2" (onClick)="openNew()" />
@@ -29,7 +30,7 @@
             <h5 class="m-0">
                 {{ mode === 'client' ? 'Meus Eventos' : 'Eventos' }}
             </h5>
-
+              
             <p-iconfield>
                 <p-inputicon styleClass="pi pi-search" />
                 <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Search..." />
@@ -44,8 +45,8 @@
             <th *ngFor="let col of cols" [pSortableColumn]="col.field" style="min-width: 9.5rem" scope="col">
                 {{ col.header }}
                 <p-sortIcon [field]="col.field" />
-            </th>
-            <th style="min-width: 12rem" scope="col"></th>
+            </th>  
+            <th style="min-width: 12rem" scope="col"></th> 
         </tr>
     </ng-template>
 
@@ -65,13 +66,19 @@
                 <p-tag [value]="event.eventStatus" [severity]="getSeverity(event.eventStatus)" />
             </td>
             <td>
-                <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true" (click)="editEvent(event)" />
-                <p-button icon="pi pi-trash" severity="danger" [rounded]="true" [outlined]="true" (click)="deleteEvent(event)" />
+                <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true"  (click) ="editEvent(event)" />
+                <p-button icon="pi pi-trash" severity="danger" [rounded]="true" [outlined]="true" (click)="deleteEvent(event)"/>
             </td>
         </tr>
     </ng-template>
 </p-table>
 
-<app-event-details [(visible)]="eventDialog" [event]="event" [submitted]="submitted" (save)="saveEvent(event)"></app-event-details>
+<app-event-details
+  [(visible)]="eventDialog"
+  [event]="event"
+  [submitted]="submitted"
+  (save)="saveEvent(event)"
+></app-event-details>
 
-<p-confirmdialog [style]="{ width: '450px' }" />
+
+<p-confirmdialog [style]="{ width: '450px' }" /> 

@@ -2,6 +2,8 @@
 import { Routes } from '@angular/router';
 import { EventsComponent } from '../events/events.component';
 import { NewsComponent } from '../news/news.component';
+import { ConsultationsComponent } from '../consultation/consultation.component';
+import { ContribuitionsComponent } from '../contribuitions/contribuitions.component';
 
 export default [
   {
@@ -9,7 +11,11 @@ export default [
     component: EventsComponent
   },
   {
-    path: 'news',
-    component: NewsComponent
+    path: 'consultations',
+    component: ConsultationsComponent
+  },
+  {
+    path: 'contributions',
+    component: ContribuitionsComponent
   }
 ] satisfies Routes;

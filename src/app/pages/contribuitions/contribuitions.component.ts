@@ -22,6 +22,10 @@ import { CabecContrib } from '../../models/cabec-contrib.model';
 import { CabecService } from '../../service/contrib/contrib.service';
 import { HttpResponse } from '../../dto/http-response.model';
 import { ContribuitionsDetailsComponent } from './contribuitions-details/contribuitions-details.component';
+import { LineContribuitionsDetailsComponent } from './line-contribuitions-details/line-contribuitions-details.component';
+import { Router } from '@angular/router';
+import { ModeUtil } from '../../mode.utils';
+import { LineContrib } from '../../models/line-contrib.model';
 
 interface Column {
     field: string;
@@ -55,20 +59,26 @@ interface ExportColumn {
         InputIconModule,
         IconFieldModule,
         ConfirmDialogModule,
-        ContribuitionsDetailsComponent
+        ContribuitionsDetailsComponent,
+        LineContribuitionsDetailsComponent
     ],
     templateUrl: './contribuitions.component.html',
     styleUrl: './contribuitions.component.scss',
     providers: [MessageService, CabecService, ConfirmationService]
 })
 export class ContribuitionsComponent {
+    mode: 'admin' | 'client' = 'client';
+
     contribDialog: boolean = false;
 
     contribuitions = signal<CabecContrib[]>([]);
 
     contrib!: CabecContrib;
-    
-    selectedContrib = signal<CabecContrib | null>(null);
+    line!: LineContrib;
+
+    showLineContribModal: boolean = false;
+
+    selectedContrib: CabecContrib | null = null;
 
     submitted: boolean = false;
 
@@ -83,7 +93,8 @@ export class ContribuitionsComponent {
     constructor(
         private readonly cabecService: CabecService,
         private readonly messageService: MessageService,
-        private readonly confirmationService: ConfirmationService
+        private readonly confirmationService: ConfirmationService,
+        private router: Router
     ) {}
 
     exportCSV() {
@@ -91,7 +102,13 @@ export class ContribuitionsComponent {
     }
 
     ngOnInit() {
+        this.mode = ModeUtil.getCurrentMode(this.router.url);
         this.loadDemoData();
+    }
+
+    onContribClick(contrib: CabecContrib) {
+        this.contrib = { ...contrib };
+        this.showLineContribModal = true;
     }
 
     loadDemoData() {
@@ -106,18 +123,16 @@ export class ContribuitionsComponent {
         );
 
         this.cols = [
+            { field: 'code', header: 'Codigo' },
             { field: 'title', header: 'Titulo' },
             { field: 'type', header: 'Tipo' },
             { field: 'description', header: 'Descrição' },
             { field: 'createdAt', header: 'Data' },
-            { field: 'total', header: 'Total' },
-            { field: 'totalApproved', header: 'Total Aprovado' },
+            ...(this.mode === 'admin' ? [{ field: 'total', header: 'Total' }] : []),
+            ...(this.mode === 'admin' ? [{ field: 'totalApproved', header: 'Total Aprovado' }] : []),
             { field: 'eventCode', header: 'Evento' },
-            { field: 'finalDate', header: 'Data final' },
-            { field: 'cabecStatus', header: 'Estado' }
+            ...(this.mode === 'admin' ? [{ field: 'cabecStatus', header: 'Estado' }] : [])
         ];
-
-        
 
         this.exportColumns = this.cols.map((col) => ({ title: col.header, dataKey: col.field }));
     }
@@ -129,6 +144,7 @@ export class ContribuitionsComponent {
         this.contrib = {
             id: null,
             title: '',
+            code: '',
             type: '', // certifique-se de usar um valor válido de ContribType (enum)
             description: '',
             total: 0,
@@ -151,5 +167,16 @@ export class ContribuitionsComponent {
 
     editContrib(contrib: CabecContrib) {
         this.contribDialog = true;
+    }
+
+    handleSave(line: LineContrib) {
+        console.log('Linha salva:', line);
+
+        // Exemplo: você pode atualizar o array contribuitions ou fazer chamada ao backend
+        this.messageService.add({
+            severity: 'success',
+            summary: 'Salvo',
+            detail: 'Linha de contribuição salva com sucesso.'
+        });
     }
 }

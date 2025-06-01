@@ -77,12 +77,45 @@ export class AppMenu {
                             items: [
                                 {
                                     label: 'Meus Eventos',
-                                    icon: 'pi pi-calendar-plus',
+                                    icon: 'pi pi-fw pi-calendar',
                                     routerLink: ['/client/pages/events']
                                 }
                             ]
                         },
-                        { label: 'Notícias', icon: 'pi pi-fw pi-book', routerLink: ['/client/pages/news'] }
+                        {
+                            label: 'Consultas',
+                            icon: 'pi pi-comments',
+                            items: [
+                                {
+                                    label: 'Minhas Consultas',
+                                    icon: 'pi pi-comments',
+                                    routerLink: ['/client/pages/consultations']
+                                }
+                            ]
+                        },
+                        {
+                            label: 'Contribuições',
+                            icon: 'pi pi-credit-card',
+                            items: [
+                                {
+                                    label: 'Abertas',
+                                    icon: 'pi pi-credit-card',
+                                    routerLink: ['/client/pages/contributions']
+                                },
+                                {
+                                    label: 'Minhas Recebidas',
+                                    icon: 'pi pi-credit-card',
+                                    routerLink: ['/client/pages/recieve-contributions']
+                                },
+                                {
+                                    label: 'Minhas Feitas',
+                                    icon: 'pi pi-credit-card',
+                                    routerLink: ['/client/pages/send-contributions']
+                                }
+                                
+                            ]
+                        },
+                
                     ]
                 }
             ];
