@@ -146,3 +146,6 @@ export class LineContribuitionsDetailsComponent {
         this.uploadedFile = []; // limpa o estado dos arquivos
     }
 }
+
+
+
