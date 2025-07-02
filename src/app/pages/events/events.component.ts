@@ -1,4 +1,4 @@
-import { Component, Input, signal, ViewChild } from '@angular/core';
+import { Component, signal, ViewChild } from '@angular/core';
 import { Table, TableModule } from 'primeng/table';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { CommonModule } from '@angular/common';
@@ -40,6 +40,7 @@ interface ExportColumn {
 
 @Component({
     selector: 'app-events',
+    standalone: true,
     imports: [
         CommonModule,
         TableModule,
@@ -67,24 +68,16 @@ interface ExportColumn {
 })
 export class EventsComponent {
     mode: 'admin' | 'client' = 'client';
-
     eventDialog: boolean = false;
-
     events = signal<EventModel[]>([]);
-
     event!: EventModel;
-
     selectedEvent!: EventModel | null;
-
     submitted: boolean = false;
-
     statuses!: any[];
+    exportColumns!: ExportColumn[];
+    cols!: Column[];
 
     @ViewChild('dt') dt!: Table;
-
-    exportColumns!: ExportColumn[];
-
-    cols!: Column[];
 
     constructor(
         private readonly eventService: EventService,
@@ -93,36 +86,25 @@ export class EventsComponent {
         private router: Router
     ) {}
 
-    exportCSV() {
-        this.dt.exportCSV();
-    }
-
     ngOnInit() {
         this.mode = ModeUtil.getCurrentMode(this.router.url);
         this.loadDemoData();
     }
 
     loadDemoData() {
-
         const userData = UserUtil.getUserData();
         const email = userData?.email;
-         // Exemplo: 'admin' ou 'client'
-    
+
         if (this.mode === 'admin') {
-            // Se for admin, busca todos eventos
             this.eventService.getAllEvents().subscribe(
                 (response: HttpResponse<EventModel[]>) => this.events.set(response.data),
                 (error) => console.error('Erro ao buscar eventos:', error)
             );
         } else if (this.mode === 'client' && email) {
-            
-            // Se for client, busca eventos só do usuário
             this.eventService.getEventsByUser(email).subscribe(
                 (response: HttpResponse<EventModel[]>) => this.events.set(response.data),
                 (error) => console.error('Erro ao buscar eventos:', error)
             );
-        } else {
-            console.error('Role do usuário desconhecida ou email ausente');
         }
 
         this.statuses = [
@@ -143,6 +125,10 @@ export class EventsComponent {
         ];
 
         this.exportColumns = this.cols.map((col) => ({ title: col.header, dataKey: col.field }));
+    }
+
+    exportCSV() {
+        this.dt.exportCSV();
     }
 
     onGlobalFilter(table: Table, event: Event) {
@@ -182,11 +168,14 @@ export class EventsComponent {
     }
 
     deleteSelectedEvent() {
-        if (!this.selectedEvent?.code) {
+        const event = this.selectedEvent;
+
+        const eventId = event?.id;
+        if (!event || !event.code || typeof eventId !== 'number') {
             this.messageService.add({
                 severity: 'warn',
                 summary: 'Aviso',
-                detail: 'Nenhum evento selecionado para excluir.',
+                detail: 'Nenhum evento válido selecionado para excluir.',
                 life: 3000
             });
             return;
@@ -194,13 +183,14 @@ export class EventsComponent {
 
         this.confirmationService.confirm({
             key: 'deleteConfirm',
-            message: 'Tem a certeza que pretende eliminar este evento?',
+            message: `Tem a certeza que pretende eliminar este evento ${event.code}?`,
             header: 'Confirmar',
             icon: 'pi pi-exclamation-triangle',
             accept: () => {
-                this.eventService.deleteEvent(this.selectedEvent?.code ?? '').subscribe({
+                this.eventService.deleteEvent(eventId).subscribe({
                     next: () => {
                         this.selectedEvent = null;
+                        this.loadDemoData();
                         this.messageService.add({
                             severity: 'success',
                             summary: 'Sucesso',
@@ -209,7 +199,7 @@ export class EventsComponent {
                         });
                     },
                     error: (error) => {
-                        console.error('Erro ao excluir evento:', error);
+                        console.error('Erro ao eliminar evento:', error);
                         this.messageService.add({
                             severity: 'error',
                             summary: 'Erro',
@@ -222,38 +212,29 @@ export class EventsComponent {
         });
     }
 
-    hideDialog() {
-        this.eventDialog = false;
-        this.submitted = false;
-    }
-
-    saveEvent() {
-        this.eventDialog = false;
-        this.submitted = false;
-        this.loadDemoData();
-    }
-
     deleteEvent(event: EventModel) {
+        const eventId = event.id;
+
+        if (!event.code || typeof eventId !== 'number') {
+            this.messageService.add({
+                severity: 'warn',
+                summary: 'Aviso',
+                detail: 'Evento inválido ou ID ausente.',
+                life: 3000
+            });
+            return;
+        }
+
         this.confirmationService.confirm({
             key: 'deleteConfirm',
             message: `Tem a certeza que pretende eliminar o evento ${event.code}?`,
             header: 'Confirmar',
             icon: 'pi pi-exclamation-triangle',
             accept: () => {
-                if (!event.code) {
-                    this.messageService.add({
-                        severity: 'warn',
-                        summary: 'Aviso',
-                        detail: 'Evento inválido',
-                        life: 3000
-                    });
-                    return;
-                }
-    
-                this.eventService.deleteEvent(event.code).subscribe({
+                this.eventService.deleteEvent(eventId).subscribe({
                     next: () => {
-                        this.loadDemoData();
                         this.selectedEvent = null;
+                        this.loadDemoData();
                         this.messageService.add({
                             severity: 'success',
                             summary: 'Sucesso',
@@ -261,7 +242,6 @@ export class EventsComponent {
                             life: 3000
                         });
                     },
-    
                     error: (error) => {
                         console.error('Erro ao eliminar evento:', error);
                         this.messageService.add({
@@ -275,10 +255,20 @@ export class EventsComponent {
             }
         });
     }
-    
 
     editEvent(event: EventModel) {
-        this.event = { ...event }; 
+        this.event = { ...event };
         this.eventDialog = true;
+    }
+
+    hideDialog() {
+        this.eventDialog = false;
+        this.submitted = false;
+    }
+
+    saveEvent() {
+        this.eventDialog = false;
+        this.submitted = false;
+        this.loadDemoData();
     }
 }

@@ -38,8 +38,8 @@ export class EventService {
     return this.http.put<HttpResponse<EventModel>>(`${this.apiUrl}/${eventId}`, event, { headers: this.getHeaders() });
   }
 
-  deleteEvent(eventCode: string): Observable<HttpResponse<string>> {
-    return this.http.delete<HttpResponse<string>>(`${this.apiUrl}/${eventCode}`, { headers: this.getHeaders() });
+  deleteEvent(eventId: number): Observable<HttpResponse<string>> {
+    return this.http.delete<HttpResponse<string>>(`${this.apiUrl}/${eventId}`, { headers: this.getHeaders() });
   }
 
   deleteEventsByUser(userId: string): Observable<HttpResponse<string>> {
