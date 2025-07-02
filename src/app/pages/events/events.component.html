@@ -77,8 +77,9 @@
   [(visible)]="eventDialog"
   [event]="event"
   [submitted]="submitted"
-  (save)="saveEvent(event)"
+  (save)="saveEvent()"
 ></app-event-details>
 
 
-<p-confirmdialog [style]="{ width: '450px' }" /> 
+
+<p-confirmdialog [style]="{ width: '450px' }" key="deleteConfirm"  /> 

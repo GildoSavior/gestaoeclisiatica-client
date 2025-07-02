@@ -46,6 +46,8 @@ export class EventDetailsComponent {
     isLoading = false;
 
     @Output() visibleChange = new EventEmitter<boolean>();
+
+
     @Output() save = new EventEmitter<void>();
 
     eventStatusOptions = Object.entries(EventStatus).map(([key, value]) => ({
@@ -115,7 +117,7 @@ export class EventDetailsComponent {
 
         this.isLoading = true;
 
-        const saveObservable = event.id ? this.eventService.updateEvent(event.code, event) : this.eventService.createEvent(event);
+        const saveObservable = event.id ? this.eventService.updateEvent(event.id, event) : this.eventService.createEvent(event);
 
         saveObservable.subscribe({
             next: (response: any) => {

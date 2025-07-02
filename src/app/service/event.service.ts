@@ -34,8 +34,8 @@ export class EventService {
     return this.http.post<HttpResponse<EventModel>>(this.apiUrl, event, { headers: this.getHeaders() });
   }
 
-  updateEvent(eventCode: string, event: EventModel): Observable<HttpResponse<EventModel>> {
-    return this.http.put<HttpResponse<EventModel>>(`${this.apiUrl}/${eventCode}`, event, { headers: this.getHeaders() });
+  updateEvent(eventId: number, event: EventModel): Observable<HttpResponse<EventModel>> {
+    return this.http.put<HttpResponse<EventModel>>(`${this.apiUrl}/${eventId}`, event, { headers: this.getHeaders() });
   }
 
   deleteEvent(eventCode: string): Observable<HttpResponse<string>> {
