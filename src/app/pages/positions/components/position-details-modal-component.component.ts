@@ -26,14 +26,16 @@ export class PositionDetailsModalComponent implements OnInit {
 
     @Input() visible: boolean = false;
     @Input() position: Position = {id: 0, code: '', description:''}
-    @Output() onClose = new EventEmitter<void>(); 
+    @Output() onClose = new EventEmitter<void>();
     isLoading = false;
+    @Output() updated = new EventEmitter<void>();
+
 
     ngOnInit(): void {}
 
     hideDialog() {
         this.visible = false;
-        this.onClose.emit(); 
+        this.onClose.emit();
     }
 
     private showError(message: string) {
@@ -56,8 +58,9 @@ export class PositionDetailsModalComponent implements OnInit {
                     detail: response.message
                 });
 
-                this.hideDialog();
-                this.isLoading = false;
+             this.isLoading = false;
+    this.visible = false;
+    this.updated.emit();
             },
             error: (err: { error: { message: string } }) => {
                 this.isLoading = false;

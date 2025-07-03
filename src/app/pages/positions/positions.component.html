@@ -51,7 +51,7 @@
             <td style="width: 3rem">
                 <p-tableCheckbox [value]="position" />
             </td>
-            
+
             <td style="width: 40%;">{{ position.code }}</td>
             <td style="width: 40%;">{{ position.description }}</td>
             <td style="width: 15%; text-align: center">
@@ -62,10 +62,11 @@
     </ng-template>
 </p-table>
 
-<app-position-details-modal-component 
-    [visible]="positionDialog" 
-    [position]="position" 
-    (close)="closeModal()">
+<app-position-details-modal-component
+  [visible]="positionDialog"
+  [position]="position"
+  (close)="closeModal()"
+  (updated)="loadDemoData()"> <!-- ✅ chama recarregamento -->
 </app-position-details-modal-component>
 
 <p-confirmdialog [style]="{ width: '450px' }"></p-confirmdialog>
