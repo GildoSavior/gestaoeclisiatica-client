@@ -13,7 +13,15 @@ import { Department } from '../../../models/departament.model';
 @Component({
     selector: 'app-department-details-modal-component',
     standalone: true,
-    imports: [DialogModule, FormsModule, DropdownModule, ButtonModule, ToastModule, ProgressSpinnerModule, CommonModule],
+    imports: [
+        DialogModule,
+        FormsModule,
+        DropdownModule,
+        ButtonModule,
+        ToastModule,
+        ProgressSpinnerModule,
+        CommonModule
+    ],
     templateUrl: './department-details-modal-component.html',
     styleUrl: './department-details-modal-component.scss'
 })
@@ -24,15 +32,17 @@ export class DepartmentDetailsModalComponent implements OnInit {
     ) {}
 
     @Input() visible: boolean = false;
-    @Input() department: Department = {id: 0, code: "", description:""}
-    @Output() onClose = new EventEmitter<void>(); 
+    @Input() department: Department = { id: 0, code: '', description: '' };
+    @Output() onClose = new EventEmitter<void>();
+    @Output() updated = new EventEmitter<void>();
+
     isLoading = false;
 
     ngOnInit(): void {}
 
     hideDialog() {
         this.visible = false;
-        this.onClose.emit(); 
+        this.onClose.emit(); // apenas fecha o modal
     }
 
     private showError(message: string) {
@@ -46,7 +56,10 @@ export class DepartmentDetailsModalComponent implements OnInit {
     saveDepartment(department: Department) {
         this.isLoading = true;
 
-        const saveObservable = department.id ? this.departmentService.updateDepartment(department.id, department) : this.departmentService.createDepartment(department);
+        const saveObservable = department.id
+            ? this.departmentService.updateDepartment(department.id, department)
+            : this.departmentService.createDepartment(department);
+
         saveObservable.subscribe({
             next: (response: { message: string; data: Department }) => {
                 this.messageService.add({
@@ -55,8 +68,9 @@ export class DepartmentDetailsModalComponent implements OnInit {
                     detail: response.message
                 });
 
-                this.hideDialog();
                 this.isLoading = false;
+                this.visible = false;
+                this.updated.emit(); // somente após sucesso
             },
             error: (err: { error: { message: string } }) => {
                 this.isLoading = false;

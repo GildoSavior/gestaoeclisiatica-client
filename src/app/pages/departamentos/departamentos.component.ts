@@ -123,10 +123,10 @@ export class DepartamentosComponent {
     }
 
     openNew() {
-        this.department = {} as Department;
-        this.submitted = false;
-        this.departmentDialog = true;
-    }
+  this.department = { id: 0, code: '', description: '' };
+  this.submitted = false;
+  this.departmentDialog = true;
+}
 
     hideDialog() {
         this.departmentDialog = false;
@@ -134,16 +134,18 @@ export class DepartamentosComponent {
     }
 
     closeModal() {
-        this.departmentDialog = false;
-        this.selectedDepartment = null;
-    }
+    this.departmentDialog = false;
+    this.department = { id: 0, code: '', description: '' };
+    this.selectedDepartment = null;
+}
+
 
     deleteSelectedDepartment() {}
 
     saveDepartment(departament: Department) {}
 
     deleteDepartment(departament: Department) {
-      
+
         this.confirmationService.confirm({
             message: `Tem certeza de que deseja eliminar o departamento ${departament.code} - ${departament.description}?`,
             header: 'Confirmar',
@@ -177,11 +179,11 @@ export class DepartamentosComponent {
             }
         });
     }
+editDepartment(department: Department) {
+  this.department = { ...department }; // faz uma cópia
+  this.submitted = false;
+  this.departmentDialog = true;
+}
 
-    editDepartment(departament: Department) {
-        this.department = { ...departament };
-        this.submitted = false;
-        this.departmentDialog = true;
-    }
 }
 

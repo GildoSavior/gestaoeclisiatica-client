@@ -54,10 +54,12 @@
 </p-table>
 
 
-<app-department-details-modal-component 
-    [visible]="departmentDialog" 
-    [department]="department" 
-    (close)="closeModal()">
+<app-department-details-modal-component
+  [visible]="departmentDialog"
+  [department]="department"
+  (close)="closeModal()"
+  (updated)="loadDemoData()">
 </app-department-details-modal-component>
+
 
 <p-confirmdialog [style]="{ width: '450px' }"></p-confirmdialog>
