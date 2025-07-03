@@ -1,7 +1,7 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
-import { AccessLevel, MaritalStatus } from '../../../../../models/enums/enums';
+import { AccessLevel, MaritalStatus, DisciplinaryStatus } from '../../../../../models/enums/enums';
 import { DropdownModule } from 'primeng/dropdown';
 import { ButtonModule } from 'primeng/button';
 import { UserService } from '../../../../../service/user/user.service';
@@ -15,10 +15,20 @@ import { Position } from '../../../../../models/position.model';
 import { PositionService } from '../../../../../service/position/position.service';
 import { ApiResponse } from '../../../../../dto/reponses';
 import { Department } from '../../../../../models/departament.model';
+import { InputSwitchModule } from 'primeng/inputswitch';
 
 @Component({
     selector: 'app-user-details-modal-component',
-    imports: [DialogModule, FormsModule, DropdownModule, ButtonModule, ToastModule, ProgressSpinnerModule, CommonModule],
+    imports: [
+        DialogModule,
+        FormsModule,
+        DropdownModule,
+        ButtonModule,
+        ToastModule,
+        ProgressSpinnerModule,
+        CommonModule,
+        InputSwitchModule
+    ],
     templateUrl: './user-details-modal-component.html',
     styleUrl: './user-details-modal-component.scss'
 })
@@ -31,32 +41,18 @@ export class UserDetailsModalComponent implements OnInit {
     ) {}
 
     dropdownYears: { name: string; value: string }[] = [];
-    dropdownYear: { name: string; value: string } | null = null;
-
     dropdownDepartments: { name: string; value: string }[] = [];
-    dropdownDepartment: { name: string; value: string } | null = null;
-
     dropdownPositions: { name: string; value: string }[] = [];
-    dropdownPosition: { name: string; value: string } | null = null;
-
     selectedImage: string | ArrayBuffer | File | null = null;
 
-    maritalStatusOptions = Object.entries(MaritalStatus).map(([key, value]) => ({
-        name: value, // Exibe a descrição no dropdown
-        value: key // Mantém o valor real para envio
-    }));
-    maritalStatus: MaritalStatus | null = null;
-    accessOptions = Object.values(AccessLevel).map((access) => ({
-        name: access,
-        value: access
-    }));
-    access: AccessLevel | null = null;
+    maritalStatusOptions = Object.entries(MaritalStatus).map(([key, value]) => ({ name: value, value: key }));
+    accessOptions = Object.values(AccessLevel).map((access) => ({ name: access, value: access }));
+    disciplinaryStatusOptions = Object.entries(DisciplinaryStatus).map(([key, value]) => ({ name: value, value: key }));
 
     private _visible: boolean = false;
     @ViewChild('fileInput') fileInput!: ElementRef;
-    //@Input() visible: boolean = false;
-    @Input() isAdmin: boolean = false; // Controla a visibilidade do modal
-    @Input() user: any; // Recebe os dados do usuário
+    @Input() isAdmin: boolean = false;
+    @Input() user: User = {} as User;
 
     @Output() visibleChange = new EventEmitter<boolean>();
     @Output() save = new EventEmitter<void>();
@@ -85,13 +81,11 @@ export class UserDetailsModalComponent implements OnInit {
         this.userService.getUserByEmail().subscribe(
             (response: ApiResponse<User>) => {
                 if (response?.data) {
-                    console.log('Utilizador autenticado:', JSON.stringify(response.data, null, 2));
                     this.user = response.data;
                 } else {
                     console.warn('A resposta da API não contém usuário.');
                 }
             },
-
             (error: any) => {
                 console.error('Erro ao buscar usuário:', error);
             }
@@ -100,9 +94,8 @@ export class UserDetailsModalComponent implements OnInit {
 
     populateYears() {
         const currentYear = new Date().getFullYear();
-        const startYear = 1900; // Defina o ano inicial conforme necessário
+        const startYear = 1900;
         this.dropdownYears = [];
-
         for (let year = currentYear; year >= startYear; year--) {
             this.dropdownYears.push({ name: year.toString(), value: year.toString() });
         }
@@ -112,7 +105,6 @@ export class UserDetailsModalComponent implements OnInit {
         this.dropdownPositions = [];
         this.positionService.getAll().subscribe(
             (response: Partial<ApiResponse<Position[]>>) => {
-                // Permite que 'ok' seja opcional
                 if (response?.data) {
                     this.dropdownPositions = response.data.map((position) => ({
                         name: position.description,
@@ -122,7 +114,6 @@ export class UserDetailsModalComponent implements OnInit {
                     alert('A resposta da API não contém cargos.');
                 }
             },
-
             (error: any) => {
                 alert('Erro ao buscar cargos:' + error);
             }
@@ -131,10 +122,8 @@ export class UserDetailsModalComponent implements OnInit {
 
     populateDepartments() {
         this.dropdownDepartments = [];
-
         this.departmentService.getAll().subscribe(
             (response: Partial<ApiResponse<Department[]>>) => {
-                // Permite que 'ok' seja opcional
                 if (response?.data) {
                     this.dropdownDepartments = response.data.map((department) => ({
                         name: department.description,
@@ -144,7 +133,6 @@ export class UserDetailsModalComponent implements OnInit {
                     alert('A resposta da API não contém departamentos.');
                 }
             },
-
             (error: any) => {
                 console.error('Erro ao buscar departamentos:', error);
             }
@@ -158,7 +146,7 @@ export class UserDetailsModalComponent implements OnInit {
     onFileSelected(event: Event) {
         const input = event.target as HTMLInputElement;
         if (input.files?.[0]) {
-            this.selectedImage = input.files[0]; // Armazena diretamente como File
+            this.selectedImage = input.files[0];
         }
     }
 
@@ -177,20 +165,17 @@ export class UserDetailsModalComponent implements OnInit {
 
     toLocalDateString(dateStr: string): string {
         const date = new Date(dateStr);
-        if (isNaN(date.getTime())) {
-            throw new Error('Data inválida');
-        }
-
+        if (isNaN(date.getTime())) throw new Error('Data inválida');
         const pad = (n: number) => n.toString().padStart(2, '0');
         return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
     }
 
     saveUser(user: User) {
         this.isLoading = true;
-
         user.birthDay = this.toLocalDateString(user.birthDay as string);
-
-        const saveObservable = user.id ? this.userService.updateUser(user.email as string, user) : this.userService.createUser(user);
+        const saveObservable = user.id
+            ? this.userService.updateUser(user.email as string, user)
+            : this.userService.createUser(user);
 
         saveObservable.subscribe({
             next: (response: ApiResponse<User>) => {
@@ -200,12 +185,11 @@ export class UserDetailsModalComponent implements OnInit {
                     detail: response.message
                 });
 
-                // Se houver uma imagem, faz o upload
-                if (this.selectedImage) {
+                if (this.selectedImage instanceof File) {
                     this.uploadImage(user.email as string);
                 } else {
-                    this.save.emit(); // notifica o componente pai
-                    this.hideDialog(); // já oculta o modal
+                    this.save.emit();
+                    this.hideDialog();
                     this.isLoading = false;
                 }
             },
@@ -218,7 +202,6 @@ export class UserDetailsModalComponent implements OnInit {
 
     uploadImage(email: string) {
         if (this.selectedImage instanceof File) {
-            // Garante que é um File
             this.userService.uploadUserImage(email, this.selectedImage).subscribe({
                 next: (response: ApiResponse<string>) => {
                     this.messageService.add({
@@ -226,8 +209,8 @@ export class UserDetailsModalComponent implements OnInit {
                         summary: 'Sucesso',
                         detail: response.message
                     });
-                    this.save.emit(); // notifica o componente pai
-                    this.hideDialog(); // já oculta o modal
+                    this.save.emit();
+                    this.hideDialog();
                     this.isLoading = false;
                 },
                 error: (err: { error: { message: string } }) => {
@@ -239,11 +222,5 @@ export class UserDetailsModalComponent implements OnInit {
             this.isLoading = false;
             this.showError('Erro: Nenhum arquivo válido selecionado.');
         }
-    }
-
-    private isValidDate(date: string | undefined): boolean {
-        if (typeof date !== 'string' || !date.trim()) return false;
-        const parsed = new Date(date);
-        return !isNaN(parsed.getTime());
     }
 }

@@ -117,14 +117,19 @@ export class UsersComponent implements OnInit {
         this.cols = [
             { field: '', header: 'Utilizador' },
             { field: 'email', header: 'Email' },
-            { field: 'age', header: 'Idade' },
             { field: 'phoneNumber', header: 'Telefone' },
             { field: 'address', header: 'Morada' },
-            { field: 'departamentCode', header: 'Departamento' },
+            { field: 'birthDay', header: 'Data de Nascimento' },
+            { field: 'yearOfConversion', header: 'Ano de Conversão' },
+            { field: 'enabled', header: 'Ativo' },
+            { field: 'maritalStatus', header: 'Estado Civil' },
             { field: 'disciplinaryStatus', header: 'Estado Disciplinar' },
-            { field: 'accessLevel', header: 'Nível de Acesso' },
-            { field: 'maritalStatus', header: 'Marital' }
+            { field: 'positionCode', header: 'Cargo' },
+            { field: 'departmentCode', header: 'Departamento' },
+            { field: 'accessLevel', header: 'Nível de Acesso' }
+
         ];
+        
 
         this.exportColumns = this.cols.map((col) => ({ title: col.header, dataKey: col.field }));
     }

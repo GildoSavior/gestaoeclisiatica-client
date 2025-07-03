@@ -36,7 +36,7 @@ export class UserUtil {
   email: '',
   password: '',
   address: '',
-  yearOfConversion: undefined,
+  yearOfConversation: undefined,
   createdAt: undefined,
   updatedAt: undefined,
   phoneNumber: undefined,

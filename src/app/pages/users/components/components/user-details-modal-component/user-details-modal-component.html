@@ -3,37 +3,39 @@
 <p-dialog
     [(visible)]="visible" 
     (onHide)="hideDialog()"
-    [style]="{ width: '500px', 'border-radius': '12px' }" 
+    [style]="{ width: '800px', 'border-radius': '12px' }" 
     header="Detalhes do Utilizador" 
     [modal]="true" 
     class="p-fluid"
     [closable]="!isLoading">
+
+    <!-- Spinner de carregamento -->
     <div *ngIf="isLoading" class="flex justify-center items-center p-6">
         <p-progressSpinner></p-progressSpinner>
     </div>
 
     <div class="card flex flex-col gap-6 p-4" [class.opacity-50]="isLoading">
 
-        <!-- Imagem do usuário com botão de edição -->
+        <!-- Avatar com edição -->
         <div class="relative flex justify-center items-center">
             <img 
-            [src]="selectedImage || user.imageUrl || 'https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png'" 
-            alt="User Avatar" 
-            width="100" 
-            class="w-[100px] h-[100px] rounded-full border border-gray-300 shadow-md object-cover"
+                [src]="selectedImage || user.imageUrl || 'https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png'" 
+                alt="User Avatar" 
+                width="100" 
+                class="w-[100px] h-[100px] rounded-full border border-gray-300 shadow-md object-cover"
             />
-
-            <div class="absolute bottom-0 right-40 bg-white p-2 rounded-full shadow-lg border border-gray-300 cursor-pointer" (click)="triggerFileInput()">
+            <div class="absolute bottom-0 right-40 bg-white p-2 rounded-full shadow-lg border border-gray-300 cursor-pointer" 
+                (click)="triggerFileInput()">
                 <i class="pi pi-pencil text-gray-600 text-sm"></i>
             </div>
             <input type="file" accept="image/*" #fileInput hidden (change)="onFileSelected($event)" />
         </div>
 
-        <!-- Campos organizados em duas colunas -->
+        <!-- Nome e Sobrenome -->
         <div class="grid grid-cols-2 gap-4">
             <div class="flex flex-col gap-2">
                 <label for="name" class="font-medium">Nome</label>
-                <input pInputText class="p-inputtext border border-gray-300 rounded-md p-2" id="name" type="text" [(ngModel)]="user.name" />
+                <input pInputText id="name" type="text" class="p-inputtext border border-gray-300 rounded-md p-2" [(ngModel)]="user.name" />
             </div>
             <div class="flex flex-col gap-2">
                 <label for="lastName" class="font-medium">Sobrenome</label>
@@ -41,6 +43,7 @@
             </div>
         </div>
 
+        <!-- Email e Telefone -->
         <div class="grid grid-cols-2 gap-4">
             <div class="flex flex-col gap-2">
                 <label for="email" class="font-medium">Email</label>
@@ -52,77 +55,62 @@
             </div>
         </div>
 
+        <!-- Morada e Data de Nascimento -->
+        <div class="grid grid-cols-2 gap-4">
+            <div class="flex flex-col gap-2">
+                <label for="address" class="font-medium">Morada</label>
+                <input pInputText id="address" type="text" class="p-inputtext border border-gray-300 rounded-md p-2" [(ngModel)]="user.address" />
+            </div>
+            <div class="flex flex-col gap-2">
+                <label for="birthDay" class="font-medium">Data de Nascimento</label>
+                <input pInputText id="birthDay" type="date" class="p-inputtext border border-gray-300 rounded-md p-2 bg-gray-100" [(ngModel)]="user.birthDay" />
+            </div>
+        </div>
+
+        <!-- Nível de acesso e Estado Civil -->
         <div class="grid grid-cols-2 gap-4">
             <div class="flex flex-col gap-2">
                 <label for="accessLevel" class="font-medium">Nível de acesso</label>
                 <p-dropdown id="accessLevel" [(ngModel)]="user.accessLevel" [options]="accessOptions" optionLabel="name" optionValue="value" placeholder="Selecione" class="w-full p-dropdown-sm border border-gray-300 rounded-md p-2"></p-dropdown>
             </div>
             <div class="flex flex-col gap-2">
-                <label for="birthDay" class="font-medium">Data de Nascimento</label>
-                <input pInputText id="birthDay" type="date"  class="p-inputtext border border-gray-300 rounded-md p-2 bg-gray-100" [(ngModel)]="user.birthDay" />
+                <label for="maritalStatus" class="font-medium">Estado Civil</label>
+                <p-dropdown id="maritalStatus" [(ngModel)]="user.maritalStatus" [options]="maritalStatusOptions" optionLabel="name" optionValue="value" placeholder="Selecione" class="w-full p-dropdown-sm border border-gray-300 rounded-md p-2" appendTo="body"></p-dropdown>
             </div>
         </div>
 
+        <!-- Ano de Conversão e Estado Disciplinar -->
         <div class="grid grid-cols-2 gap-4">
             <div class="flex flex-col gap-2">
-                <label for="maritalStatus" class="font-medium">Estado Civil</label>
-                <p-dropdown
-                    id="maritalStatus"
-                    [(ngModel)]="user.maritalStatus"
-                    [options]="maritalStatusOptions"
-                    optionLabel="name"
-                    optionValue="value"
-                    placeholder="Selecione"
-                    class="w-full p-dropdown-sm border border-gray-300 rounded-md p-2"
-                    appendTo="body"
-                ></p-dropdown>
+                <label for="yearOfConversation" class="font-medium">Ano de Conversão</label>
+                <p-dropdown id="yearOfConversation" [(ngModel)]="user.yearOfConversation" [options]="dropdownYears" optionLabel="name" optionValue="value" placeholder="Selecione" class="w-full p-dropdown-sm border border-gray-300 rounded-md p-2" appendTo="body"></p-dropdown>
             </div>
             <div class="flex flex-col gap-2">
-                <label for="yearOfConversation" class="font-medium">Ano de conversão</label>
-                <p-dropdown
-                    id="yearOfConversation"
-                    [(ngModel)]="user.yearOfConversation"
-                    [options]="dropdownYears"
-                    optionLabel="name"
-                    optionValue="value"
-                    placeholder="Selecione"
-                    class="w-full p-dropdown-sm border border-gray-300 rounded-md p-2"
-                    appendTo="body"
-                ></p-dropdown>
+                <label for="disciplinaryStatus" class="font-medium">Estado Disciplinar</label>
+                <p-dropdown id="disciplinaryStatus" [(ngModel)]="user.disciplinaryStatus" [options]="disciplinaryStatusOptions" optionLabel="name" optionValue="value" placeholder="Selecione" class="w-full p-dropdown-sm border border-gray-300 rounded-md p-2" appendTo="body"></p-dropdown>
             </div>
         </div>
 
+        <!-- Departamento e Cargo -->
         <div class="grid grid-cols-2 gap-4">
             <div class="flex flex-col gap-2">
                 <label for="departament" class="font-medium">Departamento</label>
-                <p-dropdown
-                    id="departament"
-                    [(ngModel)]="user.departmentCode"
-                    [options]="dropdownDepartments"
-                    optionLabel="name"
-                    optionValue="value"
-                    placeholder="Selecione"
-                    appendTo="body"
-                    class="w-full p-dropdown-sm border border-gray-300 rounded-md p-2"
-                ></p-dropdown>
+                <p-dropdown id="departament" [(ngModel)]="user.departmentCode" [options]="dropdownDepartments" optionLabel="name" optionValue="value" placeholder="Selecione" appendTo="body" class="w-full p-dropdown-sm border border-gray-300 rounded-md p-2"></p-dropdown>
             </div>
-
             <div class="flex flex-col gap-2">
                 <label for="position" class="font-medium">Cargo</label>
-                <p-dropdown
-                    id="position"
-                    [(ngModel)]="user.positionCode"
-                    [options]="dropdownPositions"
-                    optionLabel="name"
-                    optionValue="value"
-                    placeholder="Selecione"
-                    class="w-full p-dropdown-sm border border-gray-300 rounded-md p-2"
-                ></p-dropdown>
+                <p-dropdown id="position" [(ngModel)]="user.positionCode" [options]="dropdownPositions" optionLabel="name" optionValue="value" placeholder="Selecione" class="w-full p-dropdown-sm border border-gray-300 rounded-md p-2"></p-dropdown>
             </div>
+        </div>
+
+        <!-- Utilizador Ativo -->
+        <div class="flex flex-col gap-2 mt-2">
+            <label for="enabled" class="font-medium">Está Ativo?</label>
+            <p-inputSwitch [(ngModel)]="user.enabled" id="enabled" />
         </div>
     </div>
 
-    <!-- Rodapé com botões -->
+    <!-- Rodapé -->
     <ng-template #footer>
         <div class="flex justify-end gap-2">
             <p-button label="Cancelar" icon="pi pi-times" class="p-button-text" (click)="hideDialog()" [disabled]="isLoading" />

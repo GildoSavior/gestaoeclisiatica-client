@@ -13,7 +13,7 @@ export interface User {
     email?: string;
     password?: string;
     address?: string;
-    yearOfConversion?: number;
+    yearOfConversation?: number;
     createdAt?: Date;
     updatedAt?: Date;
     phoneNumber?:number;
@@ -23,6 +23,7 @@ export interface User {
     departmentCode?: string;
     positionCode?: string;
     imageUrl?: string;
+    enabled?: boolean;
 
   }
   
