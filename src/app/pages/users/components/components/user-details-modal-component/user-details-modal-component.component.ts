@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
 import { AccessLevel, MaritalStatus } from '../../../../../models/enums/enums';
@@ -58,6 +58,9 @@ export class UserDetailsModalComponent implements OnInit {
     @Input() isAdmin: boolean = false; // Controla a visibilidade do modal
     @Input() user: any; // Recebe os dados do usuário
 
+    @Output() visibleChange = new EventEmitter<boolean>();
+    @Output() save = new EventEmitter<void>();
+
     @Input()
     set visible(value: boolean) {
         this._visible = value;
@@ -106,7 +109,6 @@ export class UserDetailsModalComponent implements OnInit {
     }
 
     populatePositions() {
-
         this.dropdownPositions = [];
         this.positionService.getAll().subscribe(
             (response: Partial<ApiResponse<Position[]>>) => {
@@ -129,7 +131,7 @@ export class UserDetailsModalComponent implements OnInit {
 
     populateDepartments() {
         this.dropdownDepartments = [];
-        
+
         this.departmentService.getAll().subscribe(
             (response: Partial<ApiResponse<Department[]>>) => {
                 // Permite que 'ok' seja opcional
@@ -162,6 +164,7 @@ export class UserDetailsModalComponent implements OnInit {
 
     hideDialog() {
         this.visible = false;
+        this.visibleChange.emit(false);
     }
 
     private showError(message: string) {
@@ -172,13 +175,12 @@ export class UserDetailsModalComponent implements OnInit {
         });
     }
 
-
     toLocalDateString(dateStr: string): string {
         const date = new Date(dateStr);
         if (isNaN(date.getTime())) {
             throw new Error('Data inválida');
         }
-    
+
         const pad = (n: number) => n.toString().padStart(2, '0');
         return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`;
     }
@@ -202,7 +204,8 @@ export class UserDetailsModalComponent implements OnInit {
                 if (this.selectedImage) {
                     this.uploadImage(user.email as string);
                 } else {
-                    this.hideDialog();
+                    this.save.emit(); // notifica o componente pai
+                    this.hideDialog(); // já oculta o modal
                     this.isLoading = false;
                 }
             },
@@ -223,8 +226,9 @@ export class UserDetailsModalComponent implements OnInit {
                         summary: 'Sucesso',
                         detail: response.message
                     });
+                    this.save.emit(); // notifica o componente pai
+                    this.hideDialog(); // já oculta o modal
                     this.isLoading = false;
-                    this.hideDialog();
                 },
                 error: (err: { error: { message: string } }) => {
                     this.isLoading = false;

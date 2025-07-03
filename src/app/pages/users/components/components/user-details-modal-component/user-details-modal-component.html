@@ -1,6 +1,13 @@
 <p-toast></p-toast>
 
-<p-dialog [(visible)]="visible" [style]="{ width: '500px', 'border-radius': '12px' }" header="Detalhes do Utilizador" [modal]="true" class="p-fluid" [closable]="!isLoading">
+<p-dialog
+    [(visible)]="visible" 
+    (onHide)="hideDialog()"
+    [style]="{ width: '500px', 'border-radius': '12px' }" 
+    header="Detalhes do Utilizador" 
+    [modal]="true" 
+    class="p-fluid"
+    [closable]="!isLoading">
     <div *ngIf="isLoading" class="flex justify-center items-center p-6">
         <p-progressSpinner></p-progressSpinner>
     </div>

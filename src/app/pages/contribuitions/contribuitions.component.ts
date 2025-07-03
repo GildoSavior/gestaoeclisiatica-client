@@ -106,7 +106,15 @@ export class ContribuitionsComponent {
         this.loadDemoData();
     }
 
-    onContribClick(contrib: CabecContrib) {
+    onContribClick(contrib: CabecContrib | CabecContrib[] | undefined) {
+        if (!contrib) return;
+    
+        if (Array.isArray(contrib)) {
+            contrib = contrib[0]; // Pega o primeiro se vier array
+        }
+    
+        if (!contrib) return;
+    
         this.contrib = { ...contrib };
         this.showLineContribModal = true;
     }

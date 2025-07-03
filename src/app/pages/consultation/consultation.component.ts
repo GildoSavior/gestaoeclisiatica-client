@@ -73,7 +73,7 @@ interface ExportColumn {
         ConsultationDetailsModalComponent
     ],
     templateUrl: './consultations.component.html',
-    styleUrls: ['./consultations.component.scss'],
+    styleUrls: ['./consultation.component.scss'],
     providers: [MessageService, ConfirmationService]
 })
 export class ConsultationsComponent implements OnInit {

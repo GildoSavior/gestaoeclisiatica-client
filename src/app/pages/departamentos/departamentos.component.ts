@@ -70,7 +70,6 @@ interface ExportColumn {
         DepartmentDetailsModalComponent
     ],
     templateUrl: './departamentos.component.html',
-    styleUrl: './departamentos.component.scss'
 })
 export class DepartamentosComponent {
     departmentDialog: boolean = false;
