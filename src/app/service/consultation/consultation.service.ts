@@ -24,7 +24,7 @@ export class ConsultationService {
     getAll(): Observable<ApiResponse<Consultation[]>> {
         return this.http.get<ApiResponse<Consultation[]>>(this.baseUrl, { headers: this.getHeaders() });
     }
-    
+
     getAllByUserEmail(email: string): Observable<ApiResponse<Consultation[]>> {
         return this.http.get<ApiResponse<Consultation[]>>(`${this.baseUrl}/user/${email}`, { headers: this.getHeaders() });
     }
@@ -39,10 +39,15 @@ export class ConsultationService {
 
     updateConsultation(consultationId: number, consultation: Consultation): Observable<ApiResponse<Consultation>> {
         return this.http.put<ApiResponse<Consultation>>(`${this.baseUrl}/${consultationId}`, consultation, { headers: this.getHeaders() });
-        
     }
 
     deleteConsultation(consultationId: number): Observable<ApiResponse<string>> {
         return this.http.delete<ApiResponse<string>>(`${this.baseUrl}/${consultationId}`, { headers: this.getHeaders() });
+    }
+
+    updateStatus(consultationId: number, status: string): Observable<ApiResponse<Consultation>> {
+        return this.http.patch<ApiResponse<Consultation>>(`${this.baseUrl}/${consultationId}/status`, status, {
+            headers: this.getHeaders().set('Content-Type', 'application/json')
+        });
     }
 }

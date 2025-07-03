@@ -28,6 +28,7 @@ import { ConsultationDetailsModalComponent } from './components/consultation-det
 import { ApiResponse } from '../../dto/reponses';
 import { ModeUtil } from '../../mode.utils';
 import { UserUtil } from '../../service/user/userUtils';
+import { ConsultationStatus } from '../../models/enums/enums';
 
 interface Column {
     field: string;
@@ -77,9 +78,8 @@ interface ExportColumn {
     providers: [MessageService, ConfirmationService]
 })
 export class ConsultationsComponent implements OnInit {
-    
     mode: 'admin' | 'client' = 'client';
-    
+
     consultationDialog: boolean = false;
     consultations = signal<Consultation[]>([]);
     consultation: Consultation = {} as Consultation;
@@ -94,8 +94,13 @@ export class ConsultationsComponent implements OnInit {
         private readonly consultationService: ConsultationService,
         private readonly messageService: MessageService,
         private readonly confirmationService: ConfirmationService,
-        private router: Router,
+        private router: Router
     ) {}
+
+    statusOptions = Object.entries(ConsultationStatus).map(([key, value]) => ({
+        name: value,
+        value: key
+    }));
 
     exportCSV() {
         this.dt.exportCSV();
@@ -109,12 +114,12 @@ export class ConsultationsComponent implements OnInit {
     loadDemoData() {
         if (this.mode === 'client') {
             const email = UserUtil.getUserData()?.email;
-    
+
             if (!email) {
                 console.warn('Usuário não autenticado ou email indefinido.');
                 return;
             }
-    
+
             this.consultationService.getAllByUserEmail(email).subscribe(
                 (response: { message: string; data: Consultation[] }) => {
                     this.consultations.set(response.data || []);
@@ -133,7 +138,7 @@ export class ConsultationsComponent implements OnInit {
                 }
             );
         }
-    
+
         this.cols = [
             { field: 'code', header: 'Código' },
             { field: 'title', header: 'Título' },
@@ -142,10 +147,9 @@ export class ConsultationsComponent implements OnInit {
             { field: 'date', header: 'Data' },
             { field: 'status', header: 'Estado' }
         ];
-    
+
         this.exportColumns = this.cols.map((col) => ({ title: col.header, dataKey: col.field }));
     }
-    
 
     onGlobalFilter(table: Table, event: Event) {
         table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
@@ -223,5 +227,27 @@ export class ConsultationsComponent implements OnInit {
     editConsultation(consultation: Consultation) {
         this.consultation = { ...consultation };
         this.consultationDialog = true;
+    }
+
+    updateConsultationStatus(consultation: Consultation, newStatus: string) {
+        this.consultationService.updateStatus(consultation.id, newStatus).subscribe({
+            next: (response) => {
+                if (response.ok) {
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: 'Estado Atualizado',
+                        detail: `Consulta ${consultation.code} atualizada para ${newStatus}`
+                    });
+                    this.loadDemoData();
+                }
+            },
+            error: () => {
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Erro',
+                    detail: 'Falha ao atualizar o estado.'
+                });
+            }
+        });
     }
 }

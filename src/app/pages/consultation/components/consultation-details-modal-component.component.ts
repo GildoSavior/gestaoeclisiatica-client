@@ -33,6 +33,7 @@ export class ConsultationDetailsModalComponent implements OnInit {
         private readonly messageService: MessageService,
         private router: Router
     ) {}
+    
     statusOptions = Object.entries(ConsultationStatus).map(([key, value]) => ({
         name: value, // Exibe a descrição no dropdown
         value: key // Mantém o valor real para envio
