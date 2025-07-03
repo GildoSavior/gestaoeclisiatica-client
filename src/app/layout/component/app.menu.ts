@@ -50,7 +50,6 @@ export class AppMenu {
                         { label: 'Consultas', icon: 'pi pi-calendar', routerLink: ['/admin/pages/consultations'] },
                         { label: 'Notícias', icon: 'pi pi-fw pi-book', routerLink: ['/admin/pages/news'] },
                         { label: 'Contribuições', icon: 'pi pi-credit-card', routerLink: ['/admin/pages/contribuicoes'] },
-                        { label: 'Relatórios', icon: 'pi pi-fw pi-chart-line', routerLink: ['/admin/pages/reports'] }
                     ]
                 }
             ];
@@ -112,10 +111,10 @@ export class AppMenu {
                                     icon: 'pi pi-credit-card',
                                     routerLink: ['/client/pages/send-contributions']
                                 }
-                                
+
                             ]
                         },
-                
+
                     ]
                 }
             ];

@@ -26,6 +26,7 @@ import { EventDetailsComponent } from './components/event-details/event-details.
 import { ModeUtil } from '../../mode.utils';
 import { Router } from '@angular/router';
 import { UserUtil } from '../../service/user/userUtils';
+import { DropdownModule } from 'primeng/dropdown';
 
 interface Column {
     field: string;
@@ -52,7 +53,8 @@ interface ExportColumn {
         RatingModule,
         InputTextModule,
         TextareaModule,
-        SelectModule,
+        // ❌ Remova esta linha
+        // SelectModule,
         RadioButtonModule,
         InputNumberModule,
         DialogModule,
@@ -60,7 +62,8 @@ interface ExportColumn {
         InputIconModule,
         IconFieldModule,
         ConfirmDialogModule,
-        EventDetailsComponent
+        EventDetailsComponent,
+        DropdownModule // ✅ Está correto
     ],
     templateUrl: './events.component.html',
     styleUrl: './events.component.scss',
@@ -76,7 +79,7 @@ export class EventsComponent {
     statuses!: any[];
     exportColumns!: ExportColumn[];
     cols!: Column[];
-
+    isLoading: boolean = false;
     @ViewChild('dt') dt!: Table;
 
     constructor(
@@ -85,6 +88,11 @@ export class EventsComponent {
         private readonly confirmationService: ConfirmationService,
         private router: Router
     ) {}
+
+    eventStatusOptions = Object.entries(EventStatus).map(([key, value]) => ({
+        name: value,
+        value: key
+    }));
 
     ngOnInit() {
         this.mode = ModeUtil.getCurrentMode(this.router.url);
@@ -165,6 +173,41 @@ export class EventsComponent {
             default:
                 return 'info';
         }
+    }
+
+    onStatusChange(eventModel: EventModel, changeEvent: any) {
+        const newStatus = changeEvent?.value;
+        if (!newStatus || !eventModel?.id) return;
+
+        // Atualiza o status localmente antes de chamar a API
+        eventModel.eventStatus = newStatus;
+
+        this.isLoading = true;
+
+        this.eventService.updateStatus(eventModel.id, newStatus).subscribe({
+            next: () => {
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Sucesso',
+                    detail: `Estado do evento ${eventModel.code} atualizado para ${newStatus}`,
+                    life: 3000
+                });
+
+                //this.loadDemoData(); // Recarrega os dados para refletir a mudança
+            },
+            error: (err) => {
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Erro',
+                    detail: `Falha ao atualizar estado: ${err.message}`,
+                    life: 3000
+                });
+            },
+            complete: () => {
+                this.isLoading = false;
+                this.loadDemoData();
+            }
+        });
     }
 
     deleteSelectedEvent() {
