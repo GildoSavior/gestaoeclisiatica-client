@@ -41,6 +41,8 @@ export class ConsultationDetailsModalComponent implements OnInit {
     @Input() visible: boolean = false;
     @Input() consultation!: any;
     @Output() onClose = new EventEmitter<void>();
+    @Output() updated = new EventEmitter<void>();
+
     users: User[] = [];
     filteredUsers: User[] = [];
 
@@ -53,6 +55,7 @@ export class ConsultationDetailsModalComponent implements OnInit {
 
     hideDialog() {
         this.visible = false;
+         this.updated.emit();
     }
 
     getFullName(user: User): string {
@@ -120,7 +123,7 @@ export class ConsultationDetailsModalComponent implements OnInit {
         const email = UserUtil.getUserData()?.email;
         if (this.mode === 'client' && email) {
             consultation.status = 'PENDING';
-            consultation.userEmail = email; 
+            consultation.userEmail = email;
         }
 
         consultation.date = this.toLocalISOStringWithoutMs(new Date(consultation.date));
@@ -133,6 +136,7 @@ export class ConsultationDetailsModalComponent implements OnInit {
                 if (response?.ok && response.data) {
                     this.showSuccess(response.message);
                     this.hideDialog();
+                     this.updated.emit();
                 } else {
                     this.isLoading = false;
                     this.showError(response?.message || 'Erro desconhecido');
@@ -145,6 +149,7 @@ export class ConsultationDetailsModalComponent implements OnInit {
             },
             complete: () => {
                 this.isLoading = false;
+                 this.updated.emit();
             }
         });
     }
