@@ -26,6 +26,8 @@ import { LineContribuitionsDetailsComponent } from './line-contribuitions-detail
 import { Router } from '@angular/router';
 import { ModeUtil } from '../../mode.utils';
 import { LineContrib } from '../../models/line-contrib.model';
+import { ContribStatus } from '../../models/enums/enums';
+import { Dropdown, DropdownModule } from 'primeng/dropdown';
 
 interface Column {
     field: string;
@@ -60,7 +62,8 @@ interface ExportColumn {
         IconFieldModule,
         ConfirmDialogModule,
         ContribuitionsDetailsComponent,
-        LineContribuitionsDetailsComponent
+        LineContribuitionsDetailsComponent,
+        DropdownModule
     ],
     templateUrl: './contribuitions.component.html',
     styleUrl: './contribuitions.component.scss',
@@ -80,6 +83,11 @@ export class ContribuitionsComponent {
 
     selectedContrib: CabecContrib | null = null;
 
+    statusOptions = Object.entries(ContribStatus).map(([key, value]) => ({
+        name: value,
+        value: key
+    }));
+
     submitted: boolean = false;
 
     statuses!: any[];
@@ -97,6 +105,7 @@ export class ContribuitionsComponent {
         private router: Router
     ) {}
 
+
     exportCSV() {
         this.dt.exportCSV();
     }
@@ -108,13 +117,13 @@ export class ContribuitionsComponent {
 
     onContribClick(contrib: CabecContrib | CabecContrib[] | undefined) {
         if (!contrib) return;
-    
+
         if (Array.isArray(contrib)) {
             contrib = contrib[0]; // Pega o primeiro se vier array
         }
-    
+
         if (!contrib) return;
-    
+
         this.contrib = { ...contrib };
         this.showLineContribModal = true;
     }
@@ -167,13 +176,46 @@ export class ContribuitionsComponent {
         this.contribDialog = true;
     }
 
-    saveContrib(contrib: CabecContrib) {}
+    saveContrib() {
+        this.contribDialog = false;
+        this.loadDemoData(); // 🔁 recarrega a tabela com as contribuições atualizadas
+    }
 
-    deleteContrib(contrib: CabecContrib) {}
+    deleteContrib(contrib: CabecContrib) {
+        this.confirmationService.confirm({
+            message: `Tem certeza que deseja apagar a contribuição <b>${contrib.code}</b>?`,
+            header: 'Confirmar remoção',
+            icon: 'pi pi-exclamation-triangle',
+            acceptLabel: 'Sim',
+            rejectLabel: 'Não',
+            acceptButtonStyleClass: 'p-button-danger',
+            accept: () => {
+                this.cabecService.delete(contrib.id!).subscribe({
+                    next: () => {
+                        this.messageService.add({
+                            severity: 'success',
+                            summary: 'Removido',
+                            detail: 'Contribuição removida com sucesso.'
+                        });
+                        this.loadDemoData(); // recarrega a tabela
+                    },
+                    error: () => {
+                        this.messageService.add({
+                            severity: 'error',
+                            summary: 'Erro',
+                            detail: 'Falha ao remover a contribuição.'
+                        });
+                    }
+                });
+            }
+        });
+    }
 
     deleteSelectedContrib() {}
 
     editContrib(contrib: CabecContrib) {
+        this.contrib = { ...contrib }; // <- aqui faz a atribuição
+        this.submitted = false;
         this.contribDialog = true;
     }
 
@@ -187,4 +229,27 @@ export class ContribuitionsComponent {
             detail: 'Linha de contribuição salva com sucesso.'
         });
     }
+
+    updateCabecStatus(contrib: CabecContrib, newStatus: string) {
+        
+    
+        this.cabecService.updateStatus(contrib.id!, newStatus).subscribe({
+            next: () => {
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Estado alterado',
+                    detail: 'O estado da contribuição foi atualizado.'
+                });
+                this.loadDemoData(); // opcional, se quiser recarregar os dados
+            },
+            error: () => {
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Erro',
+                    detail: 'Não foi possível atualizar o estado.'
+                });
+            }
+        });
+    }
+    
 }

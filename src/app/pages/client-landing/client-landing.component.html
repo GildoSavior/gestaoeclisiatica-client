@@ -1,30 +1,62 @@
-<div class="bg-surface-0 dark:bg-surface-900 min-h-[80vh] px-4 py-10">
+<div class="bg-surface-0 dark:bg-surface-900 min-h-[80vh] px-4 py-14">
     <div class="w-full max-w-screen-xl mx-auto px-6">
-        <h1 class="text-5xl font-bold text-primary-700 dark:text-primary-300 mb-6">Todos Eventos</h1>
-    </div>
-
-    <p-carousel [value]="formattedEvents" [numVisible]="1" [numScroll]="1" [circular]="true" [autoplayInterval]="0" [showIndicators]="true" [showNavigators]="true">
+      <h1 class="text-5xl font-bold text-primary-700 dark:text-primary-300 mb-12">Destaques da Comunidade</h1>
+  
+      <!-- Eventos -->
+      <h2 class="text-3xl font-semibold text-surface-900 dark:text-surface-0 mb-6">📅 Próximos Eventos</h2>
+      <p-carousel
+        [value]="formattedEvents"
+        [numVisible]="1"
+        [numScroll]="1"
+        [circular]="true"
+        [showIndicators]="true"
+        [showNavigators]="true"
+      >
         <ng-template pTemplate="item" let-event>
-            <div class="w-full bg-white dark:bg-gray-800 shadow-lg rounded-2xl p-6 border border-gray-200 dark:border-gray-700 mx-auto h-[80vh] max-w-screen-xl">
-                <h2 class="text-3xl font-extrabold text-primary-700 dark:text-primary-300 mb-4">
-                    {{ event.title }}
-                </h2>
-
-                <p class="text-lg text-gray-800 dark:text-gray-200 mb-3 font-medium leading-relaxed">
-                    {{ event.description }}
-                </p>
-
-                <p class="text-base text-primary-600 dark:text-primary-400 font-semibold mb-4">📅 Início: {{ event.initialDate | date: 'short' }} — Fim: {{ event.finalDate | date: 'short' }}</p>
-
-                <p-galleria [value]="event.galleryImages" [responsiveOptions]="galleriaResponsiveOptions" [containerStyle]="{ width: '100%', 'margin-top': '1rem', 'max-height': '600px' }" [numVisible]="3" [showThumbnails]="true">
-                    <ng-template #item let-item>
-                        <img [src]="item.itemImageSrc" class="w-full h-[500px] object-cover rounded-md" />
-                    </ng-template>
-                    <ng-template #thumbnail let-item>
-                        <img [src]="item.thumbnailImageSrc" class="h-16 rounded" />
-                    </ng-template>
-                </p-galleria>
-            </div>
+          <div class="w-full bg-white dark:bg-gray-800 shadow-lg rounded-2xl p-8 border border-gray-200 dark:border-gray-700 mx-auto max-w-screen-lg min-h-[500px]">
+            <h3 class="text-3xl font-bold text-primary-700 dark:text-primary-300 mb-3">{{ event.title }}</h3>
+            <p class="text-lg text-gray-700 dark:text-gray-200 mb-4">{{ event.description }}</p>
+            <p class="text-sm text-primary-600 dark:text-primary-400 font-medium mb-6">
+              📆 {{ event.initialDate | date: 'short' }} até {{ event.finalDate | date: 'short' }}
+            </p>
+  
+            <p-galleria
+              [value]="event.galleryImages"
+              [responsiveOptions]="galleriaResponsiveOptions"
+              [containerStyle]="{ width: '100%', 'max-height': '500px' }"
+              [numVisible]="3"
+              [showThumbnails]="true"
+              [showItemNavigators]="true"
+              [showItemNavigatorsOnHover]="true"
+            >
+              <ng-template #item let-item>
+                <img [src]="item.itemImageSrc" class="w-full h-[400px] object-cover rounded-lg" />
+              </ng-template>
+              <ng-template #thumbnail let-item>
+                <img [src]="item.thumbnailImageSrc" class="h-16 w-28 object-cover rounded" />
+              </ng-template>
+            </p-galleria>
+          </div>
         </ng-template>
-    </p-carousel>
-</div>
+      </p-carousel>
+  
+      <!-- Notícias -->
+      <h2 class="text-3xl font-semibold text-surface-900 dark:text-surface-0 mt-16 mb-6">📰 Últimas Notícias</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-8">
+        <div
+          *ngFor="let item of formattedNews"
+          class="bg-white dark:bg-surface-800 rounded-xl border border-gray-200 dark:border-surface-700 shadow-md overflow-hidden"
+        >
+          <img [src]="item.imageUrl" class="w-full h-60 object-cover" *ngIf="item.imageUrl" />
+          <div class="p-6">
+            <h3 class="text-xl font-semibold text-primary-700 dark:text-primary-300 mb-2">{{ item.title }}</h3>
+            <p class="text-sm text-gray-700 dark:text-gray-300 mb-3">{{ item.content | slice: 0:140 }}...</p>
+            <div class="text-xs text-muted-color font-medium">
+              ✍ {{ item.author }} — {{ item.publishDate | date: 'shortDate' }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

@@ -1,8 +1,8 @@
 export enum AccessLevel {
-    ROLE_SUPER_ADMIN = 'ROLE_SUPER_ADMIN',
-    ROLE_ADMIN = 'ROLE_ADMIN',
-    ROLE_DEPARTMENT = 'ROLE_DEPARTMENT',
-    ROLE_USER = 'ROLE_USER'
+    ROLE_SUPER_ADMIN = 'Super',
+    ROLE_ADMIN = 'Admin',
+    ROLE_DEPARTMENT = 'Pastor',
+    ROLE_USER = 'Fiel'
 }
 
 export enum MaritalStatus {

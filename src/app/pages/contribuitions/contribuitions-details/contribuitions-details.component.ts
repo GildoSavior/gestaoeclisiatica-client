@@ -40,6 +40,7 @@ export class ContribuitionsDetailsComponent {
 
     @Output() visibleChange = new EventEmitter<boolean>();
     @Output() save = new EventEmitter<void>();
+    
 
     showEvents: boolean = false;
 
@@ -116,6 +117,8 @@ export class ContribuitionsDetailsComponent {
                     detail: 'Contribuição salva com sucesso.'
                 });
                 this.isLoading = false;
+                this.save.emit(); // ✅ apenas notifica o pai
+                this.hideDialog(); // fecha o modal
             },
             error: (err) => {
                 this.isLoading = false;

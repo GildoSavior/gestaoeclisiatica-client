@@ -1,21 +1,17 @@
-<div class="layout-topbar ">
+<div class="layout-topbar">
     <div class="layout-topbar-logo-container">
         <button class="layout-menu-button layout-topbar-action" (click)="layoutService.onMenuToggle()"
             *ngIf="currentUrl !== '/'" title="Menu" aria-label="Menu">
             <i class="pi pi-bars"></i>
         </button>
         <a class="layout-topbar-logo" routerLink="/">
-            <img src="assets/logo-igreja.jpeg" alt="Logo" class="layout-topbar-logo-image rounded-full" width="50"
-                height="50" />
-            <!-- <span class="text-surface-900 dark:text-surface-0 font-medium text-1xl leading-normal mr-20 pr-10 whitespace-nowrap">Centro Emanuel</span> -->
+            <img src="assets/logo-igreja.jpeg" alt="Logo" class="layout-topbar-logo-image rounded-full" width="50" height="50" />
         </a>
     </div>
 
-    <div
-        class="items-center bg-surface-0 dark:bg-surface-900 grow justify-between hidden lg:flex absolute lg:static w-full left-0 top-full px-12 lg:px-0 z-20 rounded-border">
+    <div class="items-center bg-surface-0 dark:bg-surface-900 grow justify-between hidden lg:flex absolute lg:static w-full left-0 top-full px-12 lg:px-0 z-20 rounded-border">
         <ng-container *ngIf="currentUrl == '/'">
             <ul class="list-none p-0 m-0 flex lg:items-center select-none flex-col lg:flex-row cursor-pointer gap-8">
-
                 <li>
                     <a pRipple class="px-0 py-4 text-surface-900 dark:text-surface-0 font-medium text-xl">
                         <i class="pi pi-home mr-2"></i>
@@ -36,23 +32,21 @@
                 </li>
             </ul>
         </ng-container>
-
     </div>
 
     <div class="layout-topbar-actions">
-
         <ng-container *ngIf="currentUrl == '/'">
             <div class="flex border-t lg:border-t-0 border-surface py-4 lg:py-0 mt-4 lg:mt-0 gap-2 whitespace-nowrap">
-                <button pButton pRipple label="Iniciar Sessão" routerLink="/auth/login" class="p-button-rounded" title="Iniciar Sessão" style="background-color: #0B1288; border-color: #0B1288;"></button>
+                <button pButton pRipple label="Iniciar Sessão" routerLink="/auth/login" class="p-button-rounded" title="Iniciar Sessão"
+                    style="background-color: #0B1288; border-color: #0B1288;"></button>
             </div>
         </ng-container>
 
-        <!-- Só mostrar esses dois botões se não estiver na rota "/" -->
+        <!-- Mostrar botões apenas fora da rota principal -->
         <ng-container *ngIf="currentUrl !== '/'">
             <div class="layout-config-menu">
                 <button type="button" class="layout-topbar-action" (click)="toggleDarkMode()" title="Dark Mode">
-                    <i
-                        [ngClass]="{ 'pi ': true, 'pi-moon': layoutService.isDarkTheme(), 'pi-sun': !layoutService.isDarkTheme() }"></i>
+                    <i [ngClass]="{ 'pi': true, 'pi-moon': layoutService.isDarkTheme(), 'pi-sun': !layoutService.isDarkTheme() }"></i>
                 </button>
             </div>
 
@@ -63,8 +57,18 @@
         </ng-container>
     </div>
 
+    <!-- OverlayPanel que abre ao clicar no botão de perfil -->
+    <p-overlayPanel #profileMenu>
+        <div class="p-2">
+            <button pButton type="button" label="Ver Perfil" class="w-full mb-2" (click)="openProfile()"></button>
+            <button pButton type="button" label="Logout" class="w-full p-button-danger" (click)="logout()"></button>
+        </div>
+    </p-overlayPanel>
 </div>
 
-
-<app-user-details-modal-component [visible]="isProfileDialogVisible" [user]="user" [isAdmin]="false">
+<!-- Modal de detalhes do usuário -->
+<app-user-details-modal-component
+    [visible]="isProfileDialogVisible"
+    [user]="user"
+    [isAdmin]="false">
 </app-user-details-modal-component>

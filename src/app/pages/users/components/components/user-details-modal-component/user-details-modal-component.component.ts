@@ -115,7 +115,7 @@ export class UserDetailsModalComponent implements OnInit {
                 }
             },
             (error: any) => {
-                alert('Erro ao buscar cargos:' + error);
+               // alert('Erro ao buscar cargos:' + error);
             }
         );
     }
@@ -134,7 +134,7 @@ export class UserDetailsModalComponent implements OnInit {
                 }
             },
             (error: any) => {
-                console.error('Erro ao buscar departamentos:', error);
+                //console.error('Erro ao buscar departamentos:', error);
             }
         );
     }

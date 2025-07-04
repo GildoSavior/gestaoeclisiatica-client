@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { CabecContrib } from '../../models/cabec-contrib.model';
 import { HttpResponse } from '../../dto/http-response.model'
 import { UserUtil } from '../user/userUtils';
+import { ApiResponse } from '../../dto/reponses';
 
 @Injectable({
   providedIn: 'root',
@@ -44,4 +45,17 @@ export class CabecService {
   delete(id: number): Observable<HttpResponse<string>> {
     return this.http.delete<HttpResponse<string>>(`${this.apiUrl}/${id}`, { headers: this.getHeaders() });
   }
+
+  updateStatus(cabecId: number, status: string): Observable<ApiResponse<CabecContrib>> {
+    return this.http.patch<ApiResponse<CabecContrib>>(
+      `${this.apiUrl}/${cabecId}/status`,
+      { status }, // ✅ passe o objeto, não string
+      {
+        headers: this.getHeaders().set('Content-Type', 'application/json')
+      }
+    );
+  }
+  
+  
 }
+

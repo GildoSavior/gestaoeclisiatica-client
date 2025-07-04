@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { Router, RouterModule } from '@angular/router';
+import { Router, RouterModule, NavigationEnd } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { StyleClassModule } from 'primeng/styleclass';
 import { OverlayPanelModule, OverlayPanel } from 'primeng/overlaypanel';
@@ -12,6 +12,7 @@ import { User } from '../../../models/user.model';
 import { CarouselModule } from 'primeng/carousel';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
+import { filter } from 'rxjs/operators';
 
 @Component({
     selector: 'app-topbar',
@@ -22,7 +23,7 @@ import { CardModule } from 'primeng/card';
         StyleClassModule,
         AppConfigurator,
         DialogModule,
-        OverlayPanelModule, // ✅ Adicionado
+        OverlayPanelModule,
         UserDetailsModalComponent,
         CarouselModule,
         ButtonModule,
@@ -35,16 +36,25 @@ export class AppTopbar {
 
     isProfileDialogVisible: boolean = false;
     currentUrl: string = '';
-    user: User = {...emptyUser}
+    user: User = { ...emptyUser };
 
-    constructor(public layoutService: LayoutService, private readonly router: Router) {
-        this.router.events.subscribe(() => {
-            this.currentUrl = this.router.url;
-        });
+    constructor(
+        public layoutService: LayoutService,
+        private readonly router: Router
+    ) {
+        this.currentUrl = this.router.url;
+        this.router.events
+            .pipe(filter(event => event instanceof NavigationEnd))
+            .subscribe(() => {
+                this.currentUrl = this.router.url;
+            });
     }
 
     toggleDarkMode() {
-        this.layoutService.layoutConfig.update((state) => ({ ...state, darkTheme: !state.darkTheme }));
+        this.layoutService.layoutConfig.update((state) => ({
+            ...state,
+            darkTheme: !state.darkTheme
+        }));
     }
 
     logout() {
@@ -53,10 +63,13 @@ export class AppTopbar {
     }
 
     openProfileMenu(event: Event) {
-        this.profileMenu.toggle(event);
+        if (this.profileMenu) {
+            this.profileMenu.toggle(event);
+        }
     }
 
     openProfile() {
         this.isProfileDialogVisible = true;
+        this.profileMenu?.hide(); // esconde o painel ao abrir o modal
     }
 }

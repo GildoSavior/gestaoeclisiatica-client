@@ -16,7 +16,7 @@
     [columns]="cols"
     [paginator]="true"
     [globalFilterFields]="['name', 'country.name', 'representative.name', 'status']"
-    [tableStyle]="{ 'width': '100%' }"
+    [tableStyle]="{ width: '100%' }"
     [(selection)]="selectedContrib"
     [rowHover]="true"
     [selectionMode]="'single'"
@@ -35,70 +35,74 @@
             </p-iconfield>
         </div>
     </ng-template>
-
     <ng-template #header>
         <tr>
-            <th *ngIf="mode !== 'client'" style="width: 3rem" scope="col">
+            <th *ngIf="mode !== 'client'" class="px-4 py-2" scope="col">
                 <p-tableHeaderCheckbox />
             </th>
-            <th style="width: 20%">Código</th>
-            <th style="width: 15%">Título</th>
-            <th style="width: 8%">Tipo</th>
-            <th style="width: 18%">Descrição</th>
-            <th style="width: 10%">Criado em</th>
-            <th *ngIf="mode !== 'client'" style="width: 8%">Total</th>
-            <th *ngIf="mode !== 'client'" style="width: 8%">Aprovado</th>
-            <th style="width: 15%">Evento</th>
-            <th *ngIf="mode !== 'client'" style="width: 7%">Estado</th>
-            <th style="width: 5%">Ações</th>
+            <th class="px-4 py-2">Código</th>
+            <th class="px-4 py-2">Título</th>
+            <th class="px-4 py-2">Tipo</th>
+            <th class="px-4 py-2">Descrição</th>
+            <th class="px-4 py-2">Criado em</th>
+            <th *ngIf="mode !== 'client'" class="px-4 py-2">Total</th>
+            <th *ngIf="mode !== 'client'" class="px-4 py-2">Aprovado</th>
+            <th class="px-4 py-2">Evento</th>
+            <th *ngIf="mode !== 'client'" class="px-4 py-2">Estado</th>
+            <th class="px-4 py-2"></th>
         </tr>
     </ng-template>
 
     <ng-template #body let-contrib>
         <tr>
-            <td *ngIf="mode !== 'client'" style="width: 3rem">
+            <td *ngIf="mode !== 'client'" class="px-4 py-2">
                 <p-tableCheckbox [value]="contrib" />
             </td>
-            <td style="width: 8%">{{ contrib.code }}</td>
-            <td style="width: 10%">{{ contrib.title }}</td>
-            <td style="width: 8%">{{ contrib.type }}</td>
-            <td style="width: 18%">{{ contrib.description }}</td>
-            <td style="width: 10%">{{ contrib.createdAt }}</td>
-            <td *ngIf="mode !== 'client'" style="width: 8%">{{ contrib.total }}</td>
-            <td *ngIf="mode !== 'client'" style="width: 8%">{{ contrib.totalApproved }}</td>
-            <td style="width: 10%">{{ contrib.eventCode }}</td>
-            <td *ngIf="mode !== 'client'" style="width: 7%">{{ contrib.cabecStatus }}</td>
+            <td class="px-4 py-2">{{ contrib.code }}</td>
+            <td class="px-4 py-2">{{ contrib.title }}</td>
+            <td class="px-4 py-2">{{ contrib.type }}</td>
+            <td class="px-4 py-2">{{ contrib.description }}</td>
+            <td class="px-4 py-2">{{ contrib.createdAt }}</td>
+            <td *ngIf="mode !== 'client'" class="px-4 py-2">{{ contrib.total }}</td>
+            <td *ngIf="mode !== 'client'" class="px-4 py-2">{{ contrib.totalApproved }}</td>
+            <td class="px-4 py-2">{{ contrib.eventCode }}</td>
 
-            <td *ngIf="mode !== 'client'" style="width: 10%">
-                <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true" (click)="editContrib(contrib)" />
-                <p-button icon="pi pi-trash" severity="danger" [rounded]="true" [outlined]="true" (click)="deleteContrib(contrib)" />
+            
+
+            <td style="min-width: 9.5rem">
+                <ng-container *ngIf="mode !== 'client'; else statusText">
+                    <p-dropdown
+                        [options]="statusOptions"
+                        [(ngModel)]="contrib.cabecStatus"
+                        optionLabel="name"
+                        optionValue="value"
+                        styleClass="w-full"
+                        (onChange)="updateCabecStatus(contrib, $event.value)"
+                        [appendTo]="'body'"
+                        [panelStyle]="{ bottom: '100%', top: 'auto' }"
+                    ></p-dropdown>
+                </ng-container>
+                <ng-template #statusText>
+                    {{ contrib.cabecStatus }}
+                </ng-template>
             </td>
-            <td *ngIf="mode === 'client'" style="width: 20%">
+
+            <td *ngIf="mode !== 'client'" class="px-4 py-2">
+                <div class="flex items-center gap-2">
+                    <p-button icon="pi pi-pencil" [rounded]="true" [outlined]="true" (click)="editContrib(contrib)" />
+                    <p-button icon="pi pi-trash" severity="danger" [rounded]="true" [outlined]="true" (click)="deleteContrib(contrib)" />
+                </div>
+            </td>
+
+            <td *ngIf="mode === 'client'" class="px-4 py-2">
                 <p-button icon="pi pi-plus" class="mr-2" [rounded]="true" [outlined]="true" (click)="onContribClick(contrib)" />
             </td>
         </tr>
     </ng-template>
 </p-table>
 
-<app-contribuitions-details
-  [(visible)]="contribDialog"
-  [contrib]="contrib"
-  [submitted]="submitted"
-  (save)="saveContrib(contrib)"
-></app-contribuitions-details>
+<app-contribuitions-details [visible]="contribDialog" (visibleChange)="contribDialog = $event" [contrib]="contrib" [submitted]="submitted" (save)="saveContrib()"></app-contribuitions-details>
 
-
-<app-line-contribuitions-details
-  [(visible)]="showLineContribModal"
-  [contrib]="contrib"
-  [submitted]="submitted"
-  (save)="handleSave(line)"
-></app-line-contribuitions-details>
-
-
-
-
-
-
+<app-line-contribuitions-details [(visible)]="showLineContribModal" [contrib]="contrib" [submitted]="submitted" (save)="handleSave(line)"></app-line-contribuitions-details>
 
 <p-confirmdialog [style]="{ width: '450px' }" />
