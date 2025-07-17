@@ -1,50 +1,77 @@
+// enums.ts
+
+// === Nível de Acesso (AccessLevel) ===
 export enum AccessLevel {
     ROLE_SUPER_ADMIN = 'Super',
-    ROLE_ADMIN = 'Admin',
-    ROLE_DEPARTMENT = 'Pastor',
-    ROLE_USER = 'Fiel'
+    ROLE_ADMIN = 'Administrador',
+    ROLE_PASTOR = 'Pastor',
+    ROLE_FIEL = 'Fiel'
 }
 
+// === Estado Civil (MaritalStatus) ===
 export enum MaritalStatus {
-    SINGLE = 'Solteiro',
-    MARRIED = 'Casado',
-    DIVORCED = 'Divorciado',
-    WIDOWED = 'Viuvo'
+    CASADO = 'Casado',
+    SOLTEIRO = 'Solteiro',
+    VIUVO = 'Viúvo',
+    DIVORCIADO = 'Divorciado'
 }
 
+// === Estado da Consulta (ConsultationStatus) ===
 export enum ConsultationStatus {
-    PENDING = 'Pendente',
-    REJECTED = 'Rejeitado',
-    APPROVED = 'Aprovado'
+    PENDENTE = 'Pendente',
+    REJEITADA = 'Rejeitada',
+    APROVADA = 'Aprovada',
+    REALIZADA = 'Realizada'
 }
 
+// === Estado da Contribuição (ContribStatus) ===
 export enum ContribStatus {
-    PENDING = 'Pendente',
-    APPROVED = 'Aprovado',
-    REJECTED = 'Anulado',
-    PROCESSED = 'Processado'
+    PENDENTE = 'Pendente',
+    APROVADO = 'Aprovado',
+    REJEITADA = 'Rejeitada'
 }
 
-export enum DisciplinaryStatus {
-    DISCIPLINED = 'Disciplinado',
-    UNDISCIPLINED = 'Indisciplinado'
-}
-
-export enum EventStatus {
-    PENDING = 'PENDENTE',
-    APPROVED = 'APROVADO',
-    REJECTED = 'ANULADO',
-    PROCESSED = 'PROCESSADO'
-}
-
-export enum Enum_EventType {
-    WEDDING = 'CASAMENTO',
-    PROPOSAL = 'PEDIDO',
-    FUNERAL = 'FUNERAL'
-}
-
+// === Tipo de Contribuição (ContribType) ===
 export enum ContribType {
-    WEDDING = 'CASAMENTO',
-    FUNERAL = 'FUNERAL',
-    TRIP = 'EXCURSÃO'
+    CASAMENTO = 'Casamento',
+    FUNERAL = 'Funeral',
+    EXCURSAO = 'Excursão',
+    DIZIMO = 'Dízimo',
+    OFERTA = 'Oferta',
+    CONSTRUCAO = 'Contribuição para construção',
+    EVENTO = 'Contribuição para eventos',
+    MISSAO = 'Missões e evangelismo',
+    AGRADECIMENTO = 'Oferta de agradecimento',
+    OUTRO = 'Outro'
+}
+
+// === Situação Disciplinar (DisciplinaryStatus) ===
+export enum DisciplinaryStatus {
+    DISCIPLINADO = 'Disciplinado',
+    INDISCIPLINADO = 'Indisciplinado'
+}
+
+// === Estado do Evento (EventStatus) ===
+export enum EventStatus {
+    PENDENTE = 'Pendente',
+    APROVADO = 'Aprovado',
+    REJEITADO = 'Rejeitado'
+}
+
+// === Tipo de Evento (EnumEventType) ===
+export enum EnumEventType {
+    CASAMENTO = 'Casamento',
+    HOBBY = 'Lazer',
+    PEDIDO = 'Pedido de Casamento',
+    FUNERAL = 'Funeral',
+    BATISMO = 'Batismo',
+    CULTO = 'Culto',
+    CONGRESSO = 'Congresso',
+    RETIRO = 'Retiro Espiritual',
+    VIGILIA = 'Vigília',
+    SANTA_CEIA = 'Santa Ceia',
+    FORMATURA = 'Formatura',
+    ANIVERSARIO_IGREJA = 'Aniversário da Igreja',
+    ANIVERSARIO_MEMBRO = 'Aniversário de Membro',
+    OUTRO = 'Outro'
 }

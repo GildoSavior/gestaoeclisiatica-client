@@ -123,6 +123,7 @@ export class ConsultationsComponent implements OnInit {
             this.consultationService.getAllByUserEmail(email).subscribe(
                 (response: { message: string; data: Consultation[] }) => {
                     this.consultations.set(response.data || []);
+                    console.log("Consultas" + response.data)
                 },
                 (error: any) => {
                     console.error('Erro ao buscar consultas do usuário:', error);
@@ -132,6 +133,8 @@ export class ConsultationsComponent implements OnInit {
             this.consultationService.getAll().subscribe(
                 (response: { message: string; data: Consultation[] }) => {
                     this.consultations.set(response.data || []);
+                    console.log("Consultas" + JSON.stringify(response.data))
+                
                 },
                 (error: any) => {
                     console.error('Erro ao buscar todas as consultas:', error);

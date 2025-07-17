@@ -62,16 +62,16 @@ export class UserConversionWidget {
     yearOptions: { label: string, value: number }[] = [];
     disciplinaryOptions = [
         { label: 'Todos', value: null },
-        { label: DisciplinaryStatus.DISCIPLINED, value: 'DISCIPLINED' },
-        { label: DisciplinaryStatus.UNDISCIPLINED, value: 'UNDISCIPLINED' }
+        { label: DisciplinaryStatus.DISCIPLINADO, value: 'DISCIPLINADO' },
+        { label: DisciplinaryStatus.INDISCIPLINADO, value: 'INDISCIPLINADO' }
     ];
 
     maritalOptions = [
         { label: 'Todos', value: null },
-        { label: MaritalStatus.SINGLE, value: 'SINGLE' },
-        { label: MaritalStatus.MARRIED, value: 'MARRIED' },
-        { label: MaritalStatus.DIVORCED, value: 'DIVORCED' },
-        { label: MaritalStatus.WIDOWED, value: 'WIDOWED' }
+        { label: MaritalStatus.SOLTEIRO, value: 'SOLTEIRO' },
+        { label: MaritalStatus.CASADO, value: 'CASADO' },
+        { label: MaritalStatus.DIVORCIADO, value: 'DIVORCIADO' },
+        { label: MaritalStatus.VIUVO, value: 'VIUVO' }
     ];
 
     constructor(private layoutService: LayoutService, private userService: UserService) {}

@@ -1,6 +1,4 @@
 
-import { Enum_EventType, EventStatus } from './enums/enums';
-
 export interface EventModel {
 
   id: number | null;

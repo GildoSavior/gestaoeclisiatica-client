@@ -15,12 +15,12 @@ export const authGuard: CanActivateFn = (route, state) => {
     return false;
   }
 
-  if (url.startsWith('/admin') && userAccessLevel === AccessLevel.ROLE_USER) {
+  if (url.startsWith('/admin') && userAccessLevel === AccessLevel.ROLE_FIEL) {
     router.navigate(['/auth/access']); // Bloqueia acesso se não for admin
     return false;
   }
 
-  if (url.startsWith('/client') && userAccessLevel !== AccessLevel.ROLE_USER) {
+  if (url.startsWith('/client') && userAccessLevel !== AccessLevel.ROLE_FIEL) {
     router.navigate(['/auth/access']); // Bloqueia acesso se não for admin
     return false;
   }

@@ -21,7 +21,7 @@ export class Access {
     constructor() {
         this.userData = UserUtil.getUserData();
 
-        if (this.userData && this.userData.accessLevel === AccessLevel.ROLE_USER) {
+        if (this.userData && this.userData.accessLevel === AccessLevel.ROLE_FIEL) {
             this.buttonLabel = 'Go to Home';
             this.buttonLink = '/client';
         }

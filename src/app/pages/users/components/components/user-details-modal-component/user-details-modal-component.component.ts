@@ -46,7 +46,7 @@ export class UserDetailsModalComponent implements OnInit {
     selectedImage: string | ArrayBuffer | File | null = null;
 
     maritalStatusOptions = Object.entries(MaritalStatus).map(([key, value]) => ({ name: value, value: key }));
-    accessOptions = Object.values(AccessLevel).map((access) => ({ name: access, value: access }));
+    accessOptions = Object.entries(AccessLevel).map(([key, value]) => ({ name: value, value: key }));
     disciplinaryStatusOptions = Object.entries(DisciplinaryStatus).map(([key, value]) => ({ name: value, value: key }));
 
     private _visible: boolean = false;
@@ -171,7 +171,7 @@ export class UserDetailsModalComponent implements OnInit {
     }
 
     saveUser(user: User) {
-        this.isLoading = true;
+         this.isLoading = true;
         user.birthDay = this.toLocalDateString(user.birthDay as string);
         const saveObservable = user.id
             ? this.userService.updateUser(user.email as string, user)

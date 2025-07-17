@@ -24,16 +24,21 @@ export class RevenueStreamWidget {
 
     // Mapeamentos legíveis
     statusLabels: Record<string, string> = {
-        PENDING: ContribStatus.PENDING,
-        APPROVED: ContribStatus.APPROVED,
-        REJECTED: ContribStatus.REJECTED,
-        PROCESSED: ContribStatus.PROCESSED
+        PENDENTE: ContribStatus.PENDENTE,
+        APROVADO: ContribStatus.APROVADO,
+        REJEITADA: ContribStatus.REJEITADA
     };
 
     typeLabels: Record<string, string> = {
-        WEDDING: ContribType.WEDDING,
+        CASAMENTO: ContribType.CASAMENTO,
         FUNERAL: ContribType.FUNERAL,
-        TRIP: ContribType.TRIP
+        DIZIMO: ContribType.DIZIMO,
+        AGRADECIMENTO: ContribType.AGRADECIMENTO,
+        CONSTRUCAO: ContribType.CONSTRUCAO,
+        EVENTO: ContribType.EVENTO,
+        EXCURSAO: ContribType.EXCURSAO,
+        MISSSAO: ContribType.MISSAO,
+        OFERTA: ContribType.OFERTA,
     };
 
     constructor(
@@ -107,8 +112,12 @@ export class RevenueStreamWidget {
                         },
                         y: {
                             stacked: true,
+                            beginAtZero: true,
+                            type: 'linear',
                             ticks: {
-                                color: textMutedColor
+                                color: textMutedColor,
+                                stepSize: 1, // <- Força incremento de 1 unidade
+                                precision: 0
                             },
                             grid: {
                                 color: borderColor,

@@ -7,7 +7,7 @@ import { ButtonModule } from 'primeng/button';
 import { ToastModule } from 'primeng/toast';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { CommonModule } from '@angular/common';
-import { Enum_EventType, EventStatus } from '../../../../models/enums/enums';
+import { EnumEventType, EventStatus } from '../../../../models/enums/enums';
 import { MessageService } from 'primeng/api';
 import { FileUploadModule } from 'primeng/fileupload';
 import { EventService } from '../../../../service/event.service';
@@ -56,11 +56,11 @@ export class EventDetailsComponent {
     }));
     eventStatus: EventStatus | null = null;
 
-    eventTypeOptions = Object.entries(Enum_EventType).map(([key, value]) => ({
+    eventTypeOptions = Object.entries(EnumEventType).map(([key, value]) => ({
         name: value,
         value: key
     }));
-    eventType: Enum_EventType | null = null;
+    eventType: EnumEventType | null = null;
 
     uploadedFiles: any[] = [];
 

@@ -43,9 +43,10 @@ export class ConsultationStatusWidget {
   selectedStatus: string | null = null;
   statusOptions = [
     { label: 'Todos', value: null },
-    { label: ConsultationStatus.PENDING, value: 'PENDING' },
-    { label: ConsultationStatus.APPROVED, value: 'APPROVED' },
-    { label: ConsultationStatus.REJECTED, value: 'REJECTED' }
+    { label: ConsultationStatus.PENDENTE, value: 'PENDENTE' },
+    { label: ConsultationStatus.APROVADA, value: 'APROVADA' },
+    { label: ConsultationStatus.REJEITADA, value: 'REJEITADA' },
+    { label: ConsultationStatus.REALIZADA, value: 'REALIZADA' }
   ];
 
   constructor(
@@ -84,13 +85,14 @@ export class ConsultationStatusWidget {
 
     this.chartData = {
       labels: [
-        ConsultationStatus.PENDING,
-        ConsultationStatus.APPROVED,
-        ConsultationStatus.REJECTED
+        ConsultationStatus.PENDENTE,
+        ConsultationStatus.APROVADA,
+        ConsultationStatus.REJEITADA,
+        ConsultationStatus.REALIZADA
       ],
       datasets: [
         {
-          data: [counts['PENDING'], counts['APPROVED'], counts['REJECTED']],
+          data: [counts['PENDENTE'], counts['APROVADA'], counts['REJEITADA']],
           backgroundColor: [
             'rgba(255, 193, 7, 0.8)',
             'rgba(40, 167, 69, 0.8)',

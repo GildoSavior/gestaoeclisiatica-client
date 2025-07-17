@@ -7,7 +7,7 @@ import { debounceTime, Subscription } from 'rxjs';
 import { LayoutService } from '../../../layout/service/layout.service';
 import { EventService } from '../../../service/event.service';
 import { EventModel } from '../../../models/event.model';
-import { EventStatus, Enum_EventType } from '../../../models/enums/enums';
+import { EventStatus, EnumEventType } from '../../../models/enums/enums';
 
 @Component({
     standalone: true,
@@ -51,18 +51,28 @@ export class EventStatusWidget {
 
     statusOptions = [
         { label: 'Todos', value: null },
-        { label: EventStatus.PENDING, value: 'PENDING' },
-        { label: EventStatus.APPROVED, value: 'APPROVED' },
-        { label: EventStatus.REJECTED, value: 'REJECTED' },
-        { label: EventStatus.PROCESSED, value: 'PROCESSED' }
+        { label: EventStatus.PENDENTE, value: 'PENDENTE' },
+        { label: EventStatus.APROVADO, value: 'APROVADO' },
+        { label: EventStatus.REJEITADO, value: 'REJEITADO' },
+
     ];
 
     typeOptions = [
         { label: 'Todos', value: null },
-        { label: Enum_EventType.WEDDING, value: 'WEDDING' },
-        { label: Enum_EventType.PROPOSAL, value: 'PROPOSAL' },
-        { label: Enum_EventType.FUNERAL, value: 'FUNERAL' }
+        { label: EnumEventType.CASAMENTO, value: 'CASAMENTO' },
+        { label: EnumEventType.FUNERAL, value: 'FUNERAL' },
+        { label: EnumEventType.PEDIDO, value: 'PEDIDO' },
+        { label: EnumEventType.FUNERAL, value: 'FUNERAL' },
+        { label: EnumEventType.BATISMO, value: 'BATISMO' },
+        { label: EnumEventType.CULTO, value: 'CULTO' },
+        { label: EnumEventType.CONGRESSO, value: 'CONGRESSO' },
+        { label: EnumEventType.RETIRO, value: 'RETIRO' },
+        { label: EnumEventType.VIGILIA, value: 'VIGILIA' },
+        { label: EnumEventType.ANIVERSARIO_IGREJA, value: 'ANIVERSARIO_IGREJA' },
+        { label: EnumEventType.OUTRO, value: 'OUTRO' },
+
     ];
+
 
     constructor(private layoutService: LayoutService, private eventService: EventService) {}
 
